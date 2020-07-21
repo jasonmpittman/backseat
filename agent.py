@@ -1,11 +1,21 @@
 import subprocess
 
-import sys
+import platform
 
+import os
 
 class Agent:
 	def __init__(self):
-		pass
+		self._platform = self.get_platform()
+
+
+	def get_platform(self):
+		plat = platform.system()
+		if plat == "Darwin":
+			return "MacOS"
+		else:
+			return plat
+
 
 	'''
 	This function takes in a command then executes the command.
@@ -17,5 +27,9 @@ class Agent:
 		string_result = subprocess_result.stdout.decode("utf-8")
 		return string_result
 
-A = Agent()
-A.run_command("ls -l")
+
+if __name__ == "__main__":
+	A = Agent()
+	res = A.run_command("ls -l")
+	print(res)
+	print(A._platform)
