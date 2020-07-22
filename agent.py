@@ -23,8 +23,9 @@ class Agent:
 	'''
 	def run_command(self, command):
 		command_list = command.split(" ")
-		subprocess_result = subprocess.run(command_list, stdout=subprocess.PIPE)
+		subprocess_result = subprocess.run(command_list, capture_output=True)
 		string_result = subprocess_result.stdout.decode("utf-8")
+		string_result =  string_result[:-1]
 		return string_result
 
 
