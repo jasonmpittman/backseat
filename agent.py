@@ -39,28 +39,29 @@ class Agent:
 	def mac_get_updates_list(self):
 		brew_command = 'brew outdated'
 		macOS_command = 'softwareupdate -l'
-		macOS_command_res, macOS_command_err = self.run_command(macOS_command)
-		# brew_command_res, brew_command_err = self.run_command(brew_command)
-		# return macOS_command_res +"\n" + macOS_command_err + brew_command_res + brew_command_err
-		# return brew_command_res.split("\n")
-		return "woo"
+		macOS_res = self.run_command(macOS_command)
+		brew_res = self.run_command(brew_command)
+		return macOS_res, brew_res
 
 	def mac_brew_software_update(self, software_update):
 		command = f"brew upgrade {software_update}"
 		return self.run_command(command)
 
 	def mac_brew_software_updates(self, software_list):
-		output = ""
+		output_list = []
 		for software in software_list:
-			output_tup = self.mac_brew_software_update(software)
-			output_list = list(output_tup)
-			for part in output_list:
-				output += part
+			output = self.mac_brew_software_update(software)
+			output_list.append(output)
+
+		output = ""
+		for o in output_list:
+			output += o.create_output()
 		return output
 
 if __name__ == "__main__":
 	A = Agent()
 	# print(A._platform)
 	# print(A.mac_brew_software_updates(A.mac_get_updates_list()))
-	res = A.run_command("woo")
+	# res = A.mac_brew_software_updates(["hugo"])
+	res = A.run_command("./hugo.zsh")
 	print(res.create_output())
