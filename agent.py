@@ -43,6 +43,15 @@ class Agent:
 		brew_res = self.run_command(brew_command)
 		return macOS_res, brew_res
 
+	def mac_os_install(self, version):
+		get_installer = f"softwareupdate --fetch-full-installer --full-installer-version {version}"
+		install = f"sudo softwareupdate -i 'macOS {version} Update-'"
+		ret_list = []
+		ret_list.append(self.run_command(get_installer))
+		ret_list.append(self.run_command(install))
+		return ret_list
+
+
 	def mac_brew_software_update(self, software_update):
 		command = f"brew upgrade {software_update}"
 		return self.run_command(command)
@@ -62,6 +71,12 @@ if __name__ == "__main__":
 	A = Agent()
 	# print(A._platform)
 	# print(A.mac_brew_software_updates(A.mac_get_updates_list()))
+
 	# res = A.mac_brew_software_updates(["hugo"])
-	res = A.run_command("./hugo.zsh")
-	print(res.create_output())
+	# print(res)
+
+	# res = A.run_command("./hugo.zsh")
+	# print(res.create_output())
+
+	# A.mac_os_install("10.14.6")
+	#10.14.6
