@@ -4,7 +4,17 @@ import platform
 
 import os
 
-import command_result
+import threading
+
+import getpass
+
+def output_reader(proc, ret):
+	try:
+		for line in iter(proc.stdout.readline, b''):
+			print('got line: {0}'.format(line.decode('utf-8')), end='')
+		ret = True
+	except:
+		ret = False
 
 class Agent:
 	def __init__(self):
@@ -23,18 +33,34 @@ class Agent:
 	The results are then returned as as string.
 	'''
 	def run_command(self, command):
-		try:
-			command_list = command.split(" ")
-			subprocess_result = subprocess.run(command_list, capture_output=True)
-			string_result = subprocess_result.stdout.decode("utf-8")
-			string_error = subprocess_result.stderr.decode("utf-8")
-			exit_code = subprocess_result.returncode
-			string_result =  string_result[:-1]
-			res = command_result.Command_Result(string_result, string_error, exit_code)
-		except BaseException as E:
-			res = command_result.Command_Result("", f"Failed Command: {command}\n{E}", 1)
-		return res
+		command_list = command.split(" ")
+		ret = False
+		if "sudo" in command_list:
+			print("Going to run sudo command")
+			subprocess_result = self._sudo_run_command(command_list)
+		else:
+			subprocess_result = subprocess.Popen(command_list, stdout=subprocess.PIPE)
 
+
+		t = threading.Thread(target=output_reader, args=(subprocess_result,ret,))
+		t.start()
+		t.join()
+		if ret == False:
+			output = subprocess_result.communicate()[0]
+			return output.decode("utf-8")
+
+
+		return ""
+
+	def _sudo_run_command(self, command_list):
+		if not "sudo" in command_list:
+			return False
+		command_list.insert(command_list.index("sudo")+1, "-S")
+		print(command_list)
+		password = getpass.getpass("|Password: ")
+		subprocess_result = subprocess.Popen(command_list, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+		subprocess_result.communicate(password.encode())
+		return subprocess_result
 
 	def mac_get_updates_list(self):
 		brew_command = 'brew outdated'
@@ -69,6 +95,10 @@ class Agent:
 
 if __name__ == "__main__":
 	A = Agent()
+	print(A.run_command("sudo ls -al"))
+
+	# res = A.run_command("pip3 install cryptography")
+	# print(res)
 	# print(A._platform)
 	# print(A.mac_brew_software_updates(A.mac_get_updates_list()))
 
