@@ -4,19 +4,10 @@ import platform
 
 import os
 
-import threading
-
 import getpass
 
 import socket
 
-def output_reader(proc, ret):
-	try:
-		for line in iter(proc.stdout.readline, b''):
-			print('got line: {0}'.format(line.decode('utf-8')), end='')
-		ret = True
-	except:
-		ret = False
 
 class Agent:
 	def __init__(self):
@@ -44,16 +35,8 @@ class Agent:
 		else:
 			subprocess_result = subprocess.Popen(command_list, stdout=subprocess.PIPE)
 
-
-		t = threading.Thread(target=output_reader, args=(subprocess_result,ret,))
-		t.start()
-		t.join()
-		if ret == False:
-			output = subprocess_result.communicate()[0]
-			return output.decode("utf-8")
-
-
-		return ""
+		output = subprocess_result.communicate()[0]
+		return output.decode("utf-8")
 
 	def _sudo_run_command(self, command_list):
 		if not "sudo" in command_list:
@@ -99,7 +82,7 @@ class Agent:
 if __name__ == "__main__":
 	A = Agent()
 	print(A._ip)
-	print(A.run_command("sudo ls -al"))
+	print(A.run_command("ls -al"))
 
 	# res = A.run_command("pip3 install cryptography")
 	# print(res)
