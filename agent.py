@@ -9,6 +9,8 @@ import getpass
 import socket
 
 
+#add success and failure responces
+
 class Agent:
 	def __init__(self):
 		self._platform = self.get_platform()
