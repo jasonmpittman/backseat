@@ -21,7 +21,7 @@ class Server:
 				while res != "stop":
 					res = client.recv(1024).decode()
 					print(res)
-					client.send(bytes("Server: Hi client, I have recieved your message", Server.encoding))
+					client.send(bytes(f"Server: Hi client, I have recieved your message:\n{res}", Server.encoding))
 				client.close()
 		except KeyboardInterrupt:
 			print("\n Keyboard Interupt")

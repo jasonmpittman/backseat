@@ -19,10 +19,7 @@ if __name__ == "__main__":
 
 		# try:
 	c.send_recv("Client: Hi server! How are you buddy?")
-	time.sleep(2)
-	c.send_recv("Client: Hi server again! Glad to see you are well")
-	time.sleep(1)
-	c.send_recv("stop")
+	
 
 		# except:
 		# 	print("Error in message sending, waiting 10 seconds before trying again")
