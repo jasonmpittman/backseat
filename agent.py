@@ -84,6 +84,7 @@ class Agent:
 if __name__ == "__main__":
 	A = Agent()
 	print(A._ip)
+	print(A._platform)
 	print(A.run_command("ls -al"))
 
 	# res = A.run_command("pip3 install cryptography")
