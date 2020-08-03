@@ -52,6 +52,8 @@ class Server:
 					msg = self._server_msg.to_json()
 					#encryption will occur at this point
 					client.send(bytes(msg, Server.encoding))
+					res = client.recv(1024).decode()
+					print(json.loads(res)["stdout"])
 				except:
 					pass
 				client.close()
