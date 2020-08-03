@@ -40,6 +40,23 @@ class Client:
 
 		return res
 
+#Add encrpytion!!!
+	def send(self):
+		message = self._client_msg.to_json()
+		try:
+			self._client.send(bytes(message, Client.encoding))
+		except:
+			print("Failed to send")
+
+	def recieve(self):
+		try:
+			raw_res = self._client.recv(1024).decode(Client.encoding)
+			dict_res = json.loads(raw_res)
+			return dict_res
+		except:
+			print("Failed to recieve")
+			return {}
+
 	def send_results(self, results):
 		self._client_msg.add_data(True, True, results, "", True, 0)
 		message = self._client_msg.to_json()

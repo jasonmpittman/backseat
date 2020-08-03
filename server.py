@@ -36,6 +36,25 @@ class Server:
 		print(f"id= {client_dict['command_id']}")
 		print(f"exit_code= {client_dict['exit_code']}")
 
+#Add encryption!!
+	def send(self, client):
+		message = self._server_msg.to_json()
+		try:
+			client.send(bytes(message, Server.encoding))
+		except:
+			print("Server: Failed to send")
+
+	def recieve(self, client):
+		try:
+			raw_res = client.recv(1024).decode()
+			dict_res = json.loads(raw_res)
+			return dict_res
+		except:
+			print("Server: Failed to recieve")
+			return {}
+
+
+
 	def server_loop(self):
 		client = None
 		try:
