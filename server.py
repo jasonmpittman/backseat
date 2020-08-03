@@ -35,6 +35,7 @@ class Server:
 
 		print(f"id= {client_dict['command_id']}")
 		print(f"exit_code= {client_dict['exit_code']}")
+
 	def server_loop(self):
 		client = None
 		try:
@@ -45,11 +46,11 @@ class Server:
 				try:
 					res = client.recv(1024).decode()
 					self.client_handler(res)
-					# include server logic handler here
 
 					# self._server_msg.add_data(command, sudo, password, sequence, depot_items)
 					self._server_msg.add_data("ls -al", False, "", 0, 3)
 					msg = self._server_msg.to_json()
+					#encryption will occur at this point
 					client.send(bytes(msg, Server.encoding))
 				except:
 					pass
