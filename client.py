@@ -10,14 +10,16 @@ class Client:
 		self._ip = ip
 		self._port = port
 		self._client = socket.socket()
+
+			# more resilience needs to be built into the program for things like this
+		self._client_msg = client_message.ClientMessage()
+
+	def connect(self):
+		#this needs to be moved into its own function
 		try:
 			self._client.connect((self._ip, self._port))
 		except:
 			print("Cannot connect to server, server is probably off")
-			print("Exiting program")
-			exit(1)
-			# more resilience needs to be built into the program for things like this
-		self._client_msg = client_message.ClientMessage()
 
 	def send_recv(self, message):
 		res = ""
@@ -36,6 +38,7 @@ if __name__ == "__main__":
 	c = Client("localhost", 9999)
 
 		# try:
+	c.connect()
 	c.send_recv("")
 
 
