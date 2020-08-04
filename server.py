@@ -17,24 +17,30 @@ class Server:
 		self._server_msg = server_message.ServerMessage()
 		print("Server setup and Listening:")
 
-	def client_handler(self, client_json_str):
-		client_dict = json.loads(client_json_str)
-		if client_dict["completed"]:
-			print("completed")
-			if client_dict["successful"]:
-				print("successful:")
-				print(client_dict["stdout"])
-			else:
-				print("failed:\n")
-				print(client_dict["stderr"])
+	def client_handler(self, client_dict):
+		'''
+		if completed:
+			if sucessful:
+				mark command with command id as done
+				bring back stdout information
+				give user exit code  --> perhaps attach to the item
+			if failed:
+				let user know, provide stderr
+				if not in sequence go to next item
+				Give user exitcode
+
+		else (not completed):
+			Assmue it to time to check for a ready
+
+		if ready:
+			send next command
 		else:
-			print("not completed")
-
-		if client_dict["ready"]:
-			print("Ready")
-
-		print(f"id= {client_dict['command_id']}")
-		print(f"exit_code= {client_dict['exit_code']}")
+			do not do anythnig
+		'''
+		if client_dict["completed"]:
+			if client_dict["successful"]
+		else:
+			pass
 
 #Add encryption!!
 	def send(self, client):
@@ -53,8 +59,6 @@ class Server:
 			print("Server: Failed to recieve")
 			return {}
 
-
-
 	def server_loop(self):
 		client = None
 		try:
@@ -63,16 +67,13 @@ class Server:
 				print(f"Connected to {c_ip}")
 				res = ""
 				try:
-					res = client.recv(1024).decode()
-					self.client_handler(res)
+					res = self.recieve(client)
+					# self.client_handler(res)
 
-					# self._server_msg.add_data(command, sudo, password, sequence, depot_items)
+
+					# self._server_msg.add_data(command, sudo, password, sequence, depot_items, )
 					self._server_msg.add_data("ls -al", False, "", 0, 3)
-					msg = self._server_msg.to_json()
-					#encryption will occur at this point
-					client.send(bytes(msg, Server.encoding))
-					res = client.recv(1024).decode()
-					print(json.loads(res)["stdout"])
+
 				except:
 					pass
 				client.close()
