@@ -38,7 +38,12 @@ class Server:
 			do not do anythnig
 		'''
 		if client_dict["completed"]:
-			if client_dict["successful"]
+			if client_dict["successful"]:
+				#depot interaction
+				pass
+			else:
+				#if unsequenced go onto the next item (table this one until the user has ruled on it), else wait for user responce
+				pass
 		else:
 			pass
 
