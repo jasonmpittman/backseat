@@ -82,7 +82,7 @@ class Agent:
 		return output
 
 	def ubuntu_get_updates_list(self):
-		command = "apt-get -u upgrade"
+		command = "sudo apt-get -u upgrade"
 		return self.run_command(command)
 
 if __name__ == "__main__":
