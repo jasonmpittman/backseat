@@ -81,11 +81,19 @@ class Agent:
 			output += o.create_output()
 		return output
 
+	def ubuntu_get_updates_list(self):
+		command = "apt-get -u upgrade"
+		return self.run_command(command)
+
 if __name__ == "__main__":
 	A = Agent()
 	print(A._ip)
 	print(A._platform)
 	print(A.run_command("ls -al"))
+	print("--")
+	print(A.ubuntu_get_updates_list())
+	print("-- Release information --")
+	print(A.run_command("lsb_release -a"))
 
 	# res = A.run_command("pip3 install cryptography")
 	# print(res)

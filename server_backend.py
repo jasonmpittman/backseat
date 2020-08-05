@@ -13,7 +13,7 @@ class ServerBackend:
 
 	def client_handler(self, client_dict):
 		if not self.isin(client_dict):
-			
+			pass
 		'''
 		if completed:
 			if sucessful:
