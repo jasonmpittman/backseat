@@ -17,36 +17,6 @@ class Server:
 		self._server_msg = server_message.ServerMessage()
 		print("Server setup and Listening:")
 
-	def client_handler(self, client_dict):
-		'''
-		if completed:
-			if sucessful:
-				mark command with command id as done
-				bring back stdout information
-				give user exit code  --> perhaps attach to the item
-			if failed:
-				let user know, provide stderr
-				if not in sequence go to next item
-				Give user exitcode
-
-		else (not completed):
-			Assmue it to time to check for a ready
-
-		if ready:
-			send next command
-		else:
-			do not do anythnig
-		'''
-		if client_dict["completed"]:
-			if client_dict["successful"]:
-				#depot interaction
-				pass
-			else:
-				#if unsequenced go onto the next item (table this one until the user has ruled on it), else wait for user responce
-				pass
-		else:
-			pass
-
 #Add encryption!!
 	def send(self, client):
 		message = self._server_msg.to_json()
@@ -74,7 +44,6 @@ class Server:
 				try:
 					res = self.recieve(client)
 					# self.client_handler(res)
-
 
 					# self._server_msg.add_data(command, sudo, password, sequence, depot_items, )
 					self._server_msg.add_data("ls -al", False, "", 0, 3)

@@ -11,7 +11,7 @@ class DepotItem:
 
 class Depot:
 	def __init__(self, host):
-		self._host = host
+		self.host = host
 		self._depot_active_list = []
 		# self._depot_completed_list = []
 

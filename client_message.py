@@ -4,7 +4,8 @@ class ClientMessage:
 	def __init__(self):
 		pass
 
-	def add_data(self, ready, completed, stdout, stderr, successful, exit_code, command_id=0):
+	def add_data(self, whoami, ready, completed, stdout, stderr, successful, exit_code, command_id=0):
+		self._whoami = whoami
 		self._ready = ready
 		self._completed = completed
 		self._stdout = stdout
