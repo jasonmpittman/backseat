@@ -47,7 +47,8 @@ class Agent:
 		print(command_list)
 		password = getpass.getpass("|Password: ")
 		subprocess_result = subprocess.Popen(command_list, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
-		subprocess_result.communicate(password.encode())
+		# subprocess_result.communicate(password.encode())
+		subprocess_result.stdin.write(bytes(password, "utf-8"))
 		return subprocess_result
 
 	def mac_get_updates_list(self):
@@ -89,11 +90,12 @@ if __name__ == "__main__":
 	A = Agent()
 	print(A._ip)
 	print(A._platform)
-	print(A.run_command("ls -al"))
 	print("--")
-	print(A.ubuntu_get_updates_list())
-	print("-- Release information --")
-	print(A.run_command("lsb_release -a"))
+	print(A.run_command("sudo ls -al"))
+	print("--")
+	# print(A.ubuntu_get_updates_list())
+	# print("-- Release information --")
+	# print(A.run_command("lsb_release -a"))
 
 	# res = A.run_command("pip3 install cryptography")
 	# print(res)
