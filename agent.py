@@ -83,8 +83,21 @@ class Agent:
 		return output
 
 	def ubuntu_get_updates_list(self):
-		command = "sudo apt-get -u upgrade"
+		command = "apt list --upgradable"
 		return self.run_command(command)
+
+	def ubuntu_run_package_update(self, package):
+		command = f"apt-get upgrade {package}"
+		return self.run_command(command)
+
+	def ubuntu_check_os_update(self):
+		command = "do-release-upgrade -c"
+		return self.run_command(command)
+
+	def ubuntu_run_os_update(self):
+		command = "sudo do-release-upgrade"
+		return self.run_command(command)
+
 
 if __name__ == "__main__":
 	A = Agent()
