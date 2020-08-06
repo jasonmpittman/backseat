@@ -32,6 +32,7 @@ class Depot:
 	def get_next(self):
 		for dp in self._depot_active_list:
 			if dp._done == False:
+				self.count -= 1
 				return dp._command, dp._command_id, self.count
 		return None
 

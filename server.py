@@ -4,6 +4,8 @@ import server_message
 
 import json
 
+import server_backend
+
 class Server:
 	encoding = "utf-8"
 
@@ -15,6 +17,7 @@ class Server:
 		self._server.bind((self._ip, self._port))
 		self._server.listen(self._connections)
 		self._server_msg = server_message.ServerMessage()
+		self._server_backend = server_backend.ServerBackend()
 		print("Server setup and Listening:")
 
 #Add encryption!!
@@ -43,10 +46,20 @@ class Server:
 				res = ""
 				try:
 					res = self.recieve(client)
+					handler_result = self._server_backend.client_handler(res)
+
+					if handler_result not None:
+						command, command_id, count = handler_result
+						self._server_msg.add_data(command, "", "", 0, count, command_id)
+						json_message = self._server_msg.to_json()
+					else:
+						pass
+						#create a situation where it can return a message for the client to wait for the server
+						# and the server can ping the client to wake it up
 					# self.client_handler(res)
 
 					# self._server_msg.add_data(command, sudo, password, sequence, depot_items, )
-					self._server_msg.add_data("ls -al", False, "", 0, 3)
+					# self._server_msg.add_data("ls -al", False, "", 0, 3)
 
 				except:
 					pass
