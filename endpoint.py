@@ -10,10 +10,15 @@ class Endpoint:
 	def run_local_command(self):
 		#get command from server
 		self._client.connect()
-		responce = self._client.send_recv()
-		result = self._agent.run_command(responce["command"])
-		print(result)
-		self._client.send_results(result)
+		responce = self._client.get_command()
+		print(responce)
+		if responce != None:
+			result = self._agent.run_command(responce["command"])
+			print(result)
+			self._client.send_results(result)
+		else:
+			print("run_local_command: None")
+
 		#run command
 		#send results back to the server
 

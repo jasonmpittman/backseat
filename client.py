@@ -25,20 +25,33 @@ class Client:
 			print("Cannot connect to server, server is probably off")
 			return False
 
-	def send_recv(self, message="Test"):
+	def send_recv(self, message=""):
 		res = ""
-		# self._client_msg.add_data(ready, completed, stdout, stderr, successful, exit_code)
-		self._client_msg.add_data(True, True, message, "", True, 0)
+		# self._client_msg.add_data("whoami", ready, completed, stdout, stderr, successful, exit_code)
+		self._client_msg.add_data("localhost", True, True, message, "", True, 0)
 		message = self._client_msg.to_json()
+
 		try:
 			self._client.send(bytes(message, Client.encoding))
-			res = self._client.recv(1024).decode(Client.encoding)
+			res = self.recieve()
 			res = json.loads(res)
 		except:
 			#this is for testing purposes only
-			res = {"command": None}
+			res = None
 
 		return res
+
+	def get_command(self):
+		#whoami, ping, ready, completed, stdout, stderr, successful, exit_code, command_id=0
+		self._client_msg.add_data("localhost", True, True, True,"", "", False, 0)
+		self.send()
+		res = self.recieve()
+		if res == None:
+			print("get_command failed")
+			return None
+		else:
+			return res
+
 
 #Add encrpytion!!!
 	def send(self):
@@ -55,10 +68,11 @@ class Client:
 			return dict_res
 		except:
 			print("Failed to recieve")
-			return {}
+			return None
 
-	def send_results(self, results):
-		self._client_msg.add_data(True, True, results, "", True, 0)
+	def send_results(self, stdout, stderr=""):
+		# whoami, ping, ready, completed, stdout, stderr, successful, exit_code, command_id=0
+		self._client_msg.add_data("localhost", False, True, True, stdout, stderr, True, 0)
 		message = self._client_msg.to_json()
 		try:
 			self._client.send(bytes(message, Client.encoding))

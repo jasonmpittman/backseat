@@ -3,7 +3,7 @@
 class DepotItem:
 	def __init__(self, command, command_id):
 		# self._host = host
-		self._command = command
+		self.command = command
 		self.command_id = command_id
 		self._done = False
 		self._stdout = ""
@@ -30,13 +30,19 @@ class Depot:
 				return command_object
 
 	def get_next(self):
+		print(self._depot_active_list)
 		for dp in self._depot_active_list:
+			print(dp._done)
 			if dp._done == False:
 				self.count -= 1
-				return dp._command, dp._command_id, self.count
+				print(f"{dp.command}, {dp.command_id}, {self.count}")
+				return (dp.command, dp.command_id, self.count)
 		return None
 
 	def add(self, command, command_id):
 		new_depot_item = DepotItem(command, command_id)
 		self._depot_active_list.append(new_depot_item)
 		self.count += 1
+
+	def load_depot(self, command_list):
+		for item in command_list:

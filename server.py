@@ -46,15 +46,18 @@ class Server:
 				res = ""
 				try:
 					res = self.recieve(client)
+					print(res)
 					handler_result = self._server_backend.client_handler(res)
 
-					if handler_result not None:
+					if handler_result != None:
 						command, command_id, count = handler_result
-						self._server_msg.add_data(command, "", "", 0, count, command_id)
-						json_message = self._server_msg.to_json()
+						print(f"command: {command}, command_id: {command_id}, count: {count}")
+						#not_ready, command, sudo, password, sequence, depot_items, command_id=0
+						self._server_msg.add_data(False, command, "", "", 0, count, command_id)
+						self.send(client)
 					else:
-						pass
-						#create a situation where it can return a message for the client to wait for the server
+						print("None")
+						# create a situation where it can return a message for the client to wait for the server
 						# and the server can ping the client to wake it up
 					# self.client_handler(res)
 
@@ -66,6 +69,7 @@ class Server:
 				client.close()
 		except KeyboardInterrupt:
 			print("\n Keyboard Interupt")
+			self._server.close()
 			if client != None:
 				print("client closed")
 				client.close()

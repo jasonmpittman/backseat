@@ -12,6 +12,7 @@ class ServerBackend:
 		return False
 
 	def client_handler(self, client_dict):
+		#gets working depot
 		working_depot = None
 		if not self.isin(client_dict):
 			new_depot = depot.Depot(client_dict["whoami"])
@@ -25,20 +26,23 @@ class ServerBackend:
 		#for testing
 		working_depot.add("ls -al", 1)
 
-
-		if client_dict["completed"]:
-			if client_dict["successful"]:
-				depot_item = working_depot.get_by_id(1)
-				depot_item.set(client_dict["completed"], client_dict["stdout"], client_dict["exit_code"])
-				depot_item.count -= 1
-				# print(depot_item.output())
+		if client_dict["ping"]== False:
+			if client_dict["completed"]:
+				if client_dict["successful"]:
+					depot_item = working_depot.get_by_id(1)
+					depot_item.set(client_dict["completed"], client_dict["stdout"], client_dict["exit_code"])
+					depot_item.count -= 1
+					# print(depot_item.output())
+				else:
+					#if unsequenced go onto the next item (table this one until the user has ruled on it), else wait for user responce
+					print("unsuccessful")
 			else:
-				#if unsequenced go onto the next item (table this one until the user has ruled on it), else wait for user responce
-				print("unsuccessful")
+				print("Not completed")
 		else:
-			print("Not completed")
+			print("Ping == True")
 
 		if client_dict["ready"]:
+			print("ready!")
 			return working_depot.get_next()
 		else:
 			return None
