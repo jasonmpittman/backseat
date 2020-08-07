@@ -21,7 +21,7 @@ class Depot:
 	def __init__(self, host):
 		self.host = host
 		self._depot_items_list = []
-		self.count = 0
+		self.count = 0 # -1 when done = True
 		# self._depot_completed_list = []
 
 	def get_by_id(self, id):
@@ -30,11 +30,9 @@ class Depot:
 				return command_object
 
 	def get_next(self):
-		print(self._depot_items_list)
 		for dp in self._depot_items_list:
-			print(dp._done)
 			if dp._done == False:
-				self.count -= 1
+				# self.count -= 1
 				print(f"{dp.command}, {dp.command_id}, {self.count}")
 				return (dp.command, dp.command_id, self.count)
 		return None
@@ -86,8 +84,9 @@ class DepotList():
 				depot.add(command)
 
 if __name__ == "__main__":
-	dp = Depot("localhost")
-	dp.mass_load_depot(["ls -al", "PWD"])
-
+	dl = DepotList()
+	dl.add_depot("localhost")
+	working_depot = dl.get_working_depot("localhost")
+	working_depot.mass_load_depot(["ls -al", "PWD"])
 
 #
