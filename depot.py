@@ -54,10 +54,40 @@ class Depot:
 		for command in command_list:
 			self.add(command)
 
+class DepotList():
+	def __init__(self):
+		self.list = []
+
+	def add_depot(self, host):
+		new_depot = Depot(host)
+		self.list.append(new_depot)
+		return new_depot
+
+	def get_working_depot(self, host):
+		for depot in self.list:
+			if depot.host == host:
+				return depot
+
+		return self.add_depot(host)
+
+	def isin(self, host):
+		for depot in self.list:
+			if host == depot.host:
+				return True
+		return False
+
+	def add_to_all(self, command):
+		for depot in self.list:
+			depot.add(command)
+
+	def add_to_specified(self, command, host_list):
+		for depot in self.list:
+			if depot.host in host_list:
+				depot.add(command)
 
 if __name__ == "__main__":
 	dp = Depot("localhost")
-	dp.mass_load_depot(["ls -al", "PWD", ])
+	dp.mass_load_depot(["ls -al", "PWD"])
 
 
 #
