@@ -15,23 +15,23 @@ class DepotItem:
 		self._exit_code = exit_code
 
 	def output(self):
-		return f"{self._command}, {self.command_id}, {self._done}, {self._stdout}, {self._exit_code}"
+		return f"{self.command}, {self.command_id}, {self._done}, {self._stdout}, {self._exit_code}"
 
 class Depot:
 	def __init__(self, host):
 		self.host = host
-		self._depot_active_list = []
+		self._depot_items_list = []
 		self.count = 0
 		# self._depot_completed_list = []
 
 	def get_by_id(self, id):
-		for command_object in self._depot_active_list:
+		for command_object in self._depot_items_list:
 			if command_object.command_id == id:
 				return command_object
 
 	def get_next(self):
-		print(self._depot_active_list)
-		for dp in self._depot_active_list:
+		print(self._depot_items_list)
+		for dp in self._depot_items_list:
 			print(dp._done)
 			if dp._done == False:
 				self.count -= 1
@@ -41,8 +41,24 @@ class Depot:
 
 	def add(self, command, command_id):
 		new_depot_item = DepotItem(command, command_id)
-		self._depot_active_list.append(new_depot_item)
+		self._depot_items_list.append(new_depot_item)
 		self.count += 1
 
+	def get_depot_list_len(self):
+		#This function is for if I decide to change the model to having 2 lists instead of 1
+		return len(self._depot_items_list)
+
+
 	def load_depot(self, command_list):
-		for item in command_list:
+		for command in command_list:
+			new_depot_item = DepotItem(command, self.get_depot_list_len() + 1)
+			print(new_depot_item.output())
+			self._depot_items_list.append(new_depot_item)
+
+
+if __name__ == "__main__":
+	dp = Depot("localhost")
+	dp.load_depot(["ls -al", "PWD", ])
+
+
+#
