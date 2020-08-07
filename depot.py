@@ -1,5 +1,5 @@
 
-
+#Needs better system to keep track of # of items in depot
 class DepotItem:
 	def __init__(self, command, command_id):
 		# self._host = host
@@ -39,9 +39,10 @@ class Depot:
 				return (dp.command, dp.command_id, self.count)
 		return None
 
-	def add(self, command, command_id):
-		new_depot_item = DepotItem(command, command_id)
+	def add(self, command):
+		new_depot_item = DepotItem(command, self.get_depot_list_len()+1)
 		self._depot_items_list.append(new_depot_item)
+		print(new_depot_item.output())
 		self.count += 1
 
 	def get_depot_list_len(self):
@@ -49,16 +50,14 @@ class Depot:
 		return len(self._depot_items_list)
 
 
-	def load_depot(self, command_list):
+	def mass_load_depot(self, command_list):
 		for command in command_list:
-			new_depot_item = DepotItem(command, self.get_depot_list_len() + 1)
-			print(new_depot_item.output())
-			self._depot_items_list.append(new_depot_item)
+			self.add(command)
 
 
 if __name__ == "__main__":
 	dp = Depot("localhost")
-	dp.load_depot(["ls -al", "PWD", ])
+	dp.mass_load_depot(["ls -al", "PWD", ])
 
 
 #
