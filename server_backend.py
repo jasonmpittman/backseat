@@ -3,18 +3,19 @@ import depot
 class ServerBackend:
 	def __init__(self):
 		self.depot_list = depot.DepotList()
+		working_depot = self.depot_list.get_working_depot("localhost")
+		working_depot.add("ls -al")
+		working_depot.add("PWD")
 
 	def client_handler(self, client_dict):
 		#gets working depot
 		working_depot = self.depot_list.get_working_depot(client_dict["whoami"])
 
-		#for testing
-		working_depot.add("ls -al")
-
+		print(f"ping = {client_dict['ping']}")
 		if client_dict["ping"]== False:
 			if client_dict["completed"]:
 				if client_dict["successful"]:
-					depot_item = working_depot.get_by_id(1)
+					depot_item = working_depot.get_by_id(client_dict["command_id"])
 					depot_item.set(client_dict["completed"], client_dict["stdout"], client_dict["exit_code"])
 					depot_item.count -= 1
 					# print(depot_item.output())

@@ -27,7 +27,7 @@ class Client:
 
 	def send_recv(self, message=""):
 		res = ""
-		# self._client_msg.add_data("whoami", ready, completed, stdout, stderr, successful, exit_code)
+		# self._client_msg.add_data(self, whoami, ping, ready, completed, stdout, stderr, successful, exit_code, command_id=0
 		self._client_msg.add_data("localhost", True, True, message, "", True, 0)
 		message = self._client_msg.to_json()
 
@@ -63,21 +63,21 @@ class Client:
 
 	def recieve(self):
 		try:
-			raw_res = self._client.recv(1024).decode(Client.encoding)
+			raw_res = self._client.recv(4096).decode(Client.encoding)
 			dict_res = json.loads(raw_res)
 			return dict_res
 		except:
 			print("Failed to recieve")
 			return None
 
-	def send_results(self, stdout, stderr=""):
+	def send_results(self, command_id, stdout, stderr=""):
 		# whoami, ping, ready, completed, stdout, stderr, successful, exit_code, command_id=0
 		self._client_msg.add_data("localhost", False, True, True, stdout, stderr, True, 0)
 		message = self._client_msg.to_json()
 		try:
 			self._client.send(bytes(message, Client.encoding))
-			res = self._client.recv(1024).decode(Client.encoding)
-			print(res)
+			# res = self._client.recv(4096).decode(Client.encoding)
+			# print(res)
 		except:
 			print("send_results: Failed")
 

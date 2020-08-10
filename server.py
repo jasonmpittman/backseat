@@ -30,7 +30,7 @@ class Server:
 
 	def recieve(self, client):
 		try:
-			raw_res = client.recv(1024).decode()
+			raw_res = client.recv(4096).decode()
 			dict_res = json.loads(raw_res)
 			return dict_res
 		except:
@@ -55,6 +55,9 @@ class Server:
 						#not_ready, command, sudo, password, sequence, depot_items, command_id=0
 						self._server_msg.add_data(False, command, "", "", 0, count, command_id)
 						self.send(client)
+						print("recieve_res_time")
+						results = self.recieve(client)
+						print(results["stdout"])
 					else:
 						print("None")
 						# create a situation where it can return a message for the client to wait for the server
