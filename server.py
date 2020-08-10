@@ -38,6 +38,7 @@ class Server:
 			return {}
 
 	def server_loop(self):
+		# Figure out a way to breakup large messages so that they can be sent and recieved without issue
 		client = None
 		try:
 			while True:
@@ -55,9 +56,10 @@ class Server:
 						#not_ready, command, sudo, password, sequence, depot_items, command_id=0
 						self._server_msg.add_data(False, command, "", "", 0, count, command_id)
 						self.send(client)
-						print("recieve_res_time")
 						results = self.recieve(client)
+						handler_results = self._server_backend.client_handler(results)
 						print(results["stdout"])
+						print(handler_results)
 					else:
 						print("None")
 						# create a situation where it can return a message for the client to wait for the server

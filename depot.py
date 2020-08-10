@@ -52,6 +52,10 @@ class Depot:
 		for command in command_list:
 			self.add(command)
 
+	def print_depot_contents(self):
+		for dp_item in self._depot_items_list:
+			print(dp_item.output())
+
 class DepotList():
 	def __init__(self):
 		self.list = []

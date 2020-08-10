@@ -14,7 +14,7 @@ class Endpoint:
 		print(responce)
 		if responce != None:
 			result = self._agent.run_command(responce["command"])
-			print(result)
+			# print(result)
 			# command_id, stdout, stderr=""
 			self._client.send_results(responce["command_id"], result)
 		else:
@@ -25,7 +25,7 @@ class Endpoint:
 
 	def ready_accept(self):
 		self._client.connect()
-		
+
 
 if __name__ == "__main__":
 	E = Endpoint()

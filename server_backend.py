@@ -1,5 +1,7 @@
 import depot
 
+# Track down and fix returning command id 0 bug
+
 class ServerBackend:
 	def __init__(self):
 		self.depot_list = depot.DepotList()
@@ -15,9 +17,18 @@ class ServerBackend:
 		if client_dict["ping"]== False:
 			if client_dict["completed"]:
 				if client_dict["successful"]:
+					print("getting command by id")
+					print(client_dict["command_id"])
 					depot_item = working_depot.get_by_id(client_dict["command_id"])
-					depot_item.set(client_dict["completed"], client_dict["stdout"], client_dict["exit_code"])
-					depot_item.count -= 1
+					if depot_item is not None:
+						print(f"Depot_Item: {depot_item}")
+						print("setting depot item information")
+						depot_item.set(client_dict["completed"], client_dict["stdout"], client_dict["exit_code"])
+						print(f"Modified Depot Item: {depot_item.output()}")
+						print("decrementing count")
+						depot_item.count -= 1
+					else:
+						pass
 					# print(depot_item.output())
 				else:
 					#if unsequenced go onto the next item (table this one until the user has ruled on it), else wait for user responce
@@ -26,7 +37,8 @@ class ServerBackend:
 				print("Not completed")
 		else:
 			print("Ping == True")
-
+		print("TTTTTTT")
+		working_depot.print_depot_contents()
 		if client_dict["ready"]:
 			print("ready!")
 			return working_depot.get_next()
