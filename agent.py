@@ -38,7 +38,8 @@ class Agent:
 			subprocess_result = subprocess.Popen(command_list, stdout=subprocess.PIPE)
 
 		output = subprocess_result.communicate()[0]
-		return output.decode("utf-8")
+
+		return output.decode("utf-8"), subprocess_result.returncode
 
 	def _sudo_run_command(self, command_list):
 		if not "sudo" in command_list:

@@ -52,16 +52,18 @@ class Server:
 
 					if handler_result != None:
 						command, command_id, count = handler_result
-						print(f"command: {command}, command_id: {command_id}, count: {count}")
+						print(f"handler_result != none: command: {command}, command_id: {command_id}, count: {count}")
 						#not_ready, command, sudo, password, sequence, depot_items, command_id=0
 						self._server_msg.add_data(False, command, "", "", 0, count, command_id)
 						self.send(client)
 						results = self.recieve(client)
+						print(f"results:\n {results}")
 						handler_results = self._server_backend.client_handler(results)
-						print(results["stdout"])
+						# print(results["stdout"])
+						print("handler_results2:")
 						print(handler_results)
 					else:
-						print("None")
+						print("handler_result = None")
 						# create a situation where it can return a message for the client to wait for the server
 						# and the server can ping the client to wake it up
 					# self.client_handler(res)

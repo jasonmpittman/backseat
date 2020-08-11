@@ -25,25 +25,25 @@ class Client:
 			print("Cannot connect to server, server is probably off")
 			return False
 
-	def send_recv(self, message=""):
-		res = ""
-		# self._client_msg.add_data(self, whoami, ping, ready, completed, stdout, stderr, successful, exit_code, command_id=0
-		self._client_msg.add_data("localhost", True, True, message, "", True, 0)
-		message = self._client_msg.to_json()
-
-		try:
-			self._client.send(bytes(message, Client.encoding))
-			res = self.recieve()
-			res = json.loads(res)
-		except:
-			#this is for testing purposes only
-			res = None
-
-		return res
+	# def send_recv(self, message=""):
+	# 	res = ""
+	# 	# self._client_msg.add_data(self, whoami, ping, ready, completed, stdout, stderr, successful, exit_code, command_id
+	# 	self._client_msg.add_data("localhost", True, True, message, "", True, 0)
+	# 	message = self._client_msg.to_json()
+	#
+	# 	try:
+	# 		self._client.send(bytes(message, Client.encoding))
+	# 		res = self.recieve()
+	# 		res = json.loads(res)
+	# 	except:
+	# 		#this is for testing purposes only
+	# 		res = None
+	#
+	# 	return res
 
 	def get_command(self):
-		#whoami, ping, ready, completed, stdout, stderr, successful, exit_code, command_id=0
-		self._client_msg.add_data("localhost", True, True, True,"", "", False, 0)
+		#whoami, ping, ready, completed, stdout, stderr, successful, exit_code, command_id
+		self._client_msg.add_data("localhost", True, True, True,"", "", False, 0, 0)
 		self.send()
 		res = self.recieve()
 		if res == None:
@@ -70,9 +70,9 @@ class Client:
 			print("Failed to recieve")
 			return None
 
-	def send_results(self, command_id, stdout, stderr=""):
-		# whoami, ping, ready, completed, stdout, stderr, successful, exit_code, command_id=0
-		self._client_msg.add_data("localhost", False, True, True, stdout, stderr, True, 0)
+	def send_results(self, command_id, exit_code, stdout, stderr=""):
+		# whoami, ping, ready, completed, stdout, stderr, successful, exit_code, command_id
+		self._client_msg.add_data("localhost", False, True, True, stdout, stderr, True, exit_code, command_id)
 		message = self._client_msg.to_json()
 		try:
 			self._client.send(bytes(message, Client.encoding))

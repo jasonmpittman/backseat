@@ -13,10 +13,12 @@ class Endpoint:
 		responce = self._client.get_command()
 		print(responce)
 		if responce != None:
-			result = self._agent.run_command(responce["command"])
+			result, exit_code = self._agent.run_command(responce["command"])
 			# print(result)
 			# command_id, stdout, stderr=""
-			self._client.send_results(responce["command_id"], result)
+
+			print(f"responce['command_id'] = {responce['command_id']}")
+			self._client.send_results(responce["command_id"], exit_code, result)
 		else:
 			print("run_local_command: None")
 

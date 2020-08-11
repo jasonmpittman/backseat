@@ -33,7 +33,7 @@ class Depot:
 		for dp in self._depot_items_list:
 			if dp._done == False:
 				# self.count -= 1
-				print(f"{dp.command}, {dp.command_id}, {self.count}")
+				print(f"get_next: [command]{dp.command}, [command_id]{dp.command_id}, [count]{self.count}")
 				return (dp.command, dp.command_id, self.count)
 		return None
 

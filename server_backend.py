@@ -14,20 +14,23 @@ class ServerBackend:
 		working_depot = self.depot_list.get_working_depot(client_dict["whoami"])
 
 		print(f"ping = {client_dict['ping']}")
+		
 		if client_dict["ping"]== False:
 			if client_dict["completed"]:
 				if client_dict["successful"]:
 					print("getting command by id")
-					print(client_dict["command_id"])
+					print(f"command_id: {client_dict['command_id']}")
 					depot_item = working_depot.get_by_id(client_dict["command_id"])
 					if depot_item is not None:
 						print(f"Depot_Item: {depot_item}")
 						print("setting depot item information")
+						# print("client_dict", client_dict["completed"], client_dict["stdout"], client_dict["exit_code"])
 						depot_item.set(client_dict["completed"], client_dict["stdout"], client_dict["exit_code"])
 						print(f"Modified Depot Item: {depot_item.output()}")
 						print("decrementing count")
 						depot_item.count -= 1
 					else:
+						print("depot_item = none")
 						pass
 					# print(depot_item.output())
 				else:
