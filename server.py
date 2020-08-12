@@ -8,6 +8,7 @@ import server_backend
 
 class Server:
 	encoding = "utf-8"
+	msg_byte_len = 1024
 
 	def __init__(self, ip, port, connections=10):
 		self._ip = ip
@@ -22,16 +23,24 @@ class Server:
 
 #Add encryption!!
 	def send(self, client):
-		message = self._server_msg.to_json()
+		message = self._server_msg.to_json() + "`"
 		try:
 			client.send(bytes(message, Server.encoding))
 		except:
 			print("Server: Failed to send")
 
 	def recieve(self, client):
+		raw_res = " "
 		try:
-			raw_res = client.recv(4096).decode()
-			dict_res = json.loads(raw_res)
+			print("pre while")
+			while raw_res[-1] != "`":
+				print("in while")
+				if raw_res == " ":
+					raw_res = ""
+				raw_res += client.recv(Server.msg_byte_len).decode()
+				print(raw_res)
+			res = raw_res.replace("`", "")
+			dict_res = json.loads(res)
 			return dict_res
 		except:
 			print("Server: Failed to recieve")
@@ -55,8 +64,12 @@ class Server:
 						print(f"handler_result != none: command: {command}, command_id: {command_id}, count: {count}")
 						#not_ready, command, sudo, password, sequence, depot_items, command_id=0
 						self._server_msg.add_data(False, command, "", "", 0, count, command_id)
+						print("pre-send")
 						self.send(client)
+						print("post send")
+						print("pre-recieve")
 						results = self.recieve(client)
+						print("post recieve")
 						print(f"results:\n {results}")
 						handler_results = self._server_backend.client_handler(results)
 						# print(results["stdout"])
