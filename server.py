@@ -1,10 +1,10 @@
 import socket
 
-import server_message
-
 import json
 
-import server_backend
+from backseat_server import server_message
+
+from backseat_server import server_backend
 
 class Server:
 	encoding = "utf-8"
@@ -36,7 +36,7 @@ class Server:
 				if raw_res == " ":
 					raw_res = ""
 				raw_res += client.recv(Server.msg_byte_len).decode()
-				print(raw_res)
+				# print(raw_res)
 			res = raw_res.replace("`", "")
 			dict_res = json.loads(res)
 			return dict_res
@@ -64,7 +64,7 @@ class Server:
 						self._server_msg.add_data(False, command, "", "", 0, count, command_id)
 						self.send(client)
 						results = self.recieve(client)
-						print(f"results:\n {results}")
+						print(f"results:\n {results['stdout']}")
 						handler_results = self._server_backend.client_handler(results)
 						# print(results["stdout"])
 						print("handler_results2:")

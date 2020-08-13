@@ -2,9 +2,9 @@ import socket
 
 import time
 
-import client_message
-
 import json
+
+from backseat_endpoint import client_message
 
 class Client:
 	encoding = "utf-8"

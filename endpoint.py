@@ -1,6 +1,6 @@
-import agent
+from backseat_endpoint import agent
 
-import client
+from backseat_endpoint import client
 
 class Endpoint:
 	def __init__(self, serv_ip="localhost", serv_port=9999):

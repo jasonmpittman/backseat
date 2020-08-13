@@ -1,4 +1,4 @@
-import depot
+from backseat_server import depot
 
 # Track down and fix returning command id 0 bug
 
