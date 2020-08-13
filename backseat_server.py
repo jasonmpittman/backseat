@@ -36,7 +36,6 @@ class Server:
 				if raw_res == " ":
 					raw_res = ""
 				raw_res += client.recv(Server.msg_byte_len).decode()
-				# print(raw_res)
 			res = raw_res.replace("`", "")
 			dict_res = json.loads(res)
 			return dict_res
