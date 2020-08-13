@@ -14,20 +14,17 @@ class ServerBackend:
 		working_depot = self.depot_list.get_working_depot(client_dict["whoami"])
 
 		print(f"ping = {client_dict['ping']}")
-		
+
 		if client_dict["ping"]== False:
 			if client_dict["completed"]:
 				if client_dict["successful"]:
-					print("getting command by id")
-					print(f"command_id: {client_dict['command_id']}")
 					depot_item = working_depot.get_by_id(client_dict["command_id"])
 					if depot_item is not None:
-						print(f"Depot_Item: {depot_item}")
-						print("setting depot item information")
+						# print("setting depot item information")
 						# print("client_dict", client_dict["completed"], client_dict["stdout"], client_dict["exit_code"])
 						depot_item.set(client_dict["completed"], client_dict["stdout"], client_dict["exit_code"])
-						print(f"Modified Depot Item: {depot_item.output()}")
-						print("decrementing count")
+						# print(f"Modified Depot Item: {depot_item.output()}")
+						print(lient_dict["stdout"])
 						depot_item.count -= 1
 					else:
 						print("depot_item = none")
@@ -40,34 +37,13 @@ class ServerBackend:
 				print("Not completed")
 		else:
 			print("Ping == True")
-		print("TTTTTTT")
+		print("-----@@@@@@@@-----")
 		working_depot.print_depot_contents()
 		if client_dict["ready"]:
 			print("ready!")
 			return working_depot.get_next()
 		else:
 			return None
-
-		'''
-		if completed:
-			if sucessful:
-				mark command with command id as done
-				bring back stdout information
-				give user exit code  --> perhaps attach to the item
-			if failed:
-				let user know, provide stderr
-				if not in sequence go to next item
-				Give user exitcode
-
-		else (not completed):
-			Assmue it to time to check for a ready
-
-		if ready:
-			send next command
-		else:
-			do not do anythnig
-		'''
-
 
 if __name__ == "__main__":
 	SB = ServerBackend()

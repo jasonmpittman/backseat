@@ -26,22 +26,6 @@ class Client:
 			print("Cannot connect to server, server is probably off")
 			return False
 
-	# def send_recv(self, message=""):
-	# 	res = ""
-	# 	# self._client_msg.add_data(self, whoami, ping, ready, completed, stdout, stderr, successful, exit_code, command_id
-	# 	self._client_msg.add_data("localhost", True, True, message, "", True, 0)
-	# 	message = self._client_msg.to_json()
-	#
-	# 	try:
-	# 		self._client.send(bytes(message, Client.encoding))
-	# 		res = self.recieve()
-	# 		res = json.loads(res)
-	# 	except:
-	# 		#this is for testing purposes only
-	# 		res = None
-	#
-	# 	return res
-
 	def get_command(self):
 		#whoami, ping, ready, completed, stdout, stderr, successful, exit_code, command_id
 		self._client_msg.add_data("localhost", True, True, True,"", "", False, 0, 0)
@@ -68,11 +52,9 @@ class Client:
 			while raw_res[-1] != "`":
 				if raw_res == " ":
 					raw_res = ""
-				print("|" + raw_res + "|")
 				raw_res += self._client.recv(Client.msg_byte_len).decode(Client.encoding)
-				print("|" + raw_res + "|")
 			res = raw_res.replace("`", "")
-			print(res)
+			# print(res)
 			dict_res = json.loads(res)
 			return dict_res
 		except:
@@ -84,8 +66,6 @@ class Client:
 		self._client_msg.add_data("localhost", False, True, True, stdout, stderr, True, exit_code, command_id)
 		try:
 			self.send()
-			# res = self._client.recv(4096).decode(Client.encoding)
-			# print(res)
 		except:
 			print("send_results: Failed")
 

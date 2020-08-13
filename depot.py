@@ -15,7 +15,7 @@ class DepotItem:
 		self._exit_code = exit_code
 
 	def output(self):
-		return f"{self.command}, {self.command_id}, {self._done}, {self._stdout}, {self._exit_code}"
+		return f"Command:{self.command}\n Command ID: {self.command_id}\n Done: {self._done}\n stdout: {self._stdout}\n Exit Code: {self._exit_code}\n"
 
 class Depot:
 	def __init__(self, host):

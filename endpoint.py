@@ -18,6 +18,7 @@ class Endpoint:
 			# command_id, stdout, stderr=""
 
 			print(f"responce['command_id'] = {responce['command_id']}")
+			#add stderrr
 			self._client.send_results(responce["command_id"], exit_code, result)
 		else:
 			print("run_local_command: None")

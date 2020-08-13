@@ -32,9 +32,7 @@ class Server:
 	def recieve(self, client):
 		raw_res = " "
 		try:
-			print("pre while")
 			while raw_res[-1] != "`":
-				print("in while")
 				if raw_res == " ":
 					raw_res = ""
 				raw_res += client.recv(Server.msg_byte_len).decode()
@@ -64,12 +62,8 @@ class Server:
 						print(f"handler_result != none: command: {command}, command_id: {command_id}, count: {count}")
 						#not_ready, command, sudo, password, sequence, depot_items, command_id=0
 						self._server_msg.add_data(False, command, "", "", 0, count, command_id)
-						print("pre-send")
 						self.send(client)
-						print("post send")
-						print("pre-recieve")
 						results = self.recieve(client)
-						print("post recieve")
 						print(f"results:\n {results}")
 						handler_results = self._server_backend.client_handler(results)
 						# print(results["stdout"])
@@ -79,10 +73,6 @@ class Server:
 						print("handler_result = None")
 						# create a situation where it can return a message for the client to wait for the server
 						# and the server can ping the client to wake it up
-					# self.client_handler(res)
-
-					# self._server_msg.add_data(command, sudo, password, sequence, depot_items, )
-					# self._server_msg.add_data("ls -al", False, "", 0, 3)
 
 				except:
 					pass
