@@ -4,7 +4,7 @@ import json
 
 from backseat_server import server_message
 
-from backseat_server import server_backend
+from backseat_server import client_handler
 
 class TcpSocketHandler:
 	encoding = "utf-8"
@@ -18,7 +18,7 @@ class TcpSocketHandler:
 		self._server.bind((self._ip, self._port))
 		self._server.listen(self._connections)
 		self._server_msg = server_message.ServerMessage()
-		self._server_backend = server_backend.ServerBackend()
+		self._server_backend = client_handler.ClientHandler()
 		print("Server setup and Listening:")
 
 #Add encryption!!

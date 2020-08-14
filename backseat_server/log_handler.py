@@ -1,3 +1,6 @@
+'''
+Handles all the logging.
+'''
 import logging
 
 class LogHandler:
