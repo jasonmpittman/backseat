@@ -44,10 +44,3 @@ class ClientHandler:
 			return working_depot.get_next()
 		else:
 			return None
-
-# if __name__ == "__main__":
-# 	SB = ServerBackend()
-# 	client_dict_test = {"whoami": "localhost", "ready": True, "completed": True, "stdout": "stdout: woo", "stderr": "no error today", "successful": True, "exit_code": 0, "command_id": 1}
-# 	SB.client_handler(client_dict_test)
-
-#
