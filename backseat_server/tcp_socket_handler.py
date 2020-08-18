@@ -27,7 +27,7 @@ class TcpSocketHandler:
 		try:
 			client.send(bytes(message, TcpSocketHandler.encoding))
 		except:
-			print("Server: Failed to send")
+			print("Server Socket error: Failed to send")
 
 	def recieve(self, client):
 		raw_res = " "
@@ -40,7 +40,7 @@ class TcpSocketHandler:
 			dict_res = json.loads(res)
 			return dict_res
 		except:
-			print("Server: Failed to recieve")
+			print("Server Socket error: Failed to recieve")
 			return {}
 
 	def server_loop(self):
@@ -74,7 +74,7 @@ class TcpSocketHandler:
 						# and the server can ping the client to wake it up
 
 				except:
-					pass
+					print("Server Loop Error: Server loop failed")
 				client.close()
 		except KeyboardInterrupt:
 			print("\n Keyboard Interupt")
