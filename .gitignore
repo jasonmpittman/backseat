@@ -130,3 +130,10 @@ dmypy.json
 
 # Test scripts
 *.zsh
+
+#config
+
+*.config
+
+# xml
+*.xml
