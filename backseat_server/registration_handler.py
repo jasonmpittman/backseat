@@ -30,14 +30,17 @@ class RegistrationHandler:
 			for line in self._host_list:
 				F.write(f"{line['host']}, {line['OS']}\n")
 
-	def modify_host(self, old_host, old_OS, new_host, new_OS):
+	def modify_host(self, old_host, new_host, new_OS=""):
 		self.get_registration_info()
 		found = False
 		for item in self._host_list:
-			if item["host"] == old_host and item["OS"] == old_OS:
+			if item["host"] == old_host:
 				found = True
 				item["host"] = new_host
-				item["OS"] = new_OS
+				if new_OS != "":
+					item["OS"] = new_OS
+				else:
+					pass
 		if not found:
 			print("old_host and old_OS do not match any hosts in the file")
 		else:
