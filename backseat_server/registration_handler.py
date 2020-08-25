@@ -47,7 +47,18 @@ class RegistrationHandler:
 
 
 	def delete_host(self, host):
-		pass
+		self.get_registration_info()
+		found = False
+		for item in self._host_list:
+			if item["host"] == host:
+				found = True
+				self._host_list.remove(item)
+
+		if not found:
+			print(f"delete_host: Host [{host}] not found, nothing deleted")
+		else:
+			self.write_host_list_to_config()
+
 
 	def register_new_host(self, host, OS):
 		current_hosts = []
@@ -89,12 +100,13 @@ class RegistrationHandler:
 		return self.get_host("Fedora")
 
 	def print_host_list(self):
+		self.get_registration_info()
 		for host in self._host_list:
 			print(f"{host['host']}: {host['OS']}")
 
 if __name__ == "__main__":
 	RH = RegistrationHandler()
 	RH.print_host_list()
-	RH.modify_host("444.111.111.111", "Ubuntu", "1111.1111.1111.1111", "MacOS")
 	print("--")
-	RH.modify_host("111.222.333.444", "CentOS7", "444.333.222.111", "MacOS")
+	RH.delete_host("444.333.222.111")
+	RH.print_host_list()
