@@ -10,10 +10,9 @@ class RegistrationHandler:
 	def add(self, host, OS):
 		self._host_list.append({"host": host, "OS": OS})
 
-
 	def get_registration_info(self):
-		with open("host.config", "r") as F:
-			# Add the next portion to this
+		with open("../host.config", "r") as F:
+			self._host_list = []
 			lines = F.readlines()
 			for line in lines:
 				line = line.replace("\n", "")
@@ -23,11 +22,36 @@ class RegistrationHandler:
 				if host not in hosts:
 					self.add(host, OS)
 				else:
-					print(f"repeat host [{host}] is not being added to self._host_list")
+					print(f"repeat host in host.config file: [{host}] is not being added to RegistrationHandler._host_list")
+
+	def write_host_list_to_config(self):
+		with open("../host.config", "w") as F:
+			F.write("")
+			for line in self._host_list:
+				F.write(f"{line['host']}, {line['OS']}\n")
+
+	def modify_host(self, old_host, old_OS, new_host, new_OS):
+		self.get_registration_info()
+		found = False
+		for item in self._host_list:
+			if item["host"] == old_host and item["OS"] == old_OS:
+				found = True
+				item["host"] = new_host
+				item["OS"] = new_OS
+		if not found:
+			print("old_host and old_OS do not match any hosts in the file")
+		else:
+			print("hostlist:")
+			print(self._host_list)
+			self.write_host_list_to_config()
+
+
+	def delete_host(self, host):
+		pass
 
 	def register_new_host(self, host, OS):
 		current_hosts = []
-		with open("host.config", "r") as F:
+		with open("../host.config", "r") as F:
 			lines = F.readlines()
 			for line in lines:
 				line = line.replace("\n", "")
@@ -35,9 +59,12 @@ class RegistrationHandler:
 				host, OS = line.split(",")
 				current_hosts.append(host)
 
-		with open("host.config", "a") as F:
-			F.write(f"{host}, {OS}\n")
-
+		with open("../host.config", "a") as F:
+			# F.write(f"{host}, {OS}\n")
+			if host not in current_hosts:
+				F.write(f"{host}, {OS}\n")
+			else:
+				print(f"Host is already in host.config file: [{host}, {OS}]")
 
 	def get_hosts(self, host_type):
 		res = []
@@ -53,10 +80,10 @@ class RegistrationHandler:
 		return self.get_hosts("Ubuntu")
 
 	def get_centOS_7_hosts(self):
-		return self.get_hosts("CentOS 7")
+		return self.get_hosts("CentOS7")
 
 	def get_centOS_8_hosts(self):
-		return self.get_hosts("CentOS 8")
+		return self.get_hosts("CentOS8")
 
 	def get_fedora_hosts(self):
 		return self.get_host("Fedora")
@@ -65,10 +92,9 @@ class RegistrationHandler:
 		for host in self._host_list:
 			print(f"{host['host']}: {host['OS']}")
 
-
-
-
 if __name__ == "__main__":
 	RH = RegistrationHandler()
 	RH.print_host_list()
-	RH.register_new_host("132.456.789.1011", "Ubuntu")
+	RH.modify_host("444.111.111.111", "Ubuntu", "1111.1111.1111.1111", "MacOS")
+	print("--")
+	RH.modify_host("111.222.333.444", "CentOS7", "444.333.222.111", "MacOS")
