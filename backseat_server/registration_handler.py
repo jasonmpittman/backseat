@@ -39,8 +39,7 @@ class RegistrationHandler:
 				item["host"] = new_host
 				if new_OS != "":
 					item["OS"] = new_OS
-				else:
-					pass
+					
 		if not found:
 			print("old_host and old_OS do not match any hosts in the file")
 		else:
