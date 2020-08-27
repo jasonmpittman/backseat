@@ -33,7 +33,6 @@ class ClientHandler:
 						# sets the valus of depot item because the depot_item is completed
 						depot_item.set(client_dict["completed"], client_dict["stdout"], client_dict["exit_code"])
 						# print(f"Modified Depot Item: {depot_item.output()}")
-						print(client_dict["stdout"])
 						depot_item.count -= 1
 					else:
 						# is unable to obtain the depot_item by id

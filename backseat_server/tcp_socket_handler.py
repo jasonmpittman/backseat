@@ -6,6 +6,8 @@ from backseat_server import server_message
 
 from backseat_server import client_handler
 
+import dns.resolver
+import dns.reversename
 class TcpSocketHandler:
 	encoding = "utf-8"
 	msg_byte_len = 1024
@@ -21,6 +23,14 @@ class TcpSocketHandler:
 		self._server_backend = client_handler.ClientHandler()
 		print("Server setup and Listening:")
 
+	def get_FQDN(self, ip):
+		ip = "8.8.4.4"
+		print(f"|{ip}|")
+		addr = dns.reversename.from_address(ip).to_text()
+		res = dns.resolver.query(addr,"PTR")
+		print("----------")
+		print(f"|{res[0]}|")
+		print("----------")
 #Add encryption!!
 	def send(self, client):
 		message = self._server_msg.to_json() + "`"
@@ -49,7 +59,9 @@ class TcpSocketHandler:
 		try:
 			while True:
 				client, c_ip = self._server.accept()
+				ip, port = c_ip
 				print(f"Connected to {c_ip}")
+				self.get_FQDN(ip)
 				res = ""
 				try:
 					res = self.recieve(client)

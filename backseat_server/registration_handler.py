@@ -125,5 +125,5 @@ if __name__ == "__main__":
 	RH = RegistrationHandler()
 	RH.print_host_list()
 	print("--")
-	RH.delete_host("444.333.222.111")
+	RH.delete_host("")
 	RH.print_host_list()
