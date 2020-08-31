@@ -3,6 +3,7 @@ This portion deals with the computers that are registered.
 '''
 
 from shared import log_handler
+from backseat_endpoint import agent
 
 class RegistrationHandler:
 	def __init__(self):
@@ -25,7 +26,7 @@ class RegistrationHandler:
 		'''
 		This function gets all the information from the host file and puts it into self._host_list.
 		'''
-		with open("../host.config", "r") as F:
+		with open("host.config", "r") as F:
 			self._log.info(self.get_registration_info.__name__, "host.config successfully opened")
 			self._host_list = []
 			self._log.info(self.get_registration_info.__name__, "self._host_list set to []")
@@ -104,7 +105,7 @@ class RegistrationHandler:
 				FQDN, OS = line.split(",")
 				current_hosts.append(FQDN)
 
-		with open("../host.config", "a") as F:
+		with open("host.config", "a") as F:
 			# F.write(f"{host}, {OS}\n")
 			self._log.info(self.register_new_host.__name__, "Checking if host is unique")
 			if new_FQDN not in current_hosts:
@@ -163,7 +164,7 @@ class RegistrationHandler:
 			print(f"{host['FQDN']}: {host['OS']}")
 
 if __name__ == "__main__":
-	RH = RegistrationHandler()
+	RH = registration_handler.RegistrationHandler()
 	RH.print_host_list()
 	print("--")
 	RH.delete_host("")
