@@ -2,7 +2,7 @@
 This portion deals with the computers that are registered.
 '''
 
-import log_handler
+from shared import log_handler
 
 class RegistrationHandler:
 	def __init__(self):
