@@ -10,6 +10,8 @@ import dns.resolver
 
 import dns.reversename
 
+from shared import asym_cryptography_handler as crypto
+
 class TcpSocketHandler:
 	encoding = "utf-8"
 	msg_byte_len = 1024
@@ -23,6 +25,7 @@ class TcpSocketHandler:
 		self._server.listen(self._connections)
 		self._server_msg = server_message.ServerMessage()
 		self._server_backend = client_handler.ClientHandler()
+		self._crypto_module = crypto.AsymmetricCryptographyHandler()
 		print("Server setup and Listening:")
 
 	def get_FQDN(self, ip):
@@ -40,7 +43,11 @@ class TcpSocketHandler:
 
 #Add encryption!!
 	def send(self, client):
-		message = self._server_msg.to_json() + "`"
+		message = self._server_msg.to_json()
+		cyphertext = self._crypto_module.encrypt(message)
+		print(cyphertext)
+		cyphertext = str(cyphertext) + "|"
+
 		try:
 			client.send(bytes(message, TcpSocketHandler.encoding))
 		except:
@@ -49,11 +56,13 @@ class TcpSocketHandler:
 	def recieve(self, client):
 		raw_res = " "
 		try:
-			while raw_res[-1] != "`":
+			while raw_res[-1] != "|":
 				if raw_res == " ":
 					raw_res = ""
 				raw_res += client.recv(TcpSocketHandler.msg_byte_len).decode()
-			res = raw_res.replace("`", "")
+				print("recieved: " + raw_res)
+			cyphertext = raw_res.replace("|", "")
+			res = self._crypto_module.decrypt(cyphertext)
 			dict_res = json.loads(res)
 			return dict_res
 		except:
