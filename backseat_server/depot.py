@@ -40,7 +40,7 @@ class Depot:
 	def add(self, command):
 		new_depot_item = DepotItem(command, self.get_depot_list_len()+1)
 		self._depot_items_list.append(new_depot_item)
-		print(new_depot_item.output())
+		# print(new_depot_item.output())
 		self.count += 1
 
 	def get_depot_list_len(self):
@@ -86,6 +86,11 @@ class DepotList():
 		for depot in self.list:
 			if depot.host in host_list:
 				depot.add(command)
+
+	def print_depot_list(self):
+		for depot in self.list:
+			print(f"--{depot.host}--")
+			depot.print_depot_contents()
 
 if __name__ == "__main__":
 	dl = DepotList()
