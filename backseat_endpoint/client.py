@@ -45,10 +45,13 @@ class Client:
 	def send(self):
 		message = self._client_msg.to_json()
 		cyphertext = self._crypto_module.encrypt(message)
-		print(cyphertext)
+		# print(cyphertext)
 		cyphertext = str(cyphertext) + "|"
+		print(cyphertext)
 		try:
-			self._client.send(bytes(message, Client.encoding))
+			byte_msg = bytes(cyphertext, Client.encoding)
+			print(f"byte_msg:\n{byte_msg}")
+			self._client.send(byte_msg)
 		except:
 			print("Failed to send")
 
