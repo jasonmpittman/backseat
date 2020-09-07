@@ -46,40 +46,29 @@ class TcpSocketHandler:
 		message = self._server_msg.to_json()
 		cyphertext = self._crypto_module.encrypt(message)
 		print(cyphertext)
-		cyphertext = str(cyphertext) + "|"
 
 		try:
-			client.send(bytes(message, TcpSocketHandler.encoding))
+			client.send(cyphertext)
+			client.shutdown(socket.SHUT_WR)
 		except:
 			print("Server Socket error: Failed to send")
 
 	def recieve(self, client):
-		raw_res = " "
+		res = ""
+		cyphertext = ""
 		try:
-			while raw_res[-1] != "|":
-				if raw_res == " ":
-					raw_res = ""
-				raw_res += client.recv(TcpSocketHandler.msg_byte_len).decode()
-				print("recieved: " + raw_res)
-			cyphertext = raw_res.replace("|", "")
-			print("--")
-			print(cyphertext)
+			while True:
+				raw_msg = client.recv(TcpSocketHandler.msg_byte_len)
+				if not raw_msg:
+					break
+				cyphertext += raw_msg
 			res = self._crypto_module.decrypt(cyphertext)
-			dict_res = json.loads(res)
-			return dict_res
+			return res
+
+
 		except:
 			print("Server Socket error: Failed to recieve")
-			return {}
-
-		# raw_res = " "
-		# res = ""
-		# while len(raw_res) > 0:
-		# 	raw_res = client.recv(TcpSocketHandler.msg_byte_len).decode("utf-8")
-		# 	print(f"raw_res")
-		# 	res = res + raw_res
-		# print("out of loop")
-		# print(res)
-
+			return None
 
 	def server_loop(self):
 		# Figure out a way to breakup large messages so that they can be sent and recieved without issue
