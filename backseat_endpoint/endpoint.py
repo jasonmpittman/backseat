@@ -11,7 +11,9 @@ class Endpoint:
 		#get command from server
 		self._client.connect()
 		responce = self._client.get_command()
+		print("Responce")
 		print(responce)
+		print("--")
 		if responce != None:
 			result, exit_code = self._agent.run_command(responce["command"])
 			# print(result)

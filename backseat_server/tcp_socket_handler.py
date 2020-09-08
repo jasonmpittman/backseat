@@ -55,15 +55,25 @@ class TcpSocketHandler:
 
 	def recieve(self, client):
 		res = ""
-		cyphertext = ""
+		cyphertext = b''
+		raw_msg = b''
 		try:
 			while True:
+				print("in while loop")
 				raw_msg = client.recv(TcpSocketHandler.msg_byte_len)
+				print(raw_msg)
 				if not raw_msg:
+					print("in break")
 					break
+				print("past break")
 				cyphertext += raw_msg
+				print("past +=")
+			cyphertext += raw_msg
+			print(cyphertext)
+
 			res = self._crypto_module.decrypt(cyphertext)
-			return res
+			dict_res = json.loads(res)
+			return dict_res
 
 
 		except:

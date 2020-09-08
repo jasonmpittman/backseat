@@ -45,24 +45,24 @@ class Client:
 	def send(self):
 		message = self._client_msg.to_json()
 		cyphertext = self._crypto_module.encrypt(message)
-		# print(cyphertext)
-		cyphertext = str(cyphertext) + "|"
 		print(cyphertext)
 		try:
-			byte_msg = bytes(cyphertext, Client.encoding)
-			print(f"byte_msg:\n{byte_msg}")
-			self._client.send(byte_msg)
+			self._client.send(cyphertext)
+			self._client.shutdown(socket.SHUT_WR)
 		except:
-			print("Failed to send")
+			print("Endpoint TcpSocketHandler: Failed to send")
 
 	def recieve(self):
-		raw_res = " "
+		raw_msg = ""
+		cyphertext = ""
 		try:
-			while raw_res[-1] != "|":
-				if raw_res == " ":
-					raw_res = ""
-				raw_res += self._client.recv(Client.msg_byte_len).decode(Client.encoding)
-			cyphertext = raw_res.replace("|", "")
+			while True:
+				raw_msg = self._client.recv(Client.msg_byte_len)
+				if not raw_msg:
+					break
+
+				cyphertext += raw_msg
+
 			res = self._crypto_module.decrypt(cyphertext)
 			# print(res)
 			dict_res = json.loads(res)
