@@ -12,7 +12,7 @@ import dns.reversename
 
 from shared import asym_cryptography_handler as crypto
 
-class TcpSocketHandler:
+class TcpSocketHandlerServer:
 	encoding = "utf-8"
 	msg_byte_len = 1024
 
