@@ -1,6 +1,6 @@
 import socket
 
-import asym_cryptography_handler as crypto
+from shared import asym_cryptography_handler as crypto
 
 # AsymmetricCryptographyHandler()
 # Note on the asym_crypto:
@@ -18,13 +18,13 @@ class TcpSocketHandler:
 		cyphertext_full_msg = b''
 		try:
 			for block in blocks:
-				cyphertext = self._crypto.encrypt(message, public_key)
+				cyphertext = self._crypto.encrypt(block, public_key)
 				cyphertext_full_msg += cyphertext
 		except:
 			print("TcpSocketHandler.send(): error in encrypting blocks")
 			return None
 		try:
-			signature = self._crypto.sign(cyphertext_full_msg, public_key)
+			signature = self._crypto.sign(cyphertext_full_msg, private_key)
 			signed_msg = cyphertext_full_msg + signature
 		except:
 			print("TcpSocketHandler.send(): Error in signing message")
@@ -60,8 +60,6 @@ class TcpSocketHandler:
 			print("TcpSocketHandler.recieve(): Error in decryption of the message")
 			return None
 		return return_msg
-
-
 
 
 	def create_client_socket_connect(self, ip, port):
