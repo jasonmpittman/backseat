@@ -18,13 +18,25 @@ class TcpSocketHandler:
 	def send(self, client, message, public_key, private_key):
 		blocks = self._create_message_blocks(message)
 		cyphertext_full_msg = b''
-		for block in blocks:
-			cyphertext = self._crypto.encrypt(message, public_key)
-			cyphertext_full_msg += cyphertext
-		signature = self._crypto.sign(cyphertext_full_msg, public_key)
-		signed_msg = cyphertext_full_msg + signature
-		client.send(signed_msg)
-		client.shutdown(socket.SHUT_WR)
+		try:
+			for block in blocks:
+				cyphertext = self._crypto.encrypt(message, public_key)
+				cyphertext_full_msg += cyphertext
+		except:
+			print("TcpSocketHandler.send(): error in encrypting blocks")
+			return None
+		try:
+			signature = self._crypto.sign(cyphertext_full_msg, public_key)
+			signed_msg = cyphertext_full_msg + signature
+		except:
+			print("TcpSocketHandler.send(): Error in signing message")
+			return None
+		try:
+			client.send(signed_msg)
+			client.shutdown(socket.SHUT_WR)
+		except:
+			print("TcpSocketHandler.send(): Error in sending message")
+			return None
 
 
 	def recieve(self, client):
