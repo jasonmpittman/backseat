@@ -9,15 +9,23 @@ import asym_cryptography_handler as crypto
 	# 256 byte signature output
 
 
-
 class TcpSocketHandler:
 	Crypto_Character_Limit = 245
 	Crypto_Byte_Output = 256
 	def __init__(self):
-		pass
+		self._crypto = crypto.AsymmetricCryptographyHandler()
 
-	def send(self, client):
-		pass
+	def send(self, client, message, public_key, private_key):
+		blocks = self._create_message_blocks(message)
+		cyphertext_full_msg = b''
+		for block in blocks:
+			cyphertext = self._crypto.encrypt(message, public_key)
+			cyphertext_full_msg += cyphertext
+		signature = self._crypto.sign(cyphertext_full_msg, public_key)
+		signed_msg = cyphertext_full_msg + signature
+		client.send(signed_msg)
+		client.shutdown(socket.SHUT_WR)
+
 
 	def recieve(self, client):
 		pass
@@ -39,3 +47,9 @@ class TcpSocketHandler:
 			return server
 		except:
 			print(f"Failed to create, bind, or listen to (ip[{ip}], port[{port}])")
+			return None
+
+	def _create_message_blocks(self, message):
+		chunk_list = [message[i:i+245] for i in range(0, len(message), 245)]
+		print(chunk_list)
+		return chunk_list
