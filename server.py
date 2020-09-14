@@ -9,8 +9,9 @@ try:
 	while True:
 		client, src_ip = server.accept()
 		ip, port = src_ip
-		res = socket_handler.recieve(client, "public.pem", "private.pem")
-		print(res)
+		res, sender_key = socket_handler.recieve(client, "private.pem")
+		print(f"Sender - {sender_key}:\n{res}")
+
 except KeyboardInterrupt:
 	print("\n--Keyboard Interrupt--")
 	server.close()

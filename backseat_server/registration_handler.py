@@ -3,8 +3,11 @@ This portion deals with the computers that are registered.
 '''
 
 from shared import log_handler
-from backseat_endpoint import agent
 
+from shared import asym_cryptography_handler as crypto
+
+
+# Name OS Public_Key
 class RegistrationHandler:
 	def __init__(self):
 		'''
@@ -14,13 +17,8 @@ class RegistrationHandler:
 		self.host_list = []
 		self.get_registration_info()
 		self._log.info(self.__init__.__name__, "_host_list initialized and registration information recieved from host.config file")
+		self.crypto_handler = crypto.AsymmetricCryptographyHandler()
 
-	def add(self, FQDN, OS):
-		'''
-		Adds provided FQDN and OS to the self.host_list.
-		'''
-		self.host_list.append({"FQDN": FQDN, "OS": OS})
-		self._log.info(self.add.__name__, f"Host [{FQDN}] with OS [{OS}] has been added to self.host_list")
 
 	def get_registration_info(self):
 		'''
@@ -34,85 +32,17 @@ class RegistrationHandler:
 			for line in lines:
 				line = line.replace("\n", "")
 				line = line.replace(" ", "")
-				FQDN, OS = line.split(",")
-				FQDNs = [h["FQDN"] for h in self.host_list]
-				if FQDN not in FQDNs:
-					self.add(FQDN, OS)
+				name, OS, public_key = line.split(",")
+				names = [h["name"] for h in self.host_list]
+				if name not in names:
+					self.add(name, OS, public_key)
 					self._log.info(self.get_registration_info.__name__, "host added")
 				else:
-					self._log.warning(self.get_registration_info.__name__, f"repeat host in host.config file: [{FQDN}] is not being added to RegistrationHandler._host_list")
-
-	def write_host_list_to_config(self):
-		'''
-		Writes all the data in self.host_list into the host.config file (Note: it does not check the contents, it deletes what is in host.config and writes the contents of self.host_list into the file.)
-		'''
-		with open("../host.config", "w") as F:
-			F.write("")
-			self._log.info(self.write_host_list_to_config.__name__, "Erased the contents of the host.config file")
-			for line in self.host_list:
-				F.write(f"{line['FQDN']}, {line['OS']}\n")
-			self._log.info(self.write_host_list_to_config.__name__, "Contents of self.host_list put into host.config file")
-
-	def modify_host(self, old_host, new_host, new_OS=""):
-		'''
-		Gives the ability to change or modify a host, in the event one needs to be edited.
-		'''
-		self.get_registration_info()
-		found = False
-		for item in self.host_list:
-			if item["FQDN"] == old_host:
-				found = True
-				item["FQDN"] = new_host
-				if new_OS != "":
-					item["OS"] = new_OS
-				self._log.info(self.modify_host.__name__, "host found and modified")
-				break
-
-		if not found:
-			self._log.warning(self.modify_host.__name__, "old_host does not match any hosts in the file")
-		else:
-			self.write_host_list_to_config()
+					self._log.warning(self.get_registration_info.__name__, f"repeat host in host.config file: [{name}] is not being added to RegistrationHandler._host_list")
 
 
-	def delete_host(self, FQDN):
-		'''
-		Removes a given host from the host.config file (and self.host_list).
-		'''
-		self.get_registration_info()
-		found = False
-		for item in self.host_list:
-			if item["FQDN"] == FQDN:
-				found = True
-				self.host_list.remove(item)
-				self._log.info(self.delete_host.__name__, f"host [{FQDN}] removed")
-				break
-
-		if not found:
-			self._log.warning(self.delete_host.__name__, f"delete_host: Host [{FQDN}] not found, nothing deleted")
-		else:
-			self.write_host_list_to_config()
-
-	def register_new_host(self, new_FQDN, new_OS):
-		'''
-		Adds a provided new, unique host to the host.config file.
-		'''
-		current_hosts = []
-		with open("../host.config", "r") as F:
-			lines = F.readlines()
-			for line in lines:
-				line = line.replace("\n", "")
-				line = line.replace(" ", "")
-				FQDN, OS = line.split(",")
-				current_hosts.append(FQDN)
-
-		with open("host.config", "a") as F:
-			# F.write(f"{host}, {OS}\n")
-			self._log.info(self.register_new_host.__name__, "Checking if host is unique")
-			if new_FQDN not in current_hosts:
-				F.write(f"{new_FQDN}, {new_OS}\n")
-				self._log.info(self.register_new_host.__name__, "Host addded")
-			else:
-				self._log.info(self.register_new_host.__name__, f"Host is already in host.config file: [{new_FQDN}, {new_OS}]")
+	def add(name, OS, public_key):
+		self.host_list.append({"name": name, "OS": OS, "public_key": public_key})
 
 	def get_hosts(self, host_type):
 		'''
@@ -161,11 +91,8 @@ class RegistrationHandler:
 		'''
 		self.get_registration_info()
 		for host in self.host_list:
-			print(f"{host['FQDN']}: {host['OS']}")
+			print(f"{host['name']}: {host['OS']}")
 
 if __name__ == "__main__":
 	RH = registration_handler.RegistrationHandler()
-	RH.print_host_list()
-	print("--")
-	RH.delete_host("")
 	RH.print_host_list()

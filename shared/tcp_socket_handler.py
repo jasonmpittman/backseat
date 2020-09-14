@@ -2,6 +2,8 @@ import socket
 
 from shared import asym_cryptography_handler as crypto
 
+import os
+
 # AsymmetricCryptographyHandler()
 # Note on the asym_crypto:
 	# 245 character encrytion limit
@@ -37,7 +39,7 @@ class TcpSocketHandler:
 			return None
 
 
-	def recieve(self, client, public_key, private_key):
+	def recieve(self, client, private_key):
 		signed_msg = b''
 		return_msg = ""
 		try:
@@ -51,6 +53,8 @@ class TcpSocketHandler:
 			return None
 		client_msg = signed_msg[:-256]
 		client_signature = signed_msg[-256:]
+		sender_public_key = self._identify(client_msg, client_signature)
+		print(sender_public_key)
 		msg_byte_blocks = self._byte_splitter(client_msg)
 
 		try:
@@ -59,7 +63,7 @@ class TcpSocketHandler:
 		except:
 			print("TcpSocketHandler.recieve(): Error in decryption of the message")
 			return None
-		return return_msg
+		return return_msg, sender_public_key
 
 
 	def create_client_socket_connect(self, ip, port):
@@ -88,3 +92,14 @@ class TcpSocketHandler:
 	def _byte_splitter(self, message):
 		chunk_list = [message[i:i+256] for i in range(0, len(message), 256)]
 		return chunk_list
+
+	def _get_key_list(self):
+		arr = os.listdir("keys")
+		return arr
+
+	def _identify(self, obj, signature):
+		key_list = self._get_key_list()
+		for key in key_list:
+			if self._crypto.is_sign_valid(obj, signature, key) == True:
+				return key
+		return None
