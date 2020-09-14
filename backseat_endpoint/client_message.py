@@ -4,8 +4,11 @@ class ClientMessage:
 	def __init__(self):
 		pass
 
-	def add_data(self, whoami, ping, ready, completed, stdout, stderr, successful, exit_code, command_id):
-		self._whoami = whoami
+	def create_msg(self, ping, ready, completed, stdout, stderr, successful, exit_code, command_id):
+		self.add_data(ping, ready, completed, stdout, stderr, successful, exit_code, command_id)
+		return self.to_json()
+
+	def add_data(self, ping, ready, completed, stdout, stderr, successful, exit_code, command_id):
 		self._ping = ping
 		self._ready = ready
 		self._completed = completed
@@ -16,7 +19,7 @@ class ClientMessage:
 		self._command_id = command_id
 
 	def to_json(self):
-		dict = {"whoami": self._whoami, "ping": self._ping, "ready": self._ready, "completed": self._completed, "stdout": self._stdout, "stderr": self._stderr, "successful": self._successful, "exit_code": self._exit_code, "command_id": self._command_id}
+		dict = {"ping": self._ping, "ready": self._ready, "completed": self._completed, "stdout": self._stdout, "stderr": self._stderr, "successful": self._successful, "exit_code": self._exit_code, "command_id": self._command_id}
 		output_json = json.dumps(dict)
 		return output_json
 

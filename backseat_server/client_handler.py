@@ -13,17 +13,17 @@ class ClientHandler:
 		Initializes the depot list.
 		'''
 		self.depot_list = depot.DepotList()
-		working_depot = self.depot_list.get_working_depot("localhost")
+		working_depot = self.depot_list.get_working_depot("public.pem")
 		working_depot.add("ls -al")
 		working_depot.add("PWD")
 
-	def client_handler(self, client_dict):
+	def client_handler(self, client_dict, sender_key):
 		'''
 		Decides what subsystem should run based on what message the client has
 		sent to the server.
 		'''
 		#gets working depot
-		working_depot = self.depot_list.get_working_depot(client_dict["whoami"])
+		working_depot = self.depot_list.get_working_depot(sender_key)
 
 		if client_dict["ping"]== False:
 			if client_dict["completed"]:
