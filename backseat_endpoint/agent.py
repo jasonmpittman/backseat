@@ -14,7 +14,7 @@ import socket
 class Agent:
 	def __init__(self):
 		self._platform = self.get_platform()
-		self._ip = socket.gethostbyname(socket.gethostname())
+		# self._ip = socket.gethostbyname(socket.gethostname())
 
 
 	def get_platform(self):
@@ -102,7 +102,6 @@ class Agent:
 
 if __name__ == "__main__":
 	A = Agent()
-	print(A._ip)
 	print(A._platform)
 	print("--")
 	print(A.run_command("sudo ls -al"))

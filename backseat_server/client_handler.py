@@ -14,6 +14,7 @@ class ClientHandler:
 		'''
 		self.depot_list = depot.DepotList()
 		working_depot = self.depot_list.get_working_depot("public.pem")
+		#for testing
 		working_depot.add("ls -al")
 		working_depot.add("PWD")
 
@@ -25,7 +26,7 @@ class ClientHandler:
 		#gets working depot
 		working_depot = self.depot_list.get_working_depot(sender_key)
 
-		if client_dict["ping"]== False:
+		if client_dict["ping"] == False:
 			if client_dict["completed"]:
 				if client_dict["successful"]:
 					depot_item = working_depot.get_by_id(client_dict["command_id"])

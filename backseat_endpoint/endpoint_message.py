@@ -1,6 +1,6 @@
 import json
 
-class ClientMessage:
+class EndpointMessage:
 	def __init__(self):
 		pass
 
@@ -22,6 +22,9 @@ class ClientMessage:
 		dict = {"ping": self._ping, "ready": self._ready, "completed": self._completed, "stdout": self._stdout, "stderr": self._stderr, "successful": self._successful, "exit_code": self._exit_code, "command_id": self._command_id}
 		output_json = json.dumps(dict)
 		return output_json
+
+	def get_ping_msg(self):
+		return self.create_msg(True, True, True, "", "", False, -1, 0)
 
 if __name__ == "__main__":
 	m = ClientMessage()
