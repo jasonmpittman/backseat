@@ -55,6 +55,6 @@ class ClientHandler:
 		working_depot.print_depot_contents()
 		if client_dict["ready"]:
 			print("ready!")
-			return working_depot.get_next()
+			return working_depot.get_next(), working_depot.count
 		else:
 			return None

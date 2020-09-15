@@ -27,15 +27,37 @@ class Endpoint:
 		message = self._endpoint_msg.get_ping_msg()
 		self._tcp_socket_handler.send(self._client, message, self._server_public_key, self._my_private_key)
 
-		responce = self._tcp_socket_handler.recieve(self._client, self._my_private_key)
+		responce, sender_key = self._tcp_socket_handler.recieve(self._client, self._my_private_key)
+		print("--")
+		print(responce)
+		print("--")
 		return json.loads(responce)
 
 	def run_command(self, command_msg_json):
 
 		stdout, exitcode = self._agent.run_command(command_msg_json["command"])
-		responce_msg = self._endpoint_msg.create_msg(False, True, True, stdout, "", True, exitcode, command_msg_json["command_id"])
+		responce_msg_json = self._endpoint_msg.create_msg(False, True, True, stdout, "", True, exitcode, command_msg_json["command_id"])
 
-		return responce_msg
+		return responce_msg_json
+
+	def send_command_res(self, responce_msg_json):
+		responce_msg_str = json.dumps(responce_msg_json)
+		try:
+			self.connect()
+		except:
+			pass
+
+		try:
+			self._tcp_socket_handler.send(self._client, responce_msg_str, self._server_public_key, self._my_private_key)
+		except:
+			print("Endpoint.send_command_res() - Error sending responce")
+
+
+	def operate(self):
+		server_command_msg_json = self.get_command_msg()
+		responce_msg_json = self.run_command(server_command_msg_json)
+		self.send_command_res(responce_msg_json)
+
 
 
 
@@ -64,5 +86,4 @@ class Endpoint:
 
 
 if __name__ == "__main__":
-	E = Endpoint()
-	E.run_local_command()
+	pass
