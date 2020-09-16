@@ -4,8 +4,8 @@ class ServerMessage:
 	def __init__(self):
 		pass
 
-	def create_msg(self, not_ready, command, sudo, password, sequence, depot_item, command_id):
-		self.add_data(not_ready, command, sudo, password, sequence, depot_item, command_id)
+	def create_msg(self, not_ready, command, sudo, password, sequence, depot_items, command_id):
+		self.add_data(not_ready, command, sudo, password, sequence, depot_items, command_id)
 		return self.to_json()
 
 	def add_data(self, not_ready, command, sudo, password, sequence, depot_items, command_id=0):

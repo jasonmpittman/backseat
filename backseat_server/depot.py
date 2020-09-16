@@ -34,7 +34,7 @@ class Depot:
 			if dp._done == False:
 				# self.count -= 1
 				print(f"get_next: [command]{dp.command}, [command_id]{dp.command_id}, [count]{self.count}")
-				return (dp.command, dp.command_id, self.count)
+				return {"command": dp.command, "command_id": dp.command_id, "depot_count": self.count}
 		return None
 
 	def add(self, command):

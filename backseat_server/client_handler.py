@@ -24,6 +24,8 @@ class ClientHandler:
 		sent to the server.
 		'''
 		#gets working depot
+		print("-------")
+		print(type(client_dict))
 		working_depot = self.depot_list.get_working_depot(sender_key)
 
 		if client_dict["ping"] == False:
@@ -55,6 +57,6 @@ class ClientHandler:
 		working_depot.print_depot_contents()
 		if client_dict["ready"]:
 			print("ready!")
-			return working_depot.get_next(), working_depot.count
+			return working_depot.get_next()
 		else:
 			return None

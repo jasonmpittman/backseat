@@ -41,7 +41,7 @@ class TcpSocketHandler:
 
 	def recieve(self, client, private_key):
 		signed_msg = b''
-		return_msg = ""
+		return_msg = ''
 		try:
 			while True:
 				raw_msg = client.recv(1024)
@@ -63,6 +63,12 @@ class TcpSocketHandler:
 		except:
 			print("TcpSocketHandler.recieve(): Error in decryption of the message")
 			return None
+		print("return message:")
+		# print(return_msg)
+
+		# print("##---##")
+		# return_msg = self._clean_up(return_msg)
+		# print(return_msg)
 		return return_msg, sender_public_key
 
 
@@ -103,3 +109,7 @@ class TcpSocketHandler:
 			if self._crypto.is_sign_valid(obj, signature, key) == True:
 				return key
 		return None
+
+	def _clean_up(self, escape_string):
+		out = escape_string.encode().decode('unicode_escape')
+		return out
