@@ -41,7 +41,7 @@ class TcpSocketHandler:
 
 	def recieve(self, client, private_key):
 		signed_msg = b''
-		return_msg = ''
+		return_msg = r''
 		try:
 			while True:
 				raw_msg = client.recv(1024)
@@ -54,7 +54,7 @@ class TcpSocketHandler:
 		client_msg = signed_msg[:-256]
 		client_signature = signed_msg[-256:]
 		sender_public_key = self._identify(client_msg, client_signature)
-		print(sender_public_key)
+		print("sender public key: ", sender_public_key)
 		msg_byte_blocks = self._byte_splitter(client_msg)
 
 		try:
@@ -63,7 +63,7 @@ class TcpSocketHandler:
 		except:
 			print("TcpSocketHandler.recieve(): Error in decryption of the message")
 			return None
-		print("return message:")
+		# print("return message:")
 		# print(return_msg)
 
 		# print("##---##")
@@ -105,6 +105,9 @@ class TcpSocketHandler:
 
 	def _identify(self, obj, signature):
 		key_list = self._get_key_list()
+		print(f"key_list: {key_list}")
+		print(f"obj: {obj}")
+		print(f"signature: {signature}")
 		for key in key_list:
 			if self._crypto.is_sign_valid(obj, signature, key) == True:
 				return key

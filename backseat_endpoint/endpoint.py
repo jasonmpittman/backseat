@@ -23,15 +23,25 @@ class Endpoint:
 		self._client = self._tcp_socket_handler.create_client_socket_connect(self._ip, self._port)
 
 	def get_command_msg(self):
-		self.connect()
+		try:
+			self.connect()
+		except:
+			pass
 		message = self._endpoint_msg.get_ping_msg()
+		print("Message being sent:")
+		print(message)
+		print("---")
 		self._tcp_socket_handler.send(self._client, message, self._server_public_key, self._my_private_key)
-
+		print("---")
 		responce, sender_key = self._tcp_socket_handler.recieve(self._client, self._my_private_key)
 		print("--")
 		print(responce)
 		print("--")
-		return json.loads(responce)
+		if responce == None:
+			print("responce = None")
+		else:
+			json_responce = json.loads(responce)
+		return json_responce
 
 	def run_command(self, command_msg_json):
 
@@ -41,7 +51,10 @@ class Endpoint:
 		return responce_msg_json
 
 	def send_command_res(self, responce_msg_json):
-		responce_msg_str = json.dumps(responce_msg_json)
+		if responce_msg_json == None:
+			print("responce_msg_json = None")
+		else:
+			responce_msg_str = json.dumps(responce_msg_json)
 		try:
 			self.connect()
 		except:

@@ -25,12 +25,49 @@ try:
 		#if sender_key == None -- unrecognized user
 		print(f"Sender - {sender_key}:\n{res}")
 		#convert string to python dict
-		print("@@@@@@@@@@@@@@@@@@@@@@@@")
-		print(res)
-		print("@@@@@@@@@@@@@@@@@@@@@@@@\n")
-		res_dict = json.loads(json.loads(res))
+		# print("@@@@@@@@@@@@@@@@@@@@@@@@")
+		# print(res)
+		# print("@@@@@@@@@@@@@@@@@@@@@@@@\n")
+		# new_string =""
+		# for letter in res:
+		# 	new_string += letter
+
+		res_dict = json.loads(res)
+		print(f"res_dict: {type(res_dict)}")
+		print(res_dict["ping"])
+
+		# print(res_dict["ping"])
+		# raw_str = r""
+		# print("AAAAAAAA")
+		# read_text = False
+		# key = True
+		# word = ""
+		# parts = []
+		# for q in res_dict:
+		# 	# if q == '"' and read_text == False:
+		# 	# 	read_text = True
+		# 	# if q == '"' and read_text == True:
+		# 	# 	read_text = False
+		# 	print(f"{q}: {read_text}")
+		# 	if q == '"':
+		# 		if read_text == True:
+		# 			read_text = False
+		# 			parts.append(word)
+		# 			word = ""
+		# 		else:
+		# 			read_text = True
+		# 	else:
+		# 		word += q
+		# print(parts)
+
+
+
+		print(raw_str)
+		print("AAAAAAAA")
+		print("###")
 
 		print(type(res_dict))
+		print("###")
 		print("--")
 		# print(type(res_dict[0]))
 		#send it through client_handler
