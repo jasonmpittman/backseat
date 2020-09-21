@@ -20,7 +20,10 @@ class EndpointMessage:
 
 	def to_json(self):
 		dict = {"ping": self._ping, "ready": self._ready, "completed": self._completed, "stdout": self._stdout, "stderr": self._stderr, "successful": self._successful, "exit_code": self._exit_code, "command_id": self._command_id}
+		print("-----Dict----")
+		print(type(dict))
 		output_json = json.dumps(dict)
+		print(output_json)
 		return output_json
 
 	def get_ping_msg(self):

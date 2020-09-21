@@ -41,7 +41,7 @@ class TcpSocketHandler:
 
 	def recieve(self, client, private_key):
 		signed_msg = b''
-		return_msg = r''
+		return_msg = r""
 		try:
 			while True:
 				raw_msg = client.recv(1024)
@@ -60,6 +60,8 @@ class TcpSocketHandler:
 		try:
 			for block in msg_byte_blocks:
 				return_msg += self._crypto.decrypt(block, private_key)
+				print("--return_msg--")
+				print(return_msg)
 		except:
 			print("TcpSocketHandler.recieve(): Error in decryption of the message")
 			return None

@@ -32,36 +32,45 @@ class Endpoint:
 		print(message)
 		print("---")
 		self._tcp_socket_handler.send(self._client, message, self._server_public_key, self._my_private_key)
-		print("---")
+
 		responce, sender_key = self._tcp_socket_handler.recieve(self._client, self._my_private_key)
-		print("--")
+		print("--responce--")
 		print(responce)
 		print("--")
 		if responce == None:
 			print("responce = None")
 		else:
 			json_responce = json.loads(responce)
+			print("--json_responce--")
+			print(json_responce)
+			print("--")
 		return json_responce
 
 	def run_command(self, command_msg_json):
 
 		stdout, exitcode = self._agent.run_command(command_msg_json["command"])
-		responce_msg_json = self._endpoint_msg.create_msg(False, True, True, stdout, "", True, exitcode, command_msg_json["command_id"])
 
+		responce_msg_json = self._endpoint_msg.create_msg(False, True, True, stdout, "", True, exitcode, command_msg_json["command_id"])
+		print("--responce_msg_json-- @@@@")
+
+		print(type(responce_msg_json))
 		return responce_msg_json
 
 	def send_command_res(self, responce_msg_json):
 		if responce_msg_json == None:
 			print("responce_msg_json = None")
 		else:
-			responce_msg_str = json.dumps(responce_msg_json)
+			# responce_msg_str = json.dumps(responce_msg_json)
+			print("########")
+			print(responce_msg_json)
+			pass
 		try:
 			self.connect()
 		except:
-			pass
+			print("no connection needed / connection failed")
 
 		try:
-			self._tcp_socket_handler.send(self._client, responce_msg_str, self._server_public_key, self._my_private_key)
+			self._tcp_socket_handler.send(self._client, responce_msg_json, self._server_public_key, self._my_private_key)
 		except:
 			print("Endpoint.send_command_res() - Error sending responce")
 
