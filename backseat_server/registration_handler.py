@@ -6,7 +6,6 @@ from shared import log_handler
 
 from shared import asym_cryptography_handler as crypto
 
-
 # Name OS Public_Key
 class RegistrationHandler:
 	def __init__(self):
@@ -92,6 +91,9 @@ class RegistrationHandler:
 		self.get_registration_info()
 		for host in self.host_list:
 			print(f"{host['name']}: {host['OS']}")
+
+	def generate_all_new_keys(self):
+		self.get_registration_info()
 
 if __name__ == "__main__":
 	RH = registration_handler.RegistrationHandler()
