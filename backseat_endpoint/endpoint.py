@@ -40,15 +40,15 @@ class Endpoint:
 		if responce == None:
 			print("responce = None")
 		else:
-			json_responce = json.loads(responce)
-			print("--json_responce--")
-			print(json_responce)
-			print("--")
-		return json_responce
+			dict_responce = json.loads(responce)
+		return dict_responce
 
-	def run_command(self, command_msg_json):
-
-		stdout, exitcode = self._agent.run_command(command_msg_json["command"])
+	def run_command(self, command_msg_dict):
+		print("run_command")
+		print(command_msg_dict)
+		if command_msg_dict["not_ready"]:
+			return None
+		stdout, exitcode = self._agent.run_command(command_msg_dict["command"])
 
 		responce_msg_json = self._endpoint_msg.create_msg(False, True, True, stdout, "", True, exitcode, command_msg_json["command_id"])
 		print("--responce_msg_json-- @@@@")
@@ -78,7 +78,10 @@ class Endpoint:
 	def operate(self):
 		server_command_msg_json = self.get_command_msg()
 		responce_msg_json = self.run_command(server_command_msg_json)
-		self.send_command_res(responce_msg_json)
+		if responce_msg_json != None:
+			self.send_command_res(responce_msg_json)
+		else:
+			print("run_command == None, server is probably not ready")
 
 
 

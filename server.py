@@ -32,14 +32,17 @@ try:
 		print(res_dict["ping"])
 
 		#send it through client_handler
-		next_depot_item = cli_handler.client_handler(res_dict, sender_key)
 
-		print(next_depot_item)
-		responce_msg_json = server_msg.create_msg(False, next_depot_item["command"], False, "", 0, next_depot_item["depot_count"], next_depot_item["command_id"])
-
-
+		#stops client server from sending a responce to client if there is no depot item
+		next_depot_item, count = cli_handler.client_handler(res_dict, sender_key)
+		if next_depot_item != None:
+			print(next_depot_item)
+			responce_msg_json = server_msg.create_msg(False, next_depot_item["command"], False, "", 0, next_depot_item["depot_count"], next_depot_item["command_id"])
 		#send responce
-		socket_handler.send(client, responce_msg_json, "public.pem", "private.pem")
+			socket_handler.send(client, responce_msg_json, "public.pem", "private.pem")
+		else:
+			responce_msg_json = server_msg.create_msg(True, "", False, "", 0, count, 0)
+			socket_handler.send(client, responce_msg_json, "public.pem", "private.pem")
 
 except KeyboardInterrupt:
 	print("\n--Keyboard Interrupt--")

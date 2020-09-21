@@ -36,7 +36,7 @@ class ClientHandler:
 						# sets the valus of depot item because the depot_item is completed
 						depot_item.set(client_dict["completed"], client_dict["stdout"], client_dict["exit_code"])
 						# print(f"Modified Depot Item: {depot_item.output()}")
-						depot_item.count -= 1
+						working_depot.count -= 1
 					else:
 						# is unable to obtain the depot_item by id
 						print("depot_item = none")
@@ -55,8 +55,8 @@ class ClientHandler:
 			print("Ping == True")
 		print("-----@@@@@@@@-----")
 		working_depot.print_depot_contents()
-		if client_dict["ready"]:
+		if client_dict["ready"] and working_depot.count > 0:
 			print("ready!")
-			return working_depot.get_next()
+			return working_depot.get_next(), working_depot.count
 		else:
-			return None
+			return None, working_depot.count
