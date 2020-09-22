@@ -41,14 +41,12 @@ class ClientHandler:
 						# is unable to obtain the depot_item by id
 						print("Error -- Coould not find depot item by that id - returning: None, -1")
 						return None, -1
-					# print(depot_item.output())
 				else:
 					#if unsequenced go onto the next item (table this one until the user has ruled on it), else wait for user responce
 					# The command was not successful
-					print("unsuccessful")
+					print("Command was not successful")
 			else:
-				# the command was not completed
-				# the next step should be to wait until command is done
+				# This should not happen
 				print("Not completed")
 		else:
 			# Pinging the server to figure out if there is a command that can be picked up

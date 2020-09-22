@@ -92,9 +92,6 @@ class RegistrationHandler:
 		for host in self.host_list:
 			print(f"{host['name']}: {host['OS']}")
 
-	def generate_all_new_keys(self):
-		self.get_registration_info()
-
 if __name__ == "__main__":
 	RH = registration_handler.RegistrationHandler()
 	RH.print_host_list()

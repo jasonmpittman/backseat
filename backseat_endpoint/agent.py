@@ -52,54 +52,7 @@ class Agent:
 		subprocess_result.stdin.write(bytes(password, "utf-8"))
 		return subprocess_result
 
-	def mac_get_updates_list(self):
-		brew_command = 'brew outdated'
-		macOS_command = 'softwareupdate -l'
-		macOS_res = self.run_command(macOS_command)
-		brew_res = self.run_command(brew_command)
-		return macOS_res, brew_res
-
-	def mac_os_install(self, version):
-		get_installer = f"softwareupdate --fetch-full-installer --full-installer-version {version}"
-		install = f"sudo softwareupdate -i 'macOS {version} Update-'"
-		ret_list = []
-		ret_list.append(self.run_command(get_installer))
-		ret_list.append(self.run_command(install))
-		return ret_list
-
-
-	def mac_brew_software_update(self, software_update):
-		command = f"brew upgrade {software_update}"
-		return self.run_command(command)
-
-	def mac_brew_software_updates(self, software_list):
-		output_list = []
-		for software in software_list:
-			output = self.mac_brew_software_update(software)
-			output_list.append(output)
-
-		output = ""
-		for o in output_list:
-			output += o.create_output()
-		return output
-
-	def ubuntu_get_updates_list(self):
-		command = "apt list --upgradable"
-		return self.run_command(command)
-
-	def ubuntu_run_package_update(self, package):
-		command = f"apt-get upgrade {package}"
-		return self.run_command(command)
-
-	def ubuntu_check_os_update(self):
-		command = "do-release-upgrade -c"
-		return self.run_command(command)
-
-	def ubuntu_run_os_update(self):
-		command = "sudo do-release-upgrade"
-		return self.run_command(command)
-
-
+	
 if __name__ == "__main__":
 	A = Agent()
 	print(A._platform)
