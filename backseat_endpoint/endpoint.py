@@ -84,31 +84,5 @@ class Endpoint:
 			print("run_command == None, server is probably not ready")
 
 
-
-
-
-	# def get_run_command(self):
-	# 	#get command from server
-	# 	self.connect()
-	# 	responce = self._client.get_command()
-	# 	print(responce)
-	# 	if responce != None:
-	# 		result, exit_code = self._agent.run_command(responce["command"])
-	# 		# print(result)
-	# 		# command_id, stdout, stderr=""
-	#
-	# 		print(f"responce['command_id'] = {responce['command_id']}")
-	# 		#add stderrr
-	# 		self._client.send_results(responce["command_id"], exit_code, result)
-	# 	else:
-	# 		print("run_local_command: None")
-
-		#run command
-		#send results back to the server
-	#
-	# def ready_accept(self):
-	# 	self._client.connect()
-
-
 if __name__ == "__main__":
 	pass
