@@ -3,15 +3,22 @@ from backseat_server import depot
 # Track down and fix returning command id 0 bug
 
 class ClientHandler:
-	'''
+	"""
 	This is the logical backend to the functionality of the server. The messages
-	are sent here for processing. The messages are deconstructed and the necissary
-	subsystems are run.
-	'''
+	are sent here for processing. The messages are deconstructed and the
+	necissary subsystems are run.
+
+	Attributes
+	----------
+	depot_list : DepotList object
+	"""
 	def __init__(self):
-		'''
+		"""
 		Initializes the depot list.
-		'''
+
+		Parameters
+		----------
+		"""
 		self.depot_list = depot.DepotList()
 		working_depot = self.depot_list.get_working_depot("public.pem")
 		#for testing
@@ -19,10 +26,10 @@ class ClientHandler:
 		working_depot.add("PWD")
 
 	def client_handler(self, client_dict, sender_key):
-		'''
+		"""
 		Decides what subsystem should run based on what message the client has
 		sent to the server.
-		'''
+		"""
 		#gets working depot
 		print("-------")
 		print(type(client_dict))
