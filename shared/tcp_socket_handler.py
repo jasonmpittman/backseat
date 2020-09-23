@@ -1,14 +1,22 @@
+#!/usr/bin/env python3
+
+__author__ = "Kevin A. Rubin, Jason M. Pittman"
+__copyright__ = "Copyright 2020"
+__credits__ = ["Kevin A. Rubin, Jason M. Pittman"]
+__license__ = "AGPLv3"
+__version__ = "1.0.0"
+__maintainer__ = "Jason M. Pittman"
+__email__ = "jpittman@highpoint.edu"
+__status__ = "Release"
+__dependecies__ = "socket, asym_cryptography_handler, os, log_handler"
+
 import socket
 
 from shared import asym_cryptography_handler as crypto
 
 import os
 
-# AsymmetricCryptographyHandler()
-# Note on the asym_crypto:
-	# 245 character encrytion limit
-	# 256 byte encryption output
-	# 256 byte signature output
+from shared import log_handler
 
 
 class TcpSocketHandler:
@@ -36,6 +44,7 @@ class TcpSocketHandler:
 		----------
 		"""
 		self._crypto = crypto.AsymmetricCryptographyHandler()
+		self._log = log_handler.LogHandler(self.__class__.__name__)
 
 	def send(self, client, message, public_key, private_key):
 		"""
@@ -56,20 +65,23 @@ class TcpSocketHandler:
 			for block in blocks:
 				cyphertext = self._crypto.encrypt(block, public_key)
 				cyphertext_full_msg += cyphertext
+			self._log.info("send", "Blocks encrypted")
 		except:
-			print("TcpSocketHandler.send(): error in encrypting blocks")
+			self._log.error("send", "Failed to encrypt blocks - returned None")
 			return None
 		try:
 			signature = self._crypto.sign(cyphertext_full_msg, private_key)
 			signed_msg = cyphertext_full_msg + signature
+			self._log.info("send", "Message signed")
 		except:
-			print("TcpSocketHandler.send(): Error in signing message")
+			self._log.error("send", "Failed to sign message - returned None")
 			return None
 		try:
 			client.send(signed_msg)
 			client.shutdown(socket.SHUT_WR)
+			self._log.info("send", "Message sent")
 		except:
-			print("TcpSocketHandler.send(): Error in sending message")
+			self._log.error("send", "Failed to send message - returned None")
 			return None
 
 
@@ -92,22 +104,22 @@ class TcpSocketHandler:
 				if not raw_msg:
 					break
 				signed_msg += raw_msg
+			self._log.info("recieve", "Full message recieved")
 		except:
-			print("TcpSocketHandler.recieve(): Error in recieving message")
+			self._log.error("recieve", "Failed to recieve message - returned None")
 			return None
 		client_msg = signed_msg[:-256]
 		client_signature = signed_msg[-256:]
 		sender_public_key = self._identify(client_msg, client_signature)
 		print("sender public key: ", sender_public_key)
 		msg_byte_blocks = self._byte_splitter(client_msg)
-
+		self._log.info("recieve", "Message prepared for decryption")
 		try:
 			for block in msg_byte_blocks:
 				return_msg += self._crypto.decrypt(block, private_key)
-				print("--return_msg--")
-				print(return_msg)
+			self._log.info("recieve", "Message fully decrypted")
 		except:
-			print("TcpSocketHandler.recieve(): Error in decryption of the message")
+			self._log.error("recieve", "Failed to decrypt message - retuned None")
 			return None
 		return return_msg, sender_public_key
 
@@ -126,9 +138,10 @@ class TcpSocketHandler:
 		try:
 			connected_socket = socket.socket()
 			connected_socket.connect((ip, port))
+			self._log.info("create_client_socket_connect", "Client socket created and connected")
 			return connected_socket
 		except:
-			print(f"Failed to connect to (ip[{ip}], port[{port}])")
+			self._log.error("create_client_socket_connect", "Failed to connect to (ip[{ip}], port[{port}]) - returned None")
 			return None
 
 	def create_server(self, ip, port, total_connections):
@@ -148,9 +161,10 @@ class TcpSocketHandler:
 			server = socket.socket()
 			server.bind((ip, port))
 			server.listen(total_connections)
+			self._log.info("create_server", "Server created, bound, and listening")
 			return server
 		except:
-			print(f"Failed to create, bind, or listen to (ip[{ip}], port[{port}])")
+			self._log.error("create_server", f"Failed to create, bind, or listen to (ip[{ip}], port[{port}]) - returned None")
 			return None
 
 	def _create_message_blocks(self, message):
@@ -164,6 +178,7 @@ class TcpSocketHandler:
 		message : str
 		"""
 		chunk_list = [message[i:i+245] for i in range(0, len(message), 245)]
+		self._log.info("_create_message_blocks", "Message cut into blocks")
 		return chunk_list
 
 	def _byte_splitter(self, message):
@@ -177,6 +192,7 @@ class TcpSocketHandler:
 		message : str
 		"""
 		chunk_list = [message[i:i+256] for i in range(0, len(message), 256)]
+		self._log.info("_byte_splitter", "Raw message cut into 256 byte blocks")
 		return chunk_list
 
 	def _get_key_list(self):
@@ -188,6 +204,7 @@ class TcpSocketHandler:
 		----------
 		"""
 		arr = os.listdir("keys")
+		self._log.info("_get_key_list", "Retuned a list of key names")
 		return arr
 
 	def _identify(self, obj, signature):
@@ -201,10 +218,9 @@ class TcpSocketHandler:
 		signature : bytes
 		"""
 		key_list = self._get_key_list()
-		print(f"key_list: {key_list}")
-		print(f"obj: {obj}")
-		print(f"signature: {signature}")
 		for key in key_list:
 			if self._crypto.is_sign_valid(obj, signature, key) == True:
+				self._log.info("_identify", f"Key found [{key}]")
 				return key
+		self._log.error("_identify", "Cound not find key - returned None")
 		return None
