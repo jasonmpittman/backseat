@@ -12,10 +12,44 @@ import os
 
 
 class TcpSocketHandler:
+	"""
+	This class is made to handle all of the TCP communication that occurs in
+	the backseat application. These functions can be used by both the endpoint
+	and the server to send messages. This handles all of the encryption and can
+	handle text of arbitrary length.
+
+	Attributes
+	----------
+	_crypto : cryptography module object
+	send : function
+	export : function
+	recieve : function
+	_byte_splitter : function
+	_get_key_list : function
+	_identify : function
+	"""
 	def __init__(self):
+		"""
+		Instantiates an object from the encryption module.
+
+		Parameters
+		----------
+		"""
 		self._crypto = crypto.AsymmetricCryptographyHandler()
 
 	def send(self, client, message, public_key, private_key):
+		"""
+		This function sends the provided message to the provide client
+		connection after encrypting the message using the public key and
+		signing it using the private key.
+
+		Parameters
+		----------
+		client : socket connection object
+		message : str
+		public_key : str
+		private_key : str
+		"""
 		blocks = self._create_message_blocks(message)
 		cyphertext_full_msg = b''
 		try:
@@ -40,6 +74,16 @@ class TcpSocketHandler:
 
 
 	def recieve(self, client, private_key):
+		"""
+		This function recieves the entire message sent, then it decrypts it and
+		finds out who signed the message. Returns decrypted message and name of
+		the sender's public key.
+
+		Parameters
+		----------
+		client : socket connection object
+		private_key : str
+		"""
 		signed_msg = b''
 		return_msg = r""
 		try:
@@ -65,16 +109,20 @@ class TcpSocketHandler:
 		except:
 			print("TcpSocketHandler.recieve(): Error in decryption of the message")
 			return None
-		# print("return message:")
-		# print(return_msg)
-
-		# print("##---##")
-		# return_msg = self._clean_up(return_msg)
-		# print(return_msg)
 		return return_msg, sender_public_key
 
 
 	def create_client_socket_connect(self, ip, port):
+		"""
+		This function creates a socket connection object using the ip and port
+		provided to it. It then returns that object if it is successful in
+		creation.
+
+		Parameters
+		----------
+		ip : str
+		port : int
+		"""
 		try:
 			connected_socket = socket.socket()
 			connected_socket.connect((ip, port))
@@ -84,6 +132,18 @@ class TcpSocketHandler:
 			return None
 
 	def create_server(self, ip, port, total_connections):
+		"""
+		This creates a server socket, binds it to the provided port and ip,
+		then sets it to listen.
+
+		The server is returned if it is successful, and None is if it failed.
+
+		Parameters
+		----------
+		ip : str
+		port : int
+		total_connections : int
+		"""
 		try:
 			server = socket.socket()
 			server.bind((ip, port))
@@ -94,18 +154,52 @@ class TcpSocketHandler:
 			return None
 
 	def _create_message_blocks(self, message):
+		"""
+		This function cuts the message into 245 character blocks and puts them
+		into a list. This is for the purpose of encrytion which only accepts
+		strings less than or equal to 245 in length.
+
+		Parameters
+		----------
+		message : str
+		"""
 		chunk_list = [message[i:i+245] for i in range(0, len(message), 245)]
 		return chunk_list
 
 	def _byte_splitter(self, message):
+		"""
+		This function cuts the recievedmessage into 245 byte blocks and puts
+		them into a list. This is for the purpose of decryption and separating
+		the cryptograhic signture from the message.
+
+		Parameters
+		----------
+		message : str
+		"""
 		chunk_list = [message[i:i+256] for i in range(0, len(message), 256)]
 		return chunk_list
 
 	def _get_key_list(self):
+		"""
+		Gets a list of the keys that the running program has access to in the
+		keys directory.
+
+		Parameters
+		----------
+		"""
 		arr = os.listdir("keys")
 		return arr
 
 	def _identify(self, obj, signature):
+		"""
+		This function identifies who sent the message based on the signature in
+		public key encryption.
+
+		Parameters
+		----------
+		obj : bytes
+		signature : bytes
+		"""
 		key_list = self._get_key_list()
 		print(f"key_list: {key_list}")
 		print(f"obj: {obj}")
@@ -114,7 +208,3 @@ class TcpSocketHandler:
 			if self._crypto.is_sign_valid(obj, signature, key) == True:
 				return key
 		return None
-
-	def _clean_up(self, escape_string):
-		out = escape_string.encode().decode('unicode_escape')
-		return out
