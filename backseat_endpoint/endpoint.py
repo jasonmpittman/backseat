@@ -50,7 +50,7 @@ class Endpoint:
 			return None
 		stdout, exitcode = self._agent.run_command(command_msg_dict["command"])
 
-		responce_msg_json = self._endpoint_msg.create_msg(False, True, True, stdout, "", True, exitcode, command_msg_json["command_id"])
+		responce_msg_json = self._endpoint_msg.create_msg(False, True, True, stdout, "", True, exitcode, command_msg_dict["command_id"])
 		print("--responce_msg_json-- @@@@")
 
 		print(type(responce_msg_json))
