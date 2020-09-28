@@ -60,6 +60,7 @@ class RegistrationHandler:
 		OS : str
 		public_key : str
 		"""
+		self._log.info("add", f"Host: {name} added to host_list")
 		self.host_list.append({"name": name, "OS": OS, "public_key": public_key})
 
 	def get_hosts(self, host_type):
