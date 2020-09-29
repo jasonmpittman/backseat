@@ -8,11 +8,34 @@ from backseat_server import server_message
 
 import threading
 
-#comment below out
-client = None
+from shared import log_handler
+
 
 class ServerLoop():
-	def __init__(self, ip, port, allowed_connections=10):
+	"""
+	This class handles the server looping that is needed to be done. This includes, multithreading and client handling.
+
+	Attributes
+	----------
+	_socket_handler : TcpSocketHandler object
+	_cli_handler : ClientHandler object
+	_server_msg : ServerMessage object
+	_server : Socket object - bound and listening
+	_client : str
+	_src_ip : str
+	_my_public_key : str
+	_my_private_key : str
+	"""
+	def __init__(self, ip, port, allowed_connections):
+		"""
+		Attributes are initialized.
+
+		Parameters
+		----------
+		ip : str
+		port : int
+		allowed_connections : int
+		"""
 		self._socket_handler = tcp_socket_handler.TcpSocketHandler()
 		self._cli_handler = client_handler.ClientHandler()
 		self._server_msg = server_message.ServerMessage()
@@ -21,12 +44,25 @@ class ServerLoop():
 		self._src_ip = None
 		self._my_public_key = "public.pem"
 		self._my_private_key = "private.pem"
-		self._threads_list = []
+		self._log = log_handler.LogHandler("ServerLoop")
+		self._log.info("__init__", "Server setup and ready to go.")
 
 	def server_iteration(self):
+		"""
+		This function represents a single iteration of going through the
+		server_loop. A thread runs this function, upon completion it is
+		terminated.
+
+		Parameters
+		----------
+		"""
+
 		theard_id = threading.get_ident()
-		print(f"Thread ID = {theard_id}")
+		self._log.info("server_iteration", f"Thread ID = {theard_id}")
 		res, sender_key = self._socket_handler.recieve(self._client, "private.pem")
+
+		self._log.info("server_iteration", f"Message recieved from {sender_key}")
+
 		print(f"Sender - {sender_key}\n{res}")
 		print("----")
 		res_dict = json.loads(res)
@@ -36,13 +72,25 @@ class ServerLoop():
 		if next_depot_item != None:
 			print(next_depot_item)
 
+
 			responce_msg_json = self._server_msg.create_msg(False, next_depot_item["command"], False, "", 0, next_depot_item["depot_count"], next_depot_item["command_id"])
+			self._log.info("server_iteration", "Message is created for a new depot item")
 		else:
 			responce_msg_json = self._server_msg.create_msg(True, "", False, "", 0, count, 0)
+			self._log.info("server_iteration", "Message is created letting the endpoint know there is not a new depot item")
 
 		self._socket_handler.send(self._client, responce_msg_json, sender_key, self._my_private_key)
+		self._log.info("server_iteration", "Message is sent")
 
 	def server_loop(self):
+		"""
+		Looping mechanism of the server. If the loop_iteration is the inside of
+		the loop, then this is the outside of the loop that actually drives
+		loop_iteration.
+
+		Parameters
+		----------
+		"""
 		try:
 			print("--Server Running--")
 			while True:
@@ -50,15 +98,17 @@ class ServerLoop():
 				try:
 					new_thread = threading.Thread(target=self.server_iteration())
 					new_thread.start()
+					self._log.info("server_loop", "Thread successfully ran")
 				except Exception as E:
 					print("--Error in server_loop threading--")
 					print(E)
 					print("-- --")
-
-
+					self._log.error("server_loop", f"Error in threading: {E}")
 
 		except KeyboardInterrupt:
 			print("\n--Keyboard Interrupt--")
 			self._server.close()
 			if self._client != None:
 				self._client.close()
+
+			self._log.info("server_loop", "-- Keyboard Interrupt --")
