@@ -8,29 +8,48 @@ Handles the user accounts that need to access the server through the UI.
 
 import hashlib
 
-
-
 class AccountHandler:
 	def __init__(self):
 		f = open("accounts.config")
-		self.accounts = f.readlines()
-		# Deal with the /n
-		f.close()
-		print(self.accounts)
+		file_lines = f.readlines()
 
-	def hash(self, obj):
-		return hashlib.sha512(f"{obj}".encode()).hexdigest()
+		f.close()
+		self._accounts = []
+		for file_line in file_lines:
+			file_line = file_line.strip("\n")
+			usr, pword = file_line.split(",")
+			self._accounts.append({"username": usr, "password": pword})
+
+		print(self._accounts)
+
+	def _hash(self, str_obj):
+		return hashlib.sha512(f"{str_obj}".encode()).hexdigest()
+
+
+	def verify(self, username, password):
+		for account in self._accounts:
+			if account["username"] == username:
+				if self._hash(password) == account["password"]:
+					return True
+				else:
+					print("Password or username incorrect")
+					return False
+		print("Password or username incorrect")
+		return False
+
+	def add_account(self, username, password):
+		for a in self._accounts:
+			if a["username"] == username:
+				print("Username already in use - Returned None")
+				return None
+		account = {"username": username, "password": self._hash(password)}
+		self._accounts.append(account)
+		file = open("accounts.config", "w")
+		for acc in self._accounts:
+			file.write(f"{acc['username']},{acc['password']}\n")
+		file.close()
 
 
 if __name__ == "__main__":
-	# text = "Te"
-	# m = hashlib.sha256()
-	# m.update(text.encode("utf-8"))
-	# m.update("st".encode("utf-8"))
-	# hashed = m.digest()
-	# print(hashed)
-	input = "Nobody inspects the spammish repetition"
+
 	AH = AccountHandler()
-	output = AH.hash(input)
-	print(output)
-	# print(type(ha))
