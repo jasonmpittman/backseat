@@ -52,7 +52,7 @@ class Agent:
 		subprocess_result.stdin.write(bytes(password, "utf-8"))
 		return subprocess_result
 
-	
+
 if __name__ == "__main__":
 	A = Agent()
 	print(A._platform)
