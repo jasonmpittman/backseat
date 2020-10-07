@@ -44,21 +44,33 @@ class Endpoint:
 		return dict_responce
 
 	def run_command(self, command_msg_dict):
-		print("run_command")
 		print(command_msg_dict)
 		if command_msg_dict["not_ready"]:
 			return None
 
-		try:
-			stdout, exitcode = self._agent.run_command(command_msg_dict["command"])
-			responce_msg_json = self._endpoint_msg.create_msg(False, True, True, stdout, "", True, exitcode, command_msg_dict["command_id"])
-		except Exception as E:
-			# responce_msg_json = self._endpoint_msg.create_msg(False, True, False, "", E, False, exit code)
-			pass
+		responce_msg_json = None
 
-		print("--responce_msg_json-- @@@@")
+		stdout, stderr, exitcode = self._agent.run_command(command_msg_dict["command"])
+		ready = False
+		completed = False
 
-		print(type(responce_msg_json))
+		if exitcode != None:
+			ready = True
+			completed = True
+
+		if exitcode == 0:
+			successful = True
+		else:
+			successful = False
+
+		ping = False
+		print("message creation")
+		responce_msg_json = self._endpoint_msg.create_msg(ping, ready, completed, stdout, stderr, successful, exitcode, command_msg_dict["command_id"])
+		print("post messeage creation")
+
+		# responce_msg_json = self._endpoint_msg.create_msg(False, True, False, "", E, False, exit code)
+
+
 		return responce_msg_json
 
 	def send_command_res(self, responce_msg_json):

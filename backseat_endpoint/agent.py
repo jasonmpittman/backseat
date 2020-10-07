@@ -33,13 +33,22 @@ class Agent:
 		ret = False
 		if "sudo" in command_list:
 			print("Going to run sudo command")
+			print("-- sudo does not work currently, Returning None --")
+			return None, None, None
 			subprocess_result = self._sudo_run_command(command_list)
 		else:
-			subprocess_result = subprocess.Popen(command_list, stdout=subprocess.PIPE)
+			try:
+				subprocess_result = subprocess.Popen(command_list, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+			except Exception as E:
+				stdout = ""
+				stderr = str(E)
+				ret_code = 1
+				return stdout, stderr, ret_code
 
-		output = subprocess_result.communicate()[0]
 
-		return output.decode("utf-8"), subprocess_result.returncode
+		standard_out, standard_err = subprocess_result.communicate()
+		ret_code = subprocess_result.returncode
+		return standard_out.decode("utf-8"), standard_err.decode("utf-8"), subprocess_result.returncode
 
 	def _sudo_run_command(self, command_list):
 		if not "sudo" in command_list:

@@ -25,6 +25,7 @@ class ClientHandler:
 		#for testing
 		working_depot.add("ls -al")
 		working_depot.add("PWD")
+		working_depot.add("fail")
 
 	def client_handler(self, client_dict, sender_key):
 		"""
