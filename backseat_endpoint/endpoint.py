@@ -7,7 +7,33 @@ from backseat_endpoint import endpoint_message
 import json
 
 class Endpoint:
+	"""
+	This class handles the full operations of the endpoint.
+
+	Attributes
+	----------
+	_agent : Agent object
+	_tcp_socket_handler : TcpSocketHandler object
+	_ip : str
+	_port : int
+	_client : socket connection object
+	_my_private_key : str
+	_server_public_key : str
+	_endpoint_msg : EndpointMessage object
+
+	"""
 	def __init__(self, serv_ip, serv_port, private_key, server_public_key):
+		"""
+		This function sets up the Endpoint object, so that it can function
+		correctly.
+
+		Parameters
+		----------
+		serv_ip : str
+		serv_port : int
+		private_key : str
+		server_public_key : str
+		"""
 		self._agent = agent.Agent()
 		self._tcp_socket_handler = tcp_socket_handler.TcpSocketHandler()
 		self._ip = serv_ip
