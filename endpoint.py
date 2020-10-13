@@ -15,4 +15,5 @@ if __name__ == "__main__":
 	my_private = sys.argv[3]
 	their_public = sys.argv[4]
 	E = endpoint.Endpoint(ip, port, my_private, their_public)
-	E.operate()
+	# E.operate()
+	E.operation_loop()

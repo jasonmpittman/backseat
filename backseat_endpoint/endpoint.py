@@ -6,6 +6,12 @@ from backseat_endpoint import endpoint_message
 
 import json
 
+import time
+
+import threading
+
+import sys
+
 class Endpoint:
 	"""
 	This class handles the full operations of the endpoint.
@@ -126,6 +132,53 @@ class Endpoint:
 		else:
 			print("run_command == None, server is probably not ready")
 
+	def operation_iteration(self):
+		self.operate()
+		print("1")
+		time.sleep(1)
+		print("2")
+		time.sleep(1)
+		print("3")
+		time.sleep(1)
+		print("Go!")
+
+		if input() == "disarm":
+			print("disarming")
+			sys.exit()
+		else:
+			print("type 'disarm' to stop")
+
+	def operation_loop(self):
+		try:
+			print("-- Endpoint Loop running --")
+			while True:
+				self.operation_iteration()
+
+		except KeyboardInterrupt:
+			print("\n--Keyboard Interrupt--")
+
+	def thread_operation_loop(self):
+		loop_thread = threading.Thread(target=self.operation_loop)
+		loop_thread.daemon = True
+		loop_thread.start()
+
 
 if __name__ == "__main__":
 	pass
+
+
+"""
+Communication options:
+ 	- loopback
+		- Upside --> reliability, safety, framiliarity
+		- Downside --> must build a robust loopback system
+	- file
+		- Upside --> Straight forward on what needs to be done
+				 --> can have more than 1 file descriper accessing a file at once
+		- Downside --> have to deal with more than 1 file discriptor on a file
+	- pipes
+		- Upside --> actually possible to deal with
+		- Downside --> pipes, reliability across OS?
+
+
+"""
