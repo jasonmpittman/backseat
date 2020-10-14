@@ -20,7 +20,7 @@ class ClientHandler:
 		----------
 		"""
 		self.depot_list = depot.DepotList()
-		working_depot = self.depot_list.get_working_depot("public.pem")
+		working_depot = self.depot_list.get_working_depot("client1_public.pem")
 		self._log = log_handler.LogHandler("ClientHandler")
 		#for testing
 		working_depot.add("ls -al")

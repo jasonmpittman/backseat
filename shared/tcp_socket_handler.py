@@ -36,7 +36,7 @@ class TcpSocketHandler:
 	_get_key_list : function
 	_identify : function
 	"""
-	def __init__(self):
+	def __init__(self, my_private_key, my_public_key):
 		"""
 		Instantiates an object from the encryption module.
 
@@ -45,8 +45,10 @@ class TcpSocketHandler:
 		"""
 		self._crypto = crypto.AsymmetricCryptographyHandler()
 		self._log = log_handler.LogHandler(self.__class__.__name__)
+		self._my_private_key = my_private_key
+		self._my_public_key = my_public_key
 
-	def send(self, client, message, public_key, private_key):
+	def send(self, client, message, public_key):
 		"""
 		This function sends the provided message to the provide client
 		connection after encrypting the message using the public key and
@@ -68,9 +70,10 @@ class TcpSocketHandler:
 			self._log.info("send", "Blocks encrypted")
 		except:
 			self._log.error("send", "Failed to encrypt blocks - returned None")
+			print("failed to make encrypted blocks")
 			return None
 		try:
-			signature = self._crypto.sign(cyphertext_full_msg, private_key)
+			signature = self._crypto.sign(cyphertext_full_msg, self._my_private_key)
 			signed_msg = cyphertext_full_msg + signature
 			self._log.info("send", "Message signed")
 		except:
@@ -85,7 +88,7 @@ class TcpSocketHandler:
 			return None
 
 
-	def recieve(self, client, private_key):
+	def recieve(self, client):
 		"""
 		This function recieves the entire message sent, then it decrypts it and
 		finds out who signed the message. Returns decrypted message and name of
@@ -94,7 +97,6 @@ class TcpSocketHandler:
 		Parameters
 		----------
 		client : socket connection object
-		private_key : str
 		"""
 		signed_msg = b''
 		return_msg = r""
@@ -116,7 +118,7 @@ class TcpSocketHandler:
 		self._log.info("recieve", "Message prepared for decryption")
 		try:
 			for block in msg_byte_blocks:
-				return_msg += self._crypto.decrypt(block, private_key)
+				return_msg += self._crypto.decrypt(block, self._my_private_key)
 			self._log.info("recieve", "Message fully decrypted")
 		except:
 			self._log.error("recieve", "Failed to decrypt message - retuned None")
@@ -165,6 +167,7 @@ class TcpSocketHandler:
 			return server
 		except:
 			self._log.error("create_server", f"Failed to create, bind, or listen to (ip[{ip}], port[{port}]) - returned None")
+			print("Failed to create, bind, or listen")
 			return None
 
 	def _create_message_blocks(self, message):

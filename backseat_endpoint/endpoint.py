@@ -24,11 +24,12 @@ class Endpoint:
 	_port : int
 	_client : socket connection object
 	_my_private_key : str
+	_my_public_key : str
 	_server_public_key : str
 	_endpoint_msg : EndpointMessage object
 
 	"""
-	def __init__(self, serv_ip, serv_port, private_key, server_public_key):
+	def __init__(self, serv_ip, serv_port, my_private_key, my_public_key, server_public_key):
 		"""
 		This function sets up the Endpoint object, so that it can function
 		correctly.
@@ -37,16 +38,18 @@ class Endpoint:
 		----------
 		serv_ip : str
 		serv_port : int
-		private_key : str
+		my_private_key : str
+		my_public_key : str
 		server_public_key : str
 		"""
+		self._my_private_key = my_private_key
+		self._my_public_key = my_public_key
 		self._agent = agent.Agent()
-		self._tcp_socket_handler = tcp_socket_handler.TcpSocketHandler()
+		self._tcp_socket_handler = tcp_socket_handler.TcpSocketHandler(self._my_private_key, self._my_public_key)
 		self._ip = serv_ip
 		self._port = serv_port
 		self._client = None
 		#Add something to the config file to deal with these
-		self._my_private_key = private_key
 		self._server_public_key = server_public_key
 		self._endpoint_msg = endpoint_message.EndpointMessage()
 
@@ -63,9 +66,9 @@ class Endpoint:
 		print("Message being sent:")
 		print(message)
 		print("---")
-		self._tcp_socket_handler.send(self._client, message, self._server_public_key, self._my_private_key)
+		self._tcp_socket_handler.send(self._client, message, self._server_public_key)
 
-		responce, sender_key = self._tcp_socket_handler.recieve(self._client, self._my_private_key)
+		responce, sender_key = self._tcp_socket_handler.recieve(self._client)
 		print("--responce--")
 		print(responce)
 		print("--")
@@ -119,7 +122,7 @@ class Endpoint:
 			print("no connection needed / connection failed")
 
 		try:
-			self._tcp_socket_handler.send(self._client, responce_msg_json, self._server_public_key, self._my_private_key)
+			self._tcp_socket_handler.send(self._client, responce_msg_json, self._server_public_key)
 		except:
 			print("Endpoint.send_command_res() - Error sending responce")
 
@@ -141,12 +144,6 @@ class Endpoint:
 		print("3")
 		time.sleep(1)
 		print("Go!")
-
-		if input() == "disarm":
-			print("disarming")
-			sys.exit()
-		else:
-			print("type 'disarm' to stop")
 
 	def operation_loop(self):
 		try:
@@ -180,5 +177,7 @@ Communication options:
 		- Upside --> actually possible to deal with
 		- Downside --> pipes, reliability across OS?
 
+Other:
+- Ask server if failed what to do.
 
 """

@@ -23,10 +23,10 @@ class ServerLoop():
 	_server : Socket object - bound and listening
 	_client : str
 	_src_ip : str
-	_my_public_key : str
-	_my_private_key : str
+	_server_public_key : str
+	_server_private_key : str
 	"""
-	def __init__(self, ip, port, allowed_connections):
+	def __init__(self, ip, port, allowed_connections, server_private_key, server_public_key):
 		"""
 		Attributes are initialized.
 
@@ -36,14 +36,17 @@ class ServerLoop():
 		port : int
 		allowed_connections : int
 		"""
-		self._socket_handler = tcp_socket_handler.TcpSocketHandler()
+		# change these to server_public and server_private
+		self._server_private_key = server_private_key
+		self._server_public_key = server_public_key
+
+		self._socket_handler = tcp_socket_handler.TcpSocketHandler(self._server_private_key, self._server_public_key)
 		self._cli_handler = client_handler.ClientHandler()
 		self._server_msg = server_message.ServerMessage()
 		self._server = self._socket_handler.create_server(ip, port, allowed_connections)
+		print("server::")
 		self._client = None
 		self._src_ip = None
-		self._my_public_key = "public.pem"
-		self._my_private_key = "private.pem"
 		self._log = log_handler.LogHandler("ServerLoop")
 		self._log.info("__init__", "Server setup and ready to go.")
 
@@ -59,7 +62,10 @@ class ServerLoop():
 
 		theard_id = threading.get_ident()
 		self._log.info("server_iteration", f"Thread ID = {theard_id}")
-		res, sender_key = self._socket_handler.recieve(self._client, "private.pem")
+		print("client:\n", self._client)
+		res, sender_key = self._socket_handler.recieve(self._client)
+
+		print(sender_key)
 
 		self._log.info("server_iteration", f"Message recieved from {sender_key}")
 
@@ -79,7 +85,7 @@ class ServerLoop():
 			responce_msg_json = self._server_msg.create_msg(True, "", False, "", 0, count, 0)
 			self._log.info("server_iteration", "Message is created letting the endpoint know there is not a new depot item")
 
-		self._socket_handler.send(self._client, responce_msg_json, sender_key, self._my_private_key)
+		self._socket_handler.send(self._client, responce_msg_json, sender_key)
 		self._log.info("server_iteration", "Message is sent")
 
 	def server_loop(self):
@@ -94,16 +100,17 @@ class ServerLoop():
 		try:
 			print("--Server Running--")
 			while True:
+				print(self._server)
 				self._client, self._src_ip = self._server.accept()
-				try:
-					new_thread = threading.Thread(target=self.server_iteration())
-					new_thread.start()
-					self._log.info("server_loop", "Thread successfully ran")
-				except Exception as E:
-					print("--Error in server_loop threading--")
-					print(E)
-					print("-- --")
-					self._log.error("server_loop", f"Error in threading: {E}")
+				# try:
+				new_thread = threading.Thread(target=self.server_iteration())
+				new_thread.start()
+				self._log.info("server_loop", "Thread successfully ran")
+				# except Exception as E:
+					# print("--Error in server_loop threading--")
+					# print(E)
+					# print("-- --")
+					# self._log.error("server_loop", f"Error in threading: {E}")
 
 		except KeyboardInterrupt:
 			print("\n--Keyboard Interrupt--")
