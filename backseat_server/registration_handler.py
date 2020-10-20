@@ -50,7 +50,7 @@ class RegistrationHandler:
 					self._log.warning(self.get_registration_info.__name__, f"repeat host in host.config file: [{name}] is not being added to RegistrationHandler._host_list")
 
 
-	def add(name, OS, public_key):
+	def add(self, name, OS, public_key):
 		"""
 		Adds name, OS, and public_key to the host_list
 

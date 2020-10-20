@@ -2,6 +2,7 @@ from backseat_server import depot
 
 from shared import log_handler
 
+from backseat_server import command_handler
 class ClientHandler:
 	"""
 	This is the logical backend to the functionality of the server. The messages
