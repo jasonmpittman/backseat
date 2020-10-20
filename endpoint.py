@@ -5,18 +5,19 @@
 # client_socket = socket_handler.create_client_socket_connect("localhost", 9999)
 import sys
 from backseat_endpoint import endpoint
+from shared import read_server_config
 
 #serv_ip, serv_port, my_private_key, my_public_key, server_public_key
 
 if __name__ == "__main__":
-	if len(sys.argv) != 6:
-		print(f"Needs 5 command line arguements [server_ip, server_port, my_private_key, my_public_key server_public_key], {len(sys.argv)-1} provided")
+	if len(sys.argv) != 3:
+		print(f"Needs 2 command line arguement [my_private_key, my_public_key ], {len(sys.argv)-1} provided")
 		exit()
-	ip = sys.argv[1]
-	port = int(sys.argv[2])
-	my_private_key = sys.argv[3]
-	my_public_key = sys.argv[4]
-	server_public_key = sys.argv[5]
+
+	ip, port, server_public_key = read_server_config.get_server_config()
+	my_private_key = sys.argv[1]
+	my_public_key = sys.argv[2]
+
 	E = endpoint.Endpoint(ip, port, my_private_key, my_public_key, server_public_key)
 	# E.operate()
 	E.operation_loop()
