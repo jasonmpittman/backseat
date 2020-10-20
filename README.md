@@ -34,4 +34,11 @@ All network communication between agent and server occurs within an encrypted tu
 
 ## Server
 
+## Configuration
+### host.config
+
+### server.config
+
+### accounts.config
+
 ## Acknowledgements
