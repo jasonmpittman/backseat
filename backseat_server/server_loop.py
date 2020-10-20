@@ -41,7 +41,7 @@ class ServerLoop():
 		self._server_public_key = server_public_key
 
 		self._socket_handler = tcp_socket_handler.TcpSocketHandler(self._server_private_key, self._server_public_key)
-		self._cli_handler = client_handler.ClientHandler()
+		self._cli_handler = client_handler.ClientHandler(self._server_public_key)
 		self._server_msg = server_message.ServerMessage()
 		self._server = self._socket_handler.create_server(ip, port, allowed_connections)
 		print("server::")
@@ -76,11 +76,13 @@ class ServerLoop():
 		next_depot_item, count = self._cli_handler.client_handler(res_dict, sender_key)
 
 		if next_depot_item != None:
-			print(next_depot_item)
-
-
-			responce_msg_json = self._server_msg.create_msg(False, next_depot_item["command"], False, "", 0, next_depot_item["depot_count"], next_depot_item["command_id"])
-			self._log.info("server_iteration", "Message is created for a new depot item")
+			if next_depot_item == "depot_item_added":
+				pass
+				#do something
+			else:
+				print(next_depot_item)
+				responce_msg_json = self._server_msg.create_msg(False, next_depot_item["command"], False, "", 0, next_depot_item["depot_count"], next_depot_item["command_id"])
+				self._log.info("server_iteration", "Message is created for a new depot item")
 		else:
 			responce_msg_json = self._server_msg.create_msg(True, "", False, "", 0, count, 0)
 			self._log.info("server_iteration", "Message is created letting the endpoint know there is not a new depot item")

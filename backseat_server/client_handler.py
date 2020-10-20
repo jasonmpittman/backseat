@@ -12,14 +12,16 @@ class ClientHandler:
 	----------
 	depot_list : DepotList object
 	"""
-	def __init__(self):
+	def __init__(self, server_public_key):
 		"""
 		Initializes the depot list.
 
 		Parameters
 		----------
 		"""
+		self._server_public_key = server_public_key
 		self.depot_list = depot.DepotList()
+		self._command_handler = command_handler.CommandHandler(self.depot_list)
 		working_depot = self.depot_list.get_working_depot("client1_public.pem")
 		self._log = log_handler.LogHandler("ClientHandler")
 		#for testing
@@ -78,3 +80,12 @@ class ClientHandler:
 		else:
 			self._log.info("command_handler", "Not ready - Returned None and working_depot count")
 			return None, working_depot.count
+
+	def add_commands(self, client_dict):
+		if client_dict["host_list"] == []:
+			self._command_handler.add_to_all(client_dict["command"])
+		else:
+			self._command_handler.add_to_specified(client_dict["command"], client_dict["host_list"])
+
+
+		#must return something then a number

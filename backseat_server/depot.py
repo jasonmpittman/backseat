@@ -70,7 +70,8 @@ class DepotList():
 			if depot.host == host:
 				return depot
 
-		return self.add_depot(host)
+		print("Could not get that depot")
+		return None
 
 	def isin(self, host):
 		for depot in self.list:
