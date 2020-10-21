@@ -59,7 +59,6 @@ class TcpSocketHandler:
 		client : socket connection object
 		message : str
 		public_key : str
-		private_key : str
 		"""
 		blocks = self._create_message_blocks(message)
 		cyphertext_full_msg = b''
@@ -206,9 +205,15 @@ class TcpSocketHandler:
 		Parameters
 		----------
 		"""
+		output_arr = []
 		arr = os.listdir("keys")
+		for item in arr:
+			s_item = item.split("_")
+			if s_item[1] == "public.pem":
+				output_arr.append(item)
+
 		self._log.info("_get_key_list", "Retuned a list of key names")
-		return arr
+		return output_arr
 
 	def _identify(self, obj, signature):
 		"""
@@ -221,9 +226,11 @@ class TcpSocketHandler:
 		signature : bytes
 		"""
 		key_list = self._get_key_list()
+		print(key_list)
 		for key in key_list:
 			if self._crypto.is_sign_valid(obj, signature, key) == True:
 				self._log.info("_identify", f"Key found [{key}]")
+
 				return key
 		self._log.error("_identify", "Cound not find key - returned None")
 		return None
