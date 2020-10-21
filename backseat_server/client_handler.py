@@ -13,14 +13,14 @@ class ClientHandler:
 	----------
 	depot_list : DepotList object
 	"""
-	def __init__(self, server_public_key):
+	def __init__(self, server_private_key):
 		"""
 		Initializes the depot list.
 
 		Parameters
 		----------
 		"""
-		self._server_public_key = server_public_key
+		self._server_private_key = server_private_key
 		self.depot_list = depot.DepotList()
 		self._command_handler = command_handler.CommandHandler(self.depot_list)
 		working_depot = self.depot_list.get_working_depot("client1_public.pem")
@@ -40,6 +40,24 @@ class ClientHandler:
 		sender_key : str
 		"""
 		#gets working depot
+
+		if sender_key == self._server_private_key:
+			#do something
+			#add try block
+			print("SERVER SENDER KEY")
+			if client_dict["type"] == "add":
+				self._command_handler.add_command_to_specified(client_dict["command"], client_dict["who"])
+				print("### - added to depot - ###")
+				return "depot_item_added", -1
+				#add stuff
+			if client_dict["type"] == "checkoff":
+				pass
+				#add checkoff stuff
+
+			print("Recieved message from server, but 'type' is not 'add' or 'checkoff'.")
+			return None
+
+
 		print("-------")
 		print(type(client_dict))
 		working_depot = self.depot_list.get_working_depot(sender_key)

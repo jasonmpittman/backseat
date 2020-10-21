@@ -81,8 +81,11 @@ class CommandHandler:
 		command : str
 		host_list : list
 		"""
-		self._depot_list.add_to_specified(command, host_list)
-		self._logger.info(self.add_command_to_specified.__name__, f"Added command [{command}] to hosts {host_list}")
+		if len(host_list) > 0:
+			self._depot_list.add_to_specified(command, host_list)
+			self._logger.info(self.add_command_to_specified.__name__, f"Added command [{command}] to hosts {host_list}")
+		else:
+			self.add_to_all(command)
 
 	def print_depots(self):
 		"""

@@ -41,7 +41,7 @@ class ServerLoop():
 		self._server_public_key = server_public_key
 
 		self._socket_handler = tcp_socket_handler.TcpSocketHandler(self._server_private_key, self._server_public_key)
-		self._cli_handler = client_handler.ClientHandler(self._server_public_key)
+		self._cli_handler = client_handler.ClientHandler(self._server_private_key)
 		self._server_msg = server_message.ServerMessage()
 		self._server = self._socket_handler.create_server(ip, port, allowed_connections)
 		self._client = None
@@ -76,10 +76,11 @@ class ServerLoop():
 
 		if next_depot_item != None:
 			if next_depot_item == "depot_item_added":
-				pass
+				print("DEPOT ITEM ADDED")
+				return None
 				#do something
 
-			elif: next_depot_item == "check_off_depot_item":
+			elif next_depot_item == "check_off_depot_item":
 				pass
 				#do something
 			else:
