@@ -12,7 +12,7 @@ import threading
 
 import sys
 
-class Endpoint:
+class EndpointOperation:
 	"""
 	This class handles the full operations of the endpoint.
 
@@ -136,21 +136,26 @@ class Endpoint:
 			print("run_command == None, server is probably not ready")
 
 	def operation_iteration(self):
-		self.operate()
-		print("1")
-		time.sleep(1)
-		print("2")
-		time.sleep(1)
-		print("3")
-		time.sleep(1)
-		print("Go!")
+		try:
+			self.operate()
+			print("1")
+			time.sleep(1)
+			print("2")
+			time.sleep(1)
+			print("3")
+			time.sleep(1)
+			print("Go!")
+			return True
+		except:
+			return False
 
 	def operation_loop(self):
+		working = True
 		try:
 			print("-- Endpoint Loop running --")
-			while True:
-				self.operation_iteration()
-
+			while working:
+				working = self.operation_iteration()
+			print("-- Server disconnected --")
 		except KeyboardInterrupt:
 			print("\n--Keyboard Interrupt--")
 
