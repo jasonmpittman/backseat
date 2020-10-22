@@ -4,6 +4,7 @@ Backseat is a cross-platform and cross-ditribution GNU/Linux patch management to
 ## Table of Contents
 - [Features](#features)
 - [Implementation](#implementation)
+- [Configuration](#confiuration)
 - [Acknowledgments](#acknowledgments)
 
 ## Dependencies
@@ -38,7 +39,7 @@ All network communication between agent and server occurs within an encrypted tu
 ### host.config
 The format for a line in the host.config file is:
 
-<Endpoint Name> <Endpoint OS> <Endpoint's public key>
+|Endpoint Name| |Endpoint OS| |Endpoint's public key|
 
 #### Explaination:
 |Endpoint Name|:
@@ -86,9 +87,6 @@ The hash of the password using SHA512. There is a function in account_handler.py
 (called add_account) that will be useful to use in order to add an account.
 
 Each line is 1 username and password pair.
-
-
-
 
 
 ## Acknowledgements
