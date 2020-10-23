@@ -10,8 +10,8 @@ SH = tcp_socket_handler.TcpSocketHandler("server_private.pem", "server_public.pe
 client = SH.create_client_socket_connect("localhost", 9999)
 
 
-message_dict = {"type": "add", "command": "ls", "who": []}
-# message_dict = {"type": "checkoff", "command_id": 3, "who": "client1_private.pem"}
+# message_dict = {"type": "add", "command": "PWD", "who": ["client1_public.pem"]}
+message_dict = {"type": "checkoff", "command_id": 3, "who": "client1_public.pem"}
 message = json.dumps(message_dict)
 SH.send(client, message, "server_public.pem")
 

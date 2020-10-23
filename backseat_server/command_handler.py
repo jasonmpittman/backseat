@@ -95,3 +95,9 @@ class CommandHandler:
 		----------
 		"""
 		self._depot_list.print_depot_list()
+
+	def checkoff_command(self, depot_name, command_id):
+		working_depot = self._depot_list.get_working_depot(depot_name)
+		depot_item = working_depot.get_by_id(command_id)
+		#126 -- Command not found error code
+		depot_item.set(True, "MANUALLY OVERRIDDEN", 126)

@@ -51,12 +51,14 @@ class ClientHandler:
 				return "depot_item_added", -1
 				#add stuff
 			if client_dict["type"] == "checkoff":
+				print("In checkout code")
+				self._command_handler.checkoff_command(client_dict["who"], client_dict["command_id"])
 
-
-				return "checked_off_depot_item"
+				return "checked_off_depot_item", -1
 				#add checkoff stuff
 
 			print("Recieved message from server, but 'type' is not 'add' or 'checkoff'.")
+
 			return None
 
 
@@ -108,4 +110,7 @@ class ClientHandler:
 			self._command_handler.add_to_specified(client_dict["command"], client_dict["host_list"])
 
 
+	def checkoff_command(self, client_dict):
+		self._command_handler.checkoff_command(client_dict["who"], client_dict["command_id"])
+		return "checked_off_depot_item", -1
 		#must return something then a number
