@@ -40,7 +40,6 @@ class CommandHandler:
 		self._registration = registration_handler.RegistrationHandler()
 		self._logger.info(self.__init__.__name__, "self._registration initialized")
 		for host in self._registration.host_list:
-			print(host)
 			self._depot_list.add_depot(host["public_key"])
 		self._logger.info(self.__init__.__name__, "self._depot_list filled with depots for each approved host")
 

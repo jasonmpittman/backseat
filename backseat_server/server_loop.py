@@ -78,15 +78,14 @@ class ServerLoop():
 			if next_depot_item == "depot_item_added":
 				print("DEPOT ITEM ADDED")
 				return None
-				#do something
 
 			elif next_depot_item == "checked_off_depot_item":
 				print("DEPOT ITEM CHECKEDOFF")
 				return None
-				#do something
 
-			elif next_depot_item[::5] == "DATA:":
-				server_data = next_depot_item[5::]
+
+			elif next_depot_item == "get_server_data":
+				server_data = count
 				self._socket_handler.send(self._client, server_data, self._server_public_key)
 				return None
 
@@ -113,17 +112,16 @@ class ServerLoop():
 		try:
 			print("--Server Running--")
 			while True:
-				print(self._server)
 				self._client, self._src_ip = self._server.accept()
-				# try:
-				new_thread = threading.Thread(target=self.server_iteration())
-				new_thread.start()
-				self._log.info("server_loop", "Thread successfully ran")
-				# except Exception as E:
-					# print("--Error in server_loop threading--")
-					# print(E)
-					# print("-- --")
-					# self._log.error("server_loop", f"Error in threading: {E}")
+				try:
+					new_thread = threading.Thread(target=self.server_iteration())
+					new_thread.start()
+					self._log.info("server_loop", "Thread successfully ran")
+				except Exception as E:
+					print("--Error in server_loop threading--")
+					print(E)
+					print("-- --")
+					self._log.error("server_loop", f"Error in threading: {E}")
 
 		except KeyboardInterrupt:
 			print("\n--Keyboard Interrupt--")
