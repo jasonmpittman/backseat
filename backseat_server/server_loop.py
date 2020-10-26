@@ -81,9 +81,15 @@ class ServerLoop():
 				#do something
 
 			elif next_depot_item == "checked_off_depot_item":
-				print("DEPOT ITEM CHECKDOFF")
+				print("DEPOT ITEM CHECKEDOFF")
 				return None
 				#do something
+
+			elif next_depot_item[::5] == "DATA:":
+				server_data = next_depot_item[5::]
+				self._socket_handler.send(self._client, server_data, self._server_public_key)
+				return None
+
 			else:
 				print(next_depot_item)
 				responce_msg_json = self._server_msg.create_msg(False, next_depot_item["command"], False, "", 0, next_depot_item["depot_count"], next_depot_item["command_id"])

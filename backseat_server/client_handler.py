@@ -57,6 +57,11 @@ class ClientHandler:
 				return "checked_off_depot_item", -1
 				#add checkoff stuff
 
+			if client_dict["type"] == "get_server_data":
+				print("Get Server Data")
+				return f"DATA:{self.depot_list.get_depot_list_info()}", -1
+
+
 			print("Recieved message from server, but 'type' is not 'add' or 'checkoff'.")
 
 			return None
@@ -114,3 +119,5 @@ class ClientHandler:
 		self._command_handler.checkoff_command(client_dict["who"], client_dict["command_id"])
 		return "checked_off_depot_item", -1
 		#must return something then a number
+
+	def responce

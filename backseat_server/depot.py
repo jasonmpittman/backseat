@@ -56,6 +56,12 @@ class Depot:
 		for dp_item in self._depot_items_list:
 			print(dp_item.output())
 
+	def get_depot_contents(self):
+		output = ""
+		for dp_item in self._depot_items_list:
+			output += dp_item.output() + "\n"
+		return output
+
 class DepotList():
 	def __init__(self):
 		self.list = []
@@ -92,6 +98,13 @@ class DepotList():
 		for depot in self.list:
 			print(f"--{depot.host}--")
 			depot.print_depot_contents()
+
+	def get_depot_list_info(self):
+		o_string = ""
+		for depot in self.list:
+			o_string += f"--{depot.host}--\n"
+			o_string += depot.get_depot_contents() + "\n"
+		return o_string
 
 if __name__ == "__main__":
 	dl = DepotList()
