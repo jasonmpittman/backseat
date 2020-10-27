@@ -13,13 +13,14 @@ class ClientHandler:
 	----------
 	depot_list : DepotList object
 	"""
-	def __init__(self, server_public_key):
+	def __init__(self, server_public_key, server_info):
 		"""
 		Initializes the depot list.
 
 		Parameters
 		----------
 		"""
+		self._server_info = server_info
 		self._server_public_key = server_public_key
 		self.depot_list = depot.DepotList()
 		self._command_handler = command_handler.CommandHandler(self.depot_list)

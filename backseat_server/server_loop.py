@@ -26,7 +26,7 @@ class ServerLoop():
 	_server_public_key : str
 	_server_private_key : str
 	"""
-	def __init__(self, ip, port, allowed_connections, server_private_key, server_public_key):
+	def __init__(self, ip, port, allowed_connections, server_private_key, server_public_key, server_info):
 		"""
 		Attributes are initialized.
 
@@ -41,13 +41,15 @@ class ServerLoop():
 		self._server_public_key = server_public_key
 
 		self._socket_handler = tcp_socket_handler.TcpSocketHandler(self._server_private_key, self._server_public_key)
-		self._cli_handler = client_handler.ClientHandler(self._server_public_key)
+		self._server_info = server_info
+		self._cli_handler = client_handler.ClientHandler(self._server_public_key, self._server_info)
 		self._server_msg = server_message.ServerMessage()
 		self._server = self._socket_handler.create_server(ip, port, allowed_connections)
 		self._client = None
 		self._src_ip = None
 		self._log = log_handler.LogHandler("ServerLoop")
 		self._log.info("__init__", "Server setup and ready to go.")
+
 
 	def server_iteration(self):
 		"""

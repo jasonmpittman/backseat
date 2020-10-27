@@ -8,10 +8,10 @@
 import time
 
 class ServerInfo:
-	def __init__(self, depot_list):
+	def __init__(self):
 		self.start_time = time.time()
 		self.run_time = None
-		self.depot_list = depot_list
+		self.depot_list = None
 		self.last_successful_job_time = time.time()
 		self.last_heartbeat_time = time.time()
 		self.time_since_heatbeat = self.update_heartbeat()
