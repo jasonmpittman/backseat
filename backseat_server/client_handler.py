@@ -120,4 +120,7 @@ class ClientHandler:
 	def checkoff_command(self, client_dict):
 		self._command_handler.checkoff_command(client_dict["who"], client_dict["command_id"])
 		return "checked_off_depot_item", -1
-		#must return something then a number
+
+	def get_depots_data(self):
+		pass
+		
