@@ -14,7 +14,7 @@ if __name__ == "__main__":
 		print(f"Needs 2 command line arguement [my_private_key, my_public_key ], {len(sys.argv)-1} provided")
 		exit()
 
-	ip, port, server_public_key = read_server_config.get_server_config()
+	ip, port, _, server_public_key = read_server_config.get_server_config()
 	my_private_key = sys.argv[1]
 	my_public_key = sys.argv[2]
 
