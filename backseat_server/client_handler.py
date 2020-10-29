@@ -69,7 +69,7 @@ class ClientHandler:
 
 			return None
 
-
+		self._server_info.update_heatbeat()
 		print("-------")
 		print(type(client_dict))
 		working_depot = self.depot_list.get_working_depot(sender_key)
@@ -133,14 +133,3 @@ class ClientHandler:
 			depot_item_list = {"host": depot.host, "count": depot.count, "item_list": i_list}
 			depots_out.append(depot_item_list)
 		return depots_out
-
-
-
-
-
-
-
-
-
-
-#
