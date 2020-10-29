@@ -20,17 +20,17 @@ class DepotItem:
 class Depot:
 	def __init__(self, host):
 		self.host = host
-		self._depot_items_list = []
+		self.depot_items_list = []
 		self.count = 0 # -1 when done = True
 		# self._depot_completed_list = []
 
 	def get_by_id(self, id):
-		for command_object in self._depot_items_list:
+		for command_object in self.depot_items_list:
 			if command_object.command_id == id:
 				return command_object
 
 	def get_next(self):
-		for dp in self._depot_items_list:
+		for dp in self.depot_items_list:
 			if dp._done == False:
 				# self.count -= 1
 				print(f"get_next: [command]{dp.command}, [command_id]{dp.command_id}, [count]{self.count}")
@@ -39,13 +39,13 @@ class Depot:
 
 	def add(self, command):
 		new_depot_item = DepotItem(command, self.get_depot_list_len()+1)
-		self._depot_items_list.append(new_depot_item)
+		self.depot_items_list.append(new_depot_item)
 		# print(new_depot_item.output())
 		self.count += 1
 
 	def get_depot_list_len(self):
 		#This function is for if I decide to change the model to having 2 lists instead of 1
-		return len(self._depot_items_list)
+		return len(self.depot_items_list)
 
 
 	def mass_load_depot(self, command_list):
@@ -53,12 +53,12 @@ class Depot:
 			self.add(command)
 
 	def print_depot_contents(self):
-		for dp_item in self._depot_items_list:
+		for dp_item in self.depot_items_list:
 			print(dp_item.output())
 
 	def get_depot_contents(self):
 		output = ""
-		for dp_item in self._depot_items_list:
+		for dp_item in self.depot_items_list:
 			output += dp_item.output() + "\n"
 		return output
 

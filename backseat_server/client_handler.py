@@ -60,7 +60,9 @@ class ClientHandler:
 
 			if client_dict["type"] == "get_server_data":
 				print("Get Server Data")
-				return "get_server_data", self.depot_list.get_depot_list_info()
+				self._server_info.update_depots_state(self.get_depots_data())
+				output = self.depot_list.get_depot_list_info()
+				return "get_server_data", output
 
 
 			print("Recieved message from server, but 'type' is not 'add' or 'checkoff'.")
@@ -122,5 +124,23 @@ class ClientHandler:
 		return "checked_off_depot_item", -1
 
 	def get_depots_data(self):
-		pass
-		
+		depots_out = []
+		for depot in self.depot_list.list:
+			i_list = []
+			depot_item_list = {}
+			for depot_item in depot.depot_items_list:
+				i_list.append(depot_item.output())
+			depot_item_list = {"host": depot.host, "count": depot.count, "item_list": i_list}
+			depots_out.append(depot_item_list)
+		return depots_out
+
+
+
+
+
+
+
+
+
+
+#

@@ -29,8 +29,8 @@ class ServerInfo:
 		self.last_successful_job = job_output
 		self.last_successful_job_time = time.time() - self.last_successful_job_time
 
-	def update_depots_state(self):
-		pass
+	def update_depots_state(self, depot_data):
+		self.depot_state = depot_data
 
 	def make_json(self):
 		pass
