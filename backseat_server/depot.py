@@ -1,8 +1,25 @@
 
-#Needs better system to keep track of # of items in depot
 class DepotItem:
+	"""
+	This class keeps track of individual commands, the command id, if the command has been run, the output of the command, and the exit code. These items are put into depots which keep track of which endpoint it belongs to.
+
+	Attributes
+	----------
+	command : str
+	command_id : int
+	_done : bool
+	_stdout : str
+	_exit_code : int
+	"""
 	def __init__(self, command, command_id):
-		# self._host = host
+		"""
+		This initializes the creation of a depot item.
+
+		Parameters
+		----------
+		command : str
+		command_id : int
+		"""
 		self.command = command
 		self.command_id = command_id
 		self._done = False
@@ -10,11 +27,23 @@ class DepotItem:
 		self._exit_code = None
 
 	def set(self, done, stdout, exit_code):
+		"""
+		This function sets the values for a command that has already ran.
+
+		Parameters
+		----------
+		done : bool
+		stdout : str
+		exit_code : int
+		"""
 		self._done = done
 		self._stdout = stdout
 		self._exit_code = exit_code
 
 	def output(self):
+		"""
+		This function returns all the attributes of a DepotItem as a string.
+		"""
 		return f"Command:{self.command}\n Command ID: {self.command_id}\n Done: {self._done}\n stdout: {self._stdout}\n Exit Code: {self._exit_code}\n"
 
 class Depot:
