@@ -96,6 +96,14 @@ class CommandHandler:
 		self._depot_list.print_depot_list()
 
 	def checkoff_command(self, depot_name, command_id):
+		"""
+		This allows commands that cannot or will not complete to be manually overriden so that the next command can run.
+
+		Parameters
+		----------
+		depot_name : str
+		command_id : int
+		"""
 		working_depot = self._depot_list.get_working_depot(depot_name)
 		depot_item = working_depot.get_by_id(command_id)
 		#126 -- Command not found error code

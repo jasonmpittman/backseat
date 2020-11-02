@@ -90,7 +90,6 @@ class ClientHandler:
 						self._log.info("client_handler", "depot item information updated")
 					else:
 						# is unable to obtain the depot_item by id
-						print()
 						self._log.error("client_handler", "Could not find depot item by that id - returning: None, -1")
 						return None, -1
 				else:
@@ -113,6 +112,13 @@ class ClientHandler:
 			return None, working_depot.count
 
 	def add_commands(self, client_dict):
+		"""
+		Adds commands to the depots that are provided to the server.
+
+		Parameters
+		----------
+		client_dict : python dictionary
+		"""
 		if client_dict["host_list"] == []:
 			self._command_handler.add_to_all(client_dict["command"])
 		else:
@@ -120,6 +126,14 @@ class ClientHandler:
 
 
 	def checkoff_command(self, client_dict):
+		"""
+		Checks off a command that the user wants to override as completed, even if it has not been completed.
+
+		Parameters
+		----------
+		client_dict : python dictionary
+		"""
+
 		self._command_handler.checkoff_command(client_dict["who"], client_dict["command_id"])
 		return "checked_off_depot_item", -1
 
