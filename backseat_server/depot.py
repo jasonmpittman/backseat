@@ -188,7 +188,9 @@ class DepotList():
 		Parameters
 		----------
 		"""
+		self._log = log_handler.LogHandler("DepotList")
 		self.list = []
+		self._log.info("__init__", "DepotList Initialized")
 
 	def add_depot(self, host):
 		"""
@@ -200,6 +202,7 @@ class DepotList():
 		"""
 		new_depot = Depot(host)
 		self.list.append(new_depot)
+		self._log.info("add_depot", f"New depot added for {host}")
 		return new_depot
 
 	def get_working_depot(self, host):
@@ -212,9 +215,12 @@ class DepotList():
 		"""
 		for depot in self.list:
 			if depot.host == host:
+				self._log.info("get_working_depot", f"Depot {host} found and returned")
 				return depot
 
-		print("Could not get that depot")
+		print(f"Could not find {host} depot")
+		self._log.warning("get_working_depot", f"Could not find {host} depot, Returned None")
+
 		return None
 
 	def isin(self, host):
@@ -227,7 +233,9 @@ class DepotList():
 		"""
 		for depot in self.list:
 			if host == depot.host:
+				self._log.info("isin", f"Host {host} has a depot associated with it in the depot_list")
 				return True
+		self._log.info("isin", f"Host {host} does not have a depot associated with it")
 		return False
 
 	def add_to_all(self, command):
@@ -238,6 +246,7 @@ class DepotList():
 		----------
 		command : str
 		"""
+		self._log.info("add_to_all", f"Adding command [{command}] to all depots")
 		for depot in self.list:
 			depot.add(command)
 
@@ -250,6 +259,7 @@ class DepotList():
 		command : str
 		host_list : str
 		"""
+		self._log.info("add_to_specified", "Adding command to specified depots")
 		for depot in self.list:
 			if depot.host in host_list:
 				depot.add(command)
@@ -264,6 +274,7 @@ class DepotList():
 		for depot in self.list:
 			print(f"--{depot.host}--")
 			depot.print_depot_contents()
+		self._log.info("print_depot_list", "Printed depot list")
 
 	def get_depot_list_info(self):
 		"""
@@ -276,6 +287,9 @@ class DepotList():
 		for depot in self.list:
 			o_string += f"--{depot.host}--\n"
 			o_string += depot.get_depot_contents() + "\n"
+
+		self._log.info("get_depot_list_info", "Returned depot list info in string format")
+
 		return o_string
 
 if __name__ == "__main__":
