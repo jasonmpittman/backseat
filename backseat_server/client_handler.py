@@ -138,6 +138,12 @@ class ClientHandler:
 		return "checked_off_depot_item", -1
 
 	def get_depots_data(self):
+		"""
+		Gets all the depot item data and puts it into a list which it returns.
+
+		Parameters
+		----------
+		"""
 		depots_out = []
 		for depot in self.depot_list.list:
 			i_list = []

@@ -1,3 +1,4 @@
+from shared import log_handler
 
 class DepotItem:
 	"""
@@ -20,11 +21,14 @@ class DepotItem:
 		command : str
 		command_id : int
 		"""
+		self._log = log_handler.LogHandler("DepotItem")
 		self.command = command
 		self.command_id = command_id
 		self._done = False
 		self._stdout = ""
 		self._exit_code = None
+		self._log.info("__init__", f"DepotItem created: {command} {command_id}")
+
 
 	def set(self, done, stdout, exit_code):
 		"""
@@ -39,11 +43,13 @@ class DepotItem:
 		self._done = done
 		self._stdout = stdout
 		self._exit_code = exit_code
+		self._log("set", f"Item with command_id={self.command_id}, values set. done={done} stdout={stdout} exit_code={exit_code}")
 
 	def output(self):
 		"""
 		This function returns all the attributes of a DepotItem as a string.
 		"""
+		self._log("output", f"Returning DepotItem with command_id [{self.command_id}] values as a string")
 		return f"Command:{self.command}\n Command ID: {self.command_id}\n Done: {self._done}\n stdout: {self._stdout}\n Exit Code: {self._exit_code}\n"
 
 class Depot:
@@ -65,7 +71,8 @@ class Depot:
 		self.host = host
 		self.depot_items_list = []
 		self.count = 0 # -1 when done = True
-		# self._depot_completed_list = []
+		self._log = log_handler.LogHandler("Depot")
+		self._log.info("__init__", f"Depot for {host} initialized")
 
 	def get_by_id(self, id):
 		"""
@@ -77,7 +84,12 @@ class Depot:
 		"""
 		for command_object in self.depot_items_list:
 			if command_object.command_id == id:
+				self._log.info("get_by_id", "Returned DepotItem with command_id: {id}")
 				return command_object
+
+		self._log.error("get_by_id", "Item could not be found, returned None")
+		return None
+		# HANDLE THIS CASE
 
 	def get_next(self):
 		"""
@@ -90,7 +102,12 @@ class Depot:
 			if dp._done == False:
 				# self.count -= 1
 				print(f"get_next: [command]{dp.command}, [command_id]{dp.command_id}, [count]{self.count}")
+
+				self._log.info("get_next", f"Next item found Returned DepotItem with command_id: {dp.command_id}")
+
 				return {"command": dp.command, "command_id": dp.command_id, "depot_count": self.count}
+
+		self._log.warning("get_next", "No next item can be found, returned None")
 		return None
 
 	def add(self, command):
@@ -105,6 +122,7 @@ class Depot:
 		self.depot_items_list.append(new_depot_item)
 		# print(new_depot_item.output())
 		self.count += 1
+		self._log.info("add", f"command: {command} added")
 
 	def get_depot_list_len(self):
 		"""
@@ -113,7 +131,9 @@ class Depot:
 		Parameters
 		----------
 		"""
-		return len(self.depot_items_list)
+		length = len(self.depot_items_list)
+		self._log.info("get_depot_list_len", f"Returned {lengeth}")
+		return length
 
 
 
@@ -125,6 +145,7 @@ class Depot:
 		----------
 		command_list : list of str
 		"""
+		self._log.info("mass_load_depot", "Mass loading a depot")
 		for command in command_list:
 			self.add(command)
 
@@ -137,6 +158,7 @@ class Depot:
 		"""
 		for dp_item in self.depot_items_list:
 			print(dp_item.output())
+		self._log.info("print_depot_contents", f"Printed contents of depot {self.host}")
 
 	def get_depot_contents(self):
 		"""
@@ -148,6 +170,7 @@ class Depot:
 		output = ""
 		for dp_item in self.depot_items_list:
 			output += dp_item.output() + "\n"
+		self._log.info("get_depot_contents", f"Returned depot contents for depot {self.host}")
 		return output
 
 class DepotList():
