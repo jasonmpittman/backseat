@@ -1,8 +1,5 @@
 '''
 Handles the user accounts that need to access the server through the UI.
-- Hash password
-- stored on computer
-- Possible use pam
 
 '''
 

@@ -48,6 +48,9 @@ class DepotItem:
 	def output(self):
 		"""
 		This function returns all the attributes of a DepotItem as a string.
+
+		Parameters
+		----------
 		"""
 		self._log("output", f"Returning DepotItem with command_id [{self.command_id}] values as a string")
 		return f"Command:{self.command}\n Command ID: {self.command_id}\n Done: {self._done}\n stdout: {self._stdout}\n Exit Code: {self._exit_code}\n"
@@ -59,6 +62,8 @@ class Depot:
 	Attributes
 	----------
 	host : str
+	depot_items_list : python list
+	count : int
 	"""
 	def __init__(self, host):
 		"""
@@ -80,11 +85,11 @@ class Depot:
 
 		Parameters
 		----------
-		id : str
+		id : int
 		"""
 		for command_object in self.depot_items_list:
 			if command_object.command_id == id:
-				self._log.info("get_by_id", "Returned DepotItem with command_id: {id}")
+				self._log.info("get_by_id", f"Returned DepotItem with command_id: {id}")
 				return command_object
 
 		self._log.error("get_by_id", "Item could not be found, returned None")
