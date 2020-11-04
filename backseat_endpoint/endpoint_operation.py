@@ -55,9 +55,18 @@ class EndpointOperation:
 
 
 	def connect(self):
+		"""
+		Creates a TCP socket connection with the server.
+
+		Parameters
+		----------
+		"""
 		self._client = self._tcp_socket_handler.create_client_socket_connect(self._ip, self._port)
 
 	def get_command_msg(self):
+		"""
+		Creates and sends a message to the server, prompting it to give it the next command. It returns the responce from the server.
+		"""
 		try:
 			self.connect()
 		except:
@@ -79,6 +88,13 @@ class EndpointOperation:
 		return dict_responce
 
 	def run_command(self, command_msg_dict):
+		"""
+		This function processes the command sent to the endpoint from the server, then creates a responce message to the server. The responce is returned in json format.
+
+		Parameters
+		----------
+		command_msg_dict : python dictionary
+		"""
 		print(command_msg_dict)
 		if command_msg_dict["not_ready"]:
 			return None
@@ -86,6 +102,7 @@ class EndpointOperation:
 		responce_msg_json = None
 
 		stdout, stderr, exitcode = self._agent.run_command(command_msg_dict["command"])
+
 		ready = False
 		completed = False
 
@@ -99,16 +116,19 @@ class EndpointOperation:
 			successful = False
 
 		ping = False
-		print("message creation")
+
 		responce_msg_json = self._endpoint_msg.create_msg(ping, ready, completed, stdout, stderr, successful, exitcode, command_msg_dict["command_id"])
-		print("post messeage creation")
-
-		# responce_msg_json = self._endpoint_msg.create_msg(False, True, False, "", E, False, exit code)
-
 
 		return responce_msg_json
 
 	def send_command_res(self, responce_msg_json):
+		"""
+		This function takes in a responce message in json format then sends it to the server.
+
+		Paremeters
+		----------
+		responce_msg_json :  
+		"""
 		if responce_msg_json == None:
 			print("responce_msg_json = None")
 		else:
@@ -167,22 +187,3 @@ class EndpointOperation:
 
 if __name__ == "__main__":
 	pass
-
-
-"""
-Communication options:
- 	- loopback
-		- Upside --> reliability, safety, framiliarity
-		- Downside --> must build a robust loopback system
-	- file
-		- Upside --> Straight forward on what needs to be done
-				 --> can have more than 1 file descriper accessing a file at once
-		- Downside --> have to deal with more than 1 file discriptor on a file
-	- pipes
-		- Upside --> actually possible to deal with
-		- Downside --> pipes, reliability across OS?
-
-Other:
-- Ask server if failed what to do.
-
-"""
