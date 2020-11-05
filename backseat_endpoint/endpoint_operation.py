@@ -127,7 +127,7 @@ class EndpointOperation:
 
 		Paremeters
 		----------
-		responce_msg_json :  
+		responce_msg_json :
 		"""
 		if responce_msg_json == None:
 			print("responce_msg_json = None")
@@ -148,6 +148,12 @@ class EndpointOperation:
 
 
 	def operate(self):
+		"""
+		This function at a high level deals with performing the actual steps of getting, running, then responding to commands provided.
+
+		Parameters
+		----------
+		"""
 		server_command_msg_json = self.get_command_msg()
 		responce_msg_json = self.run_command(server_command_msg_json)
 		if responce_msg_json != None:
@@ -156,6 +162,12 @@ class EndpointOperation:
 			print("run_command == None, server is probably not ready")
 
 	def operation_iteration(self):
+		"""
+		This function spaces out operating of the program to simulate the heartbeats.
+
+		Parameters
+		----------
+		"""
 		try:
 			self.operate()
 			print("1")
@@ -170,6 +182,12 @@ class EndpointOperation:
 			return False
 
 	def operation_loop(self):
+		"""
+		Loops the operation of the program. This is the master loop of the endpoint.
+
+		Parameters
+		----------
+		"""
 		working = True
 		try:
 			print("-- Endpoint Loop running --")
@@ -180,6 +198,12 @@ class EndpointOperation:
 			print("\n--Keyboard Interrupt--")
 
 	def thread_operation_loop(self):
+		"""
+		Threads the operation so that the endpoint has the ability to run other services at the same time.
+
+		Parameters
+		----------
+		"""
 		loop_thread = threading.Thread(target=self.operation_loop)
 		loop_thread.daemon = True
 		loop_thread.start()
