@@ -233,4 +233,5 @@ class TcpSocketHandler:
 
 				return key
 		self._log.error("_identify", "Cound not find key - returned None")
+		print("Could not find key - returned none")
 		return None

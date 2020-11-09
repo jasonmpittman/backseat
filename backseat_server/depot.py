@@ -43,7 +43,7 @@ class DepotItem:
 		self._done = done
 		self._stdout = stdout
 		self._exit_code = exit_code
-		self._log("set", f"Item with command_id={self.command_id}, values set. done={done} stdout={stdout} exit_code={exit_code}")
+		self._log.info("set", f"Item with command_id={self.command_id}, values set. done={done} stdout={stdout} exit_code={exit_code}")
 
 	def output(self):
 		"""
@@ -52,7 +52,7 @@ class DepotItem:
 		Parameters
 		----------
 		"""
-		self._log("output", f"Returning DepotItem with command_id [{self.command_id}] values as a string")
+		self._log.info("output", f"Returning DepotItem with command_id [{self.command_id}] values as a string")
 		return f"Command:{self.command}\n Command ID: {self.command_id}\n Done: {self._done}\n stdout: {self._stdout}\n Exit Code: {self._exit_code}\n"
 
 class Depot:
@@ -137,7 +137,7 @@ class Depot:
 		----------
 		"""
 		length = len(self.depot_items_list)
-		self._log.info("get_depot_list_len", f"Returned {lengeth}")
+		self._log.info("get_depot_list_len", f"Returned {length}")
 		return length
 
 

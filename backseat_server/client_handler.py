@@ -61,7 +61,7 @@ class ClientHandler:
 			if client_dict["type"] == "get_server_data":
 				print("Get Server Data")
 				self._server_info.update_depots_state(self.get_depots_data())
-				output = self.depot_list.get_depot_list_info()
+				output = self._server_info.to_json()
 				return "get_server_data", output
 
 

@@ -10,6 +10,9 @@ import threading
 
 from shared import log_handler
 
+import sys
+import traceback
+
 
 class ServerLoop():
 	"""
@@ -67,6 +70,7 @@ class ServerLoop():
 		res, sender_key = self._socket_handler.recieve(self._client)
 
 		print(sender_key)
+		print(res)
 
 		self._log.info("server_iteration", f"Message recieved from {sender_key}")
 
@@ -122,6 +126,8 @@ class ServerLoop():
 				except Exception as E:
 					print("--Error in server_loop threading--")
 					print(E)
+					_, _, tb = sys.exc_info()
+					traceback.print_tb(tb)
 					print("-- --")
 					self._log.error("server_loop", f"Error in threading: {E}")
 
