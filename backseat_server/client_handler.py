@@ -49,6 +49,7 @@ class ClientHandler:
 			if client_dict["type"] == "add":
 				self._command_handler.add_command_to_specified(client_dict["command"], client_dict["who"])
 				print("### - added to depot - ###")
+				print(self.depot_list.get_depot_list_info())
 				return "depot_item_added", -1
 				#add stuff
 			if client_dict["type"] == "checkoff":

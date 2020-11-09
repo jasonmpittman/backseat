@@ -18,15 +18,15 @@ class ServerUpdateHandler:
 		self._socket_handler = tcp_socket_handler.TcpSocketHandler(self._server_private_key, self._server_public_key)
 		self._client_conn = None
 
-	def add_command_message(self, command, endpoint_list):
+	def add_command(self, command, endpoint_list):
 		msg_dict = {"type": "add", "command": command, "who": endpoint_list}
 		message = json.dumps(msg_dict)
-		self.send_server_update(message)
+		self._send_server_update(message)
 
-	def override_command_message(self, command_id, who):
+	def override_command(self, command_id, who):
 		msg_dict = {"type": "checkoff", "command_id": command_id, "who": who}
 		message = json.dumps(msg_dict)
-		self.send_server_update(message)
+		self._send_server_update(message)
 
 	def get_info_message(self):
 		msg_dict = {"type": "get_server_data"}

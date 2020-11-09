@@ -264,8 +264,12 @@ class DepotList():
 		command : str
 		host_list : str
 		"""
+		print("add_to_specified ran")
+		print(f"host: {host_list}, command = {command}")
+		print(self.list)
 		self._log.info("add_to_specified", "Adding command to specified depots")
 		for depot in self.list:
+			print("--A--")
 			if depot.host in host_list:
 				depot.add(command)
 
