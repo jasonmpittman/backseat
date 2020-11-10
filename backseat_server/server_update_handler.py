@@ -47,7 +47,10 @@ class ServerUpdateHandler:
 		print(f"Last Heartbeat_time: {self._date_time_format(info_message['last_heartbeat_time'])}")
 		print(f"Time since heartbeat: {self._elapsed_time_format(info_message['time_since_heartbeat'])}")
 		print("--Depots' Info--")
-
+		for depot in info_message['depots_state']:
+			print(f"Host: {depot['host']}, Count: {depot['count']}")
+			for item in depot['item_list']:
+				print(item)
 
 
 
@@ -68,6 +71,6 @@ class ServerUpdateHandler:
 		return time.strftime("%a, %b %d, %Y %I:%M:%S %p", time.localtime(the_time))
 
 	def _elapsed_time_format(self, elapsed_time):
-		# return time.strftime('%H:%M:%S', time.gmtime(elapsed_time))
-		# e = int(time.gmtime(elapsed_time))
-		# return f"{e // 3600}:{(e % 3600 // 60)}:{e % 60}"
+		# return time.strftime('%H:%M:%S', elapsed_time)
+		e = int(elapsed_time)
+		return f"{e // 3600}:{(e % 3600 // 60)}:{e % 60}"
