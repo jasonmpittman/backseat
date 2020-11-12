@@ -42,7 +42,7 @@ class ServerUpdateHandler:
 
 		print(f"Run Time: {self._elapsed_time_format(info_message['run_time'])}")
 
-		print(f"Time Since Last Successful Job: {self._elapsed_time_format(info_message['last_successful_job_time'])}")
+		print(f"Time Since Last Successful Job: {self._elapsed_time_format(info_message['time_since_last_successful_job'])}")
 		print(f"Last successful job: {info_message['last_successful_job']}")
 		print(f"Last Heartbeat_time: {self._date_time_format(info_message['last_heartbeat_time'])}")
 		print(f"Time since heartbeat: {self._elapsed_time_format(info_message['time_since_heartbeat'])}")
@@ -72,5 +72,8 @@ class ServerUpdateHandler:
 
 	def _elapsed_time_format(self, elapsed_time):
 		# return time.strftime('%H:%M:%S', elapsed_time)
-		e = int(elapsed_time)
-		return f"{e // 3600}:{(e % 3600 // 60)}:{e % 60}"
+		if elapsed_time != None:
+			e = int(elapsed_time)
+			return f"{e // 3600}:{(e % 3600 // 60)}:{e % 60}"
+		else:
+			return None

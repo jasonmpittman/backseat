@@ -87,4 +87,5 @@ class ServerInfo:
 		self.update_runtime()
 		output_dict = {"start_time": self.start_time, "run_time": self.run_time, "last_successful_job_time": self.last_successful_job_time, "time_since_last_successful_job": self.time_since_last_successful_job, "last_successful_job": self.last_successful_job, "last_heartbeat_time": self.last_heartbeat_time, "time_since_heartbeat": self.time_since_heartbeat, "depots_state": self.depots_state}
 		output_json = json.dumps(output_dict)
+		print(self.time_since_last_successful_job)
 		return output_json
