@@ -52,6 +52,8 @@ class EndpointOperation:
 		#Add something to the config file to deal with these
 		self._server_public_key = server_public_key
 		self._endpoint_msg = endpoint_message.EndpointMessage()
+		self._f_server = None
+		self._f_client = None
 
 
 	def connect(self):
@@ -212,6 +214,24 @@ class EndpointOperation:
 		loop_thread.daemon = True
 		loop_thread.start()
 
+	def force_run_server(self, ip, port):
+		self._f_server = self._tcp_socket_handler.create_server(ip, port, total_connections)
+		try:
+			while True:
+				self._f_client, _ = self._server.accept()
+				try:
+					new_thread = threading.Thread(target=self.operate())
+					new_thread.start()
+				except Exception as E:
+					print("--Error in force_run_server threading--")
+					print(E)
+					_, _, tb = sys.exc_info()
+					traceback.print_tb(tb)
+		except KeyboardInterrupt:
+			print("\n--Keyboard Interrupt--")
+			self._f_server.close()
+			if self._f_client != None:
+				self._f_client.close()
 
 
 if __name__ == "__main__":
