@@ -20,8 +20,8 @@ class ServerUpdateHandler:
 		self._socket_handler = tcp_socket_handler.TcpSocketHandler(self._server_private_key, self._server_public_key)
 		self._client_conn = None
 
-	def add_command(self, command, endpoint_list):
-		msg_dict = {"type": "add", "command": command, "who": endpoint_list}
+	def add_command(self, command, sudo, password, endpoint_list):
+		msg_dict = {"type": "add", "command": command, "who": endpoint_list, "sudo": sudo, "password": password}
 		message = json.dumps(msg_dict)
 		self._send_server_update(message)
 

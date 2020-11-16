@@ -77,7 +77,11 @@ class EndpointOperation:
 		print("---")
 		self._tcp_socket_handler.send(self._client, message, self._server_public_key)
 
+		#SECURITY PROBLEM
 		responce, sender_key = self._tcp_socket_handler.recieve(self._client)
+		if sender_key != self._server_public_key:
+			print("Sender not server -- Returned None")
+			return None
 		print("--responce--")
 		print(responce)
 		print("--")
@@ -101,7 +105,7 @@ class EndpointOperation:
 
 		responce_msg_json = None
 
-		stdout, stderr, exitcode = self._agent.run_command(command_msg_dict["command"])
+		stdout, stderr, exitcode = self._agent.run_command(command_msg_dict["command"], command_msg_dict["password"])
 
 		ready = False
 		completed = False
@@ -207,6 +211,7 @@ class EndpointOperation:
 		loop_thread = threading.Thread(target=self.operation_loop)
 		loop_thread.daemon = True
 		loop_thread.start()
+
 
 
 if __name__ == "__main__":

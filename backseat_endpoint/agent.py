@@ -41,7 +41,7 @@ class Agent:
 			return plat
 
 
-	def run_command(self, command):
+	def run_command(self, command, password):
 		"""
 		This function takes in a command then executes the command.
 		Then return stdout (str), stderr (str), ret_code (int)
@@ -52,10 +52,7 @@ class Agent:
 		command_list = command.split(" ")
 		ret = False
 		if "sudo" in command_list:
-			print("Going to run sudo command")
-			print("-- sudo does not work currently, Returning None --")
-			return None, None, None
-			subprocess_result = self._sudo_run_command(command_list)
+			subprocess_result = self._sudo_run_command(command_list, password)
 		else:
 			try:
 				subprocess_result = subprocess.Popen(command_list, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -70,7 +67,7 @@ class Agent:
 		ret_code = subprocess_result.returncode
 		return standard_out.decode("utf-8"), standard_err.decode("utf-8"), subprocess_result.returncode
 
-	def _sudo_run_command(self, command_list):
+	def _sudo_run_command(self, command_list, password):
 		"""
 		This function runs the sudo commands. Currently not used.
 
@@ -78,11 +75,12 @@ class Agent:
 		----------
 		command_list : list
 		"""
+		print("-- SUDO NOT IMPLEMENTED DUE TO INSECURITY --")
+		return
 		if not "sudo" in command_list:
 			return False
 		command_list.insert(command_list.index("sudo")+1, "-S")
 		print(command_list)
-		password = getpass.getpass("|Password: ")
 		subprocess_result = subprocess.Popen(command_list, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
 		# subprocess_result.communicate(password.encode())
 		subprocess_result.stdin.write(bytes(password, "utf-8"))
