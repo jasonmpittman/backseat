@@ -18,14 +18,11 @@ def load_endpoint_config():
 
 
 if __name__ == "__main__":
-	# if len(sys.argv) != 3:
-	# 	print(f"Needs 2 command line arguement [my_private_key, my_public_key ], {len(sys.argv)-1} provided")
-	# 	exit()
 
 	my_ip, my_port, my_private_key, my_public_key = load_endpoint_config()
 
 	ip, port, _, server_public_key = read_server_config.get_server_config()
 
-	E = endpoint_operation.EndpointOperation(ip, port, my_private_key, my_public_key, server_public_key)
+	E = endpoint_operation.EndpointOperation(ip, port, my_ip, my_port, my_private_key, my_public_key, server_public_key)
 	# E.operate()
 	E.operation_loop()
