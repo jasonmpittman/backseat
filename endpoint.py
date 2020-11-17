@@ -9,14 +9,22 @@ from shared import read_server_config
 
 #serv_ip, serv_port, my_private_key, my_public_key, server_public_key
 
+def load_endpoint_config():
+	f = open("endpoint.config", "r")
+	data = f.read()
+	list_data = data.split(" ")
+	f.close()
+	return list_data[0], list_data[1], list_data[2], list_data[3]
+
+
 if __name__ == "__main__":
-	if len(sys.argv) != 3:
-		print(f"Needs 2 command line arguement [my_private_key, my_public_key ], {len(sys.argv)-1} provided")
-		exit()
+	# if len(sys.argv) != 3:
+	# 	print(f"Needs 2 command line arguement [my_private_key, my_public_key ], {len(sys.argv)-1} provided")
+	# 	exit()
+
+	my_ip, my_port, my_private_key, my_public_key = load_endpoint_config()
 
 	ip, port, _, server_public_key = read_server_config.get_server_config()
-	my_private_key = sys.argv[1]
-	my_public_key = sys.argv[2]
 
 	E = endpoint_operation.EndpointOperation(ip, port, my_private_key, my_public_key, server_public_key)
 	# E.operate()

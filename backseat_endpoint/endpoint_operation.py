@@ -18,18 +18,23 @@ class EndpointOperation:
 
 	Attributes
 	----------
+	_my_private_key : str
+	_my_public_key : str
 	_agent : Agent object
 	_tcp_socket_handler : TcpSocketHandler object
 	_ip : str
 	_port : int
+	_my_ip : str
+	_my_port : int
+	_my_total_connections : int
 	_client : socket connection object
-	_my_private_key : str
-	_my_public_key : str
 	_server_public_key : str
 	_endpoint_msg : EndpointMessage object
+	_f_server : a running TcpSocketHandler server
+	_f_client : a TCP connection
 
 	"""
-	def __init__(self, serv_ip, serv_port, my_private_key, my_public_key, server_public_key):
+	def __init__(self, serv_ip, serv_port, my_ip, my_port, my_private_key, my_public_key, server_public_key):
 		"""
 		This function sets up the Endpoint object, so that it can function
 		correctly.
@@ -38,6 +43,8 @@ class EndpointOperation:
 		----------
 		serv_ip : str
 		serv_port : int
+		my_ip : str
+		my_port : int
 		my_private_key : str
 		my_public_key : str
 		server_public_key : str
@@ -48,6 +55,9 @@ class EndpointOperation:
 		self._tcp_socket_handler = tcp_socket_handler.TcpSocketHandler(self._my_private_key, self._my_public_key)
 		self._ip = serv_ip
 		self._port = serv_port
+		self._my_ip = my_ip
+		self._my_port = my_port
+		self._my_total_connections = 10
 		self._client = None
 		#Add something to the config file to deal with these
 		self._server_public_key = server_public_key
@@ -214,8 +224,8 @@ class EndpointOperation:
 		loop_thread.daemon = True
 		loop_thread.start()
 
-	def force_run_server(self, ip, port):
-		self._f_server = self._tcp_socket_handler.create_server(ip, port, total_connections)
+	def force_run_server(self):
+		self._f_server = self._tcp_socket_handler.create_server(self._my_ip, self._my_port, self._my_total_connections)
 		try:
 			while True:
 				self._f_client, _ = self._server.accept()
@@ -233,6 +243,7 @@ class EndpointOperation:
 			if self._f_client != None:
 				self._f_client.close()
 
+#Server does not know about the IP of the endpoint...
 
 if __name__ == "__main__":
 	pass
