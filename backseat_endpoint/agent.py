@@ -2,14 +2,9 @@ import subprocess
 
 import platform
 
-import os
+from shared import log_handler
 
-import getpass
-
-import socket
-
-
-#add success and failure responces
+import sys
 
 class Agent:
 	"""
@@ -27,6 +22,7 @@ class Agent:
 		----------
 		"""
 		self._platform = self.get_platform()
+		self._log = log_handler.LogHandler("Agent")
 
 	def get_platform(self):
 		"""
@@ -36,8 +32,10 @@ class Agent:
 		"""
 		plat = platform.system()
 		if plat == "Darwin":
+			self._log.info("get_platform", "Returned MacOS")
 			return "MacOS"
 		else:
+			self._log.info("get_platform", f"Returned {plat}")
 			return plat
 
 
@@ -56,10 +54,14 @@ class Agent:
 		else:
 			try:
 				subprocess_result = subprocess.Popen(command_list, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+				self._log.info("run_command", f"Command [{command}] successfully ran")
 			except Exception as E:
 				stdout = ""
 				stderr = str(E)
 				ret_code = 1
+				_, _, tb = sys.exc_info()
+				traceback.print_tb(tb)
+				self._log.warning("run_command", f"Command [{command}] Failed: {E}")
 				return stdout, stderr, ret_code
 
 
@@ -79,12 +81,18 @@ class Agent:
 		return
 		if not "sudo" in command_list:
 			return False
-		command_list.insert(command_list.index("sudo")+1, "-S")
-		print(command_list)
-		subprocess_result = subprocess.Popen(command_list, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
-		# subprocess_result.communicate(password.encode())
-		subprocess_result.stdin.write(bytes(password, "utf-8"))
-		return subprocess_result
+		try:
+			command_list.insert(command_list.index("sudo")+1, "-S")
+			print(command_list)
+			subprocess_result = subprocess.Popen(command_list, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+			# subprocess_result.communicate(password.encode())
+			subprocess_result.stdin.write(bytes(password, "utf-8"))
+			self._log.info("_sudo_run_command", "Sudo command Successful")
+			return subprocess_result
+		except:
+			print("Sudo command failed")
+			self._log.warning("_sudo_run_command", "Sudo command failed, returned None")
+			return None
 
 
 if __name__ == "__main__":
