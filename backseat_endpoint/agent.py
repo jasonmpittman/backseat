@@ -93,7 +93,3 @@ class Agent:
 			print("Sudo command failed")
 			self._log.warning("_sudo_run_command", "Sudo command failed, returned None")
 			return None
-
-
-if __name__ == "__main__":
-	pass

@@ -1,8 +1,10 @@
 from backseat_endpoint import agent
 
+from backseat_endpoint import endpoint_message
+
 from shared import tcp_socket_handler
 
-from backseat_endpoint import endpoint_message
+from shared import log_handler
 
 import json
 
@@ -64,6 +66,7 @@ class EndpointOperation:
 		self._endpoint_msg = endpoint_message.EndpointMessage()
 		self._f_server = None
 		self._f_client = None
+		self._log = log_handler.LogHandler("EndpointOperation")
 
 
 	def connect(self):
@@ -73,7 +76,14 @@ class EndpointOperation:
 		Parameters
 		----------
 		"""
-		self._client = self._tcp_socket_handler.create_client_socket_connect(self._ip, self._port)
+		try:
+			self._client = self._tcp_socket_handler.create_client_socket_connect(self._ip, self._port)
+			self._log.info("connect", "Created connection")
+		except Exception as E:
+			_, _, tb = sys.exc_info()
+			traceback.print_tb(tb)
+			print("E")
+			self._log.info("connect", f"Failed to connect: {E}")
 
 	def get_command_msg(self):
 		"""
@@ -81,27 +91,32 @@ class EndpointOperation:
 		"""
 		try:
 			self.connect()
-		except:
-			pass
+		except Exception as E:
+			print(E)
 		message = self._endpoint_msg.get_ping_msg()
-		print("Message being sent:")
-		print(message)
-		print("---")
-		self._tcp_socket_handler.send(self._client, message, self._server_public_key)
+		try:
+			self._tcp_socket_handler.send(self._client, message, self._server_public_key)
+		except Exception as E:
+			print(E)
+			self._log.warning("get_command_msg", f"Sending error: {E}")
 
-		#SECURITY PROBLEM
-		responce, sender_key = self._tcp_socket_handler.recieve(self._client)
-		if sender_key != self._server_public_key:
-			print("Sender not server -- Returned None")
-			return None
-		print("--responce--")
-		print(responce)
-		print("--")
-		if responce == None:
-			print("responce = None")
-		else:
-			dict_responce = json.loads(responce)
-		return dict_responce
+		try:
+			responce, sender_key = self._tcp_socket_handler.recieve(self._client)
+			if sender_key != self._server_public_key:
+				print("Sender not server -- Returned None")
+				return None
+			print("--responce--")
+			print(responce)
+			print("--")
+			if responce == None:
+				print("responce = None")
+			else:
+				dict_responce = json.loads(responce)
+			return dict_responce
+		except Exception as E:
+			print(E)
+			self._log.warning("get_command_msg", f"Exception: {E}")
+			return
 
 	def run_command(self, command_msg_dict):
 		"""
