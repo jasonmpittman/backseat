@@ -160,13 +160,16 @@ class TcpSocketHandler:
 		"""
 		try:
 			server = socket.socket()
+			print("-A-")
 			server.bind((ip, port))
+			print("-B-")
 			server.listen(total_connections)
+			print("-C-")
 			self._log.info("create_server", "Server created, bound, and listening")
 			return server
 		except:
 			self._log.error("create_server", f"Failed to create, bind, or listen to (ip[{ip}], port[{port}]) - returned None")
-			print("Failed to create, bind, or listen")
+			print(f"Failed to create, bind, or listen to (ip[{ip}], port[{port}]) - returned None")
 			return None
 
 	def _create_message_blocks(self, message):

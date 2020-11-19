@@ -235,18 +235,21 @@ class EndpointOperation:
 		Parameters
 		----------
 		"""
+		print("Prethread write")
 		loop_thread = threading.Thread(target=self.operation_loop)
-		loop_thread.daemon = True
+		print("Prethread start")
 		loop_thread.start()
+		print("problem in force")
 		force_run_thread = threading.Thread(target=self.force_run_server)
-		force_run_thread.daemon = True
 		force_run_thread.start()
+		print("Past force")
 
 
 	def force_run_server(self):
 		self._f_server = self._tcp_socket_handler.create_server(self._my_ip, self._my_port, self._my_total_connections)
 		try:
 			while True:
+				print("###-- Waiting for force command --###")
 				self._f_client, _ = self._server.accept()
 				try:
 					new_thread = threading.Thread(target=self.operate())

@@ -24,4 +24,4 @@ if __name__ == "__main__":
 	ip, port, _, server_public_key = read_server_config.get_server_config()
 
 	E = endpoint_operation.EndpointOperation(ip, port, my_ip, my_port, my_private_key, my_public_key, server_public_key)
-	E.operation_loop()
+	E.thread_operation_loop()
