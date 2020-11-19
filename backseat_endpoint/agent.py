@@ -21,8 +21,8 @@ class Agent:
 		Parameters
 		----------
 		"""
-		self._platform = self.get_platform()
 		self._log = log_handler.LogHandler("Agent")
+		self._platform = self.get_platform()
 
 	def get_platform(self):
 		"""
