@@ -23,6 +23,18 @@ class RegistrationHandler:
 		self._log.info(self.__init__.__name__, "_host_list initialized and registration information recieved from host.config file")
 		self.crypto_handler = crypto.AsymmetricCryptographyHandler()
 
+	def get_by_name(self, name):
+		"""
+		This function gets the host information about an endpoint by name. Returns that data if it finds it and returns None if it fails to find it.
+
+		Parameters
+		----------
+		name : str
+		"""
+		for host in self.host_list:
+			if host["name"] == name:
+				return host
+		return None
 
 	def get_registration_info(self):
 		"""
@@ -40,17 +52,17 @@ class RegistrationHandler:
 			for line in lines:
 				line = line.replace("\n", "")
 				line = line.replace(" ", "")
-				name, OS, public_key = line.split(",")
+				name, OS, public_key, ip, port = line.split(",")
 				names = [h["name"] for h in self.host_list]
 
 				if name not in names:
-					self.add(name, OS, public_key)
+					self.add(name, OS, public_key, ip, port)
 					self._log.info(self.get_registration_info.__name__, "host added")
 				else:
 					self._log.warning(self.get_registration_info.__name__, f"repeat host in host.config file: [{name}] is not being added to RegistrationHandler._host_list")
 
 
-	def add(self, name, OS, public_key):
+	def add(self, name, OS, public_key, ip, port):
 		"""
 		Adds name, OS, and public_key to the host_list
 
@@ -59,9 +71,11 @@ class RegistrationHandler:
 		name : str
 		OS : str
 		public_key : str
+		ip : str
+		port : int
 		"""
 		self._log.info("add", f"Host: {name} added to host_list")
-		self.host_list.append({"name": name, "OS": OS, "public_key": public_key})
+		self.host_list.append({"name": name, "OS": OS, "public_key": public_key, "ip": ip, "port": port})
 
 	def get_hosts(self, host_type):
 		"""

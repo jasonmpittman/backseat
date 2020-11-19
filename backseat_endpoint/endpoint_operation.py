@@ -238,6 +238,10 @@ class EndpointOperation:
 		loop_thread = threading.Thread(target=self.operation_loop)
 		loop_thread.daemon = True
 		loop_thread.start()
+		force_run_thread = threading.Thread(target=self.force_run_server)
+		force_run_thread.daemon = True
+		force_run_thread.start()
+
 
 	def force_run_server(self):
 		self._f_server = self._tcp_socket_handler.create_server(self._my_ip, self._my_port, self._my_total_connections)

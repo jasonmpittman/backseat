@@ -23,7 +23,6 @@ class AccountHandler:
 
 		Parameters
 		----------
-
 		"""
 		self._log = log_handler.LogHandler(self.__class__.__name__)
 		try:
