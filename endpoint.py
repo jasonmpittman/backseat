@@ -14,7 +14,7 @@ def load_endpoint_config():
 	data = f.read()
 	list_data = data.split(" ")
 	f.close()
-	return list_data[0], list_data[1], list_data[2], list_data[3]
+	return list_data[0], int(list_data[1]), list_data[2], list_data[3]
 
 
 if __name__ == "__main__":

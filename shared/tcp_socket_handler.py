@@ -160,14 +160,31 @@ class TcpSocketHandler:
 		"""
 		try:
 			server = socket.socket()
-			print("-A-")
-			server.bind((ip, port))
-			print("-B-")
-			server.listen(total_connections)
-			print("-C-")
+			try:
+				server.bind((ip, port))
+			except Exception as Ex:
+				print("Bind Failed")
+				print(Ex)
+
+				_, _, tb = sys.exc_info()
+				traceback.print_tb(tb)
+				self._log.error("create_server", "Server faild to bind")
+				return None
+			try:
+				server.listen(total_connections)
+			except Exception as Ex:
+				print("Listen Failed")
+				print(Ex)
+				_, _, tb = sys.exc_info()
+				traceback.print_tb(tb)
+				self._log.error("create_server", "Server failed to listen")
+				return None
 			self._log.info("create_server", "Server created, bound, and listening")
 			return server
-		except:
+		except Exception as E:
+			print(E)
+			_, _, tb = sys.exc_info()
+			traceback.print_tb(tb)
 			self._log.error("create_server", f"Failed to create, bind, or listen to (ip[{ip}], port[{port}]) - returned None")
 			print(f"Failed to create, bind, or listen to (ip[{ip}], port[{port}]) - returned None")
 			return None

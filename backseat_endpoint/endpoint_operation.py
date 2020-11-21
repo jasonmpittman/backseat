@@ -202,11 +202,11 @@ class EndpointOperation:
 		try:
 			self.operate()
 			print("1")
-			time.sleep(1)
+			time.sleep(3)
 			print("2")
-			time.sleep(1)
+			time.sleep(3)
 			print("3")
-			time.sleep(1)
+			time.sleep(3)
 			print("Go!")
 			return True
 		except:
@@ -235,24 +235,51 @@ class EndpointOperation:
 		Parameters
 		----------
 		"""
-		print("Prethread write")
-		loop_thread = threading.Thread(target=self.operation_loop)
-		print("Prethread start")
-		loop_thread.start()
-		print("problem in force")
-		force_run_thread = threading.Thread(target=self.force_run_server)
-		force_run_thread.start()
-		print("Past force")
+		try:
+			loop_thread = threading.Thread(target=self.operation_loop)
+			loop_thread.start()
+		except Exception as Ex:
+			print("Listen Failed")
+			print(Ex)
+			_, _, tb = sys.exc_info()
+		try:
+			force_run_thread = threading.Thread(target=self.force_run_server)
+			force_run_thread.start()
+		except Exception as Ex:
+			print("Listen Failed")
+			print(Ex)
+			_, _, tb = sys.exc_info()
+
+
+	def force_run_operation(self):
+		"""
+		This function runs when the server connects to tell this endpoint to produce a heartbeat.
+		Attributes
+		----------
+		"""
+		print("######------FORCE RUN OPERATION RUNNING------######")
+		res, sender_key = self._tcp_socket_handler.recieve(self._f_client)
+		if sender_key == self._server_public_key:
+			self.operate()
+		else:
+			print("Message: signed with non-server key, returned None")
+			return None
 
 
 	def force_run_server(self):
+		"""
+		This is a function that runs a server that waits to get a message from the endpoint server to force a heartbeat.
+
+		Attributes
+		----------
+		"""
 		self._f_server = self._tcp_socket_handler.create_server(self._my_ip, self._my_port, self._my_total_connections)
 		try:
 			while True:
 				print("###-- Waiting for force command --###")
-				self._f_client, _ = self._server.accept()
+				self._f_client, _ = self._f_server.accept()
 				try:
-					new_thread = threading.Thread(target=self.operate())
+					new_thread = threading.Thread(target=self.force_run_operation())
 					new_thread.start()
 				except Exception as E:
 					print("--Error in force_run_server threading--")
