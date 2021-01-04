@@ -77,8 +77,6 @@ class Agent:
 		----------
 		command_list : list
 		"""
-		print("-- SUDO NOT IMPLEMENTED DUE TO INSECURITY --")
-		return
 		if not "sudo" in command_list:
 			return False
 		try:
