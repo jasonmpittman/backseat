@@ -71,7 +71,8 @@ class Agent:
 
 	def _sudo_run_command(self, command_list, password):
 		"""
-		This function runs the sudo commands. Currently not used.
+		This function runs the sudo commands. NOT SECURE BECAUSE IT REQUIRES
+		PLAIN TEXT PASSWORD.
 
 		Parameters
 		----------
