@@ -1,6 +1,7 @@
 from backseat_server import server_loop
 
 import sys
+
 from shared import read_server_config
 
 from backseat_server import server_info
