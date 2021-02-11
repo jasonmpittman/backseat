@@ -1,4 +1,8 @@
+	"""This function gets the server configuration from server_info.config which has the format
+	|ip port server_private_key server_public_key|
+	This function returns those items in that order.
 
+	"""
 def get_server_config():
 	try:
 		with open("server_info.config", "r") as server_config:
