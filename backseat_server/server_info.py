@@ -21,6 +21,7 @@ class ServerInfo:
 	last_successful_job : str
 	last_heartbeat_time : time as floating point value
 	depots_state : list of str
+	static_endpoint_data : list of python dicts
 	"""
 	def __init__(self):
 		"""
@@ -37,6 +38,28 @@ class ServerInfo:
 		self.last_heartbeat_time = time.time()
 		self.depots_state = []
 		self.time_since_heartbeat = None
+		self.static_endpoint_data = []
+		self.update_static_endpoint_data()
+
+	def update_static_endpoint_data(self):
+		"""Gets static endpoint data form the host.config file and puts it into a list of dictionaries
+		"""
+		host_file = open("host.config", "r")
+		host_list = host_file.readlines()
+		host_file.close()
+		for host in host_list:
+			host_dict = {"name": host[0], "OS": host[1], "public_key": host[2], "ip": host[3], "port": host[4]}
+			self.static_endpoint_data.append(host_dict)
+	
+	def get_static_endpoint_data(self):
+		"""Returns json version of the static endpoint data
+
+		Returns:
+			str: json of the static endpoint data
+		"""
+		json_static_endpoint_data = json.dumps(self.static_endpoint_data)
+		return json_static_endpoint_data
+
 
 	def update_heatbeat(self):
 		"""

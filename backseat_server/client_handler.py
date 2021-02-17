@@ -56,15 +56,18 @@ class ClientHandler:
 			if client_dict["type"] == "checkoff":
 				print("In checkout code")
 				self._command_handler.checkoff_command(client_dict["who"], client_dict["command_id"])
-
 				return "checked_off_depot_item", -1
-				#add checkoff stuff
 
 			if client_dict["type"] == "get_server_data":
 				print("Get Server Data")
 				self._server_info.update_depots_state(self.get_depots_data())
 				output = self._server_info.to_json()
 				return "get_server_data", output
+			
+			if client_dict["type"] == "get_startup_data":
+				print("Get Startup Data")
+				json_static_endpoint_data = self._server_info.get_static_endpoint_data()
+				return "get_startup_data", json_static_endpoint_data
 
 
 			print("Recieved message from server, but 'type' is not 'add' or 'checkoff'.")
