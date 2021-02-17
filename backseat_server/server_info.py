@@ -48,6 +48,9 @@ class ServerInfo:
 		host_list = host_file.readlines()
 		host_file.close()
 		for host in host_list:
+			host = host.strip("")
+			host = host.strip("\n")
+			host = host.split(",")
 			host_dict = {"name": host[0], "OS": host[1], "public_key": host[2], "ip": host[3], "port": host[4]}
 			self.static_endpoint_data.append(host_dict)
 	
