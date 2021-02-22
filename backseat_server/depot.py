@@ -143,18 +143,6 @@ class Depot:
 		self._log.info("get_depot_list_len", f"Returned {length}")
 		return length
 
-	def mass_load_depot(self, command_list):
-		"""
-		This adds the provided list of commands to the depot, in order all at one time. If you wanted to add a batch of commands to a depot, use this function.
-
-		Parameters
-		----------
-		command_list : list of str
-		"""
-		self._log.info("mass_load_depot", "Mass loading a depot")
-		for command in command_list:
-			self.add(command, self._item_iterator)
-
 	def print_depot_contents(self):
 		"""
 		Prints the contents of the depot.
