@@ -11,8 +11,9 @@ class DepotItem:
 	_done : bool
 	_stdout : str
 	_exit_code : int
+	_item_iterator : int
 	"""
-	def __init__(self, command, command_id):
+	def __init__(self, command, command_id, item_iterator):
 		"""
 		This initializes the creation of a depot item.
 
@@ -20,6 +21,7 @@ class DepotItem:
 		----------
 		command : str
 		command_id : int
+		item_iterator : int
 		"""
 		self._log = log_handler.LogHandler("DepotItem")
 		self.command = command
@@ -28,7 +30,7 @@ class DepotItem:
 		self._stdout = ""
 		self._exit_code = None
 		self._log.info("__init__", f"DepotItem created: {command} {command_id}")
-
+		self._item_iterator = item_iterator
 
 	def set(self, done, stdout, exit_code):
 		"""
@@ -53,7 +55,7 @@ class DepotItem:
 		----------
 		"""
 		self._log.info("output", f"Returning DepotItem with command_id [{self.command_id}] values as a string")
-		return f"Command:{self.command}\n Command ID: {self.command_id}\n Done: {self._done}\n stdout: {self._stdout}\n Exit Code: {self._exit_code}\n"
+		return f"Command:{self.command}\n Command ID: {self.command_id}\n Done: {self._done}\n stdout: {self._stdout}\n Exit Code: {self._exit_code}\n item_iterator: {self._item_iterator}\n"
 
 class Depot:
 	"""
@@ -115,15 +117,16 @@ class Depot:
 		self._log.warning("get_next", "No next item can be found, returned None")
 		return None
 
-	def add(self, command):
+	def add(self, command, item_iterator):
 		"""
 		Creates a new depot item for the provided command.
 
 		Parameters
 		----------
 		command : str
+		item_iterator : str
 		"""
-		new_depot_item = DepotItem(command, self.get_depot_list_len()+1)
+		new_depot_item = DepotItem(command, self.get_depot_list_len()+1, item_iterator)
 		self.depot_items_list.append(new_depot_item)
 		# print(new_depot_item.output())
 		self.count += 1
@@ -140,8 +143,6 @@ class Depot:
 		self._log.info("get_depot_list_len", f"Returned {length}")
 		return length
 
-
-
 	def mass_load_depot(self, command_list):
 		"""
 		This adds the provided list of commands to the depot, in order all at one time. If you wanted to add a batch of commands to a depot, use this function.
@@ -152,7 +153,7 @@ class Depot:
 		"""
 		self._log.info("mass_load_depot", "Mass loading a depot")
 		for command in command_list:
-			self.add(command)
+			self.add(command, self._item_iterator)
 
 	def print_depot_contents(self):
 		"""
@@ -196,6 +197,7 @@ class DepotList():
 		self._log = log_handler.LogHandler("DepotList")
 		self.list = []
 		self._log.info("__init__", "DepotList Initialized")
+		self._item_iterator = 1
 
 	def add_depot(self, host):
 		"""
@@ -253,7 +255,8 @@ class DepotList():
 		"""
 		self._log.info("add_to_all", f"Adding command [{command}] to all depots")
 		for depot in self.list:
-			depot.add(command)
+			depot.add(command, self._item_iterator)
+			self._item_iterator += 1
 
 	def add_to_specified(self, command, host_list):
 		"""
@@ -271,7 +274,8 @@ class DepotList():
 		for depot in self.list:
 			print("--A--")
 			if depot.host in host_list:
-				depot.add(command)
+				depot.add(command, self._item_iterator)
+				self._item_iterator += 1
 
 	def print_depot_list(self):
 		"""
