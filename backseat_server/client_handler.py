@@ -28,8 +28,8 @@ class ClientHandler:
 		working_depot = self.depot_list.get_working_depot("client1_public.pem")
 		self._log = log_handler.LogHandler("ClientHandler")
 		#for testing
-		working_depot.add("ls -al")
-		working_depot.add("PWD")
+		working_depot.add("ls -al", 100)
+		working_depot.add("PWD", 101)
 
 	def client_handler(self, client_dict, sender_key):
 		"""

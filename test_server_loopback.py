@@ -5,12 +5,14 @@ SUH = server_update_handler.ServerUpdateHandler()
 
 
 
-# SUH.add_command("ls", ["client1_public.pem"])
+# add_command(self, command, sudo, password, endpoint_list)
 
 info = SUH.get_info_message()
 print(info["depots_state"])
 print("---------")
 # SUH.override_command(2, "client1_public.pem")
+
+SUH.add_command("ls", False, "", ["client1_public.pem"])
 
 info = SUH.get_info_message()
 SUH.print_info_message(info)
