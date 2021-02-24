@@ -44,15 +44,13 @@ class ClientHandler:
 		#gets working depot
 
 		if sender_key == self._server_public_key:
-			#do something
-			#add try block
 			print("SERVER SENDER KEY")
 			if client_dict["type"] == "add":
 				self._command_handler.add_command_to_specified(client_dict["command"], client_dict["who"])
 				print("### - added to depot - ###")
 				print(self.depot_list.get_depot_list_info())
 				return "depot_item_added", -1
-				#add stuff
+				
 			if client_dict["type"] == "checkoff":
 				print("In checkout code")
 				self._command_handler.checkoff_command(client_dict["who"], client_dict["command_id"])

@@ -260,7 +260,6 @@ class DepotList():
 		print(self.list)
 		self._log.info("add_to_specified", "Adding command to specified depots")
 		for depot in self.list:
-			print("--A--")
 			if depot.host in host_list:
 				depot.add(command, self._item_order)
 				self._item_order += 1
