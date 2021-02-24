@@ -1,4 +1,4 @@
-from backseat_server import depot
+from backseat_server.depot import depot
 
 from shared import log_handler
 
