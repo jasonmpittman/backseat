@@ -57,6 +57,9 @@ class DepotItem:
 		self._log.info("output", f"Returning DepotItem with command_id [{self.command_id}] values as a string")
 		return f"Command:{self.command}\n Command ID: {self.command_id}\n Done: {self._done}\n stdout: {self._stdout}\n Exit Code: {self._exit_code}\n item_iterator: {self._item_order}\n"
 
+	def get_info(self):
+		return {"command": self.command, "command_id": self.command_id, "done": self._done, "stdout": self._stdout, "exit_code": self._exit_code, "item_iterator": self._item_order}
+
 class Depot:
 	"""
 	Depot objects hold all of the commands that a given endpoint is to or has run.

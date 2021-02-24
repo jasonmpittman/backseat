@@ -60,6 +60,8 @@ class ClientHandler:
 				print("Get Server Data")
 				self._server_info.update_depots_state(self.get_depots_data())
 				output = self._server_info.to_json()
+				print("--server_info--")
+				print(output)
 				return "get_server_data", output
 			
 			if client_dict["type"] == "get_startup_data":
@@ -125,7 +127,7 @@ class ClientHandler:
 		if client_dict["host_list"] == []:
 			self._command_handler.add_to_all(client_dict["command"])
 		else:
-			self._command_handler.add_to_specified(client_dict["command"], client_dict["host_list"])
+			self._command_handler.add_command_to_specified(client_dict["command"], client_dict["host_list"])
 
 
 	def checkoff_command(self, client_dict):
