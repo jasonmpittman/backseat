@@ -1,4 +1,4 @@
-from backseat_server.depot import depot
+from backseat_server.depot_files import depot_list
 
 from shared import log_handler
 
@@ -23,7 +23,7 @@ class ClientHandler:
 		"""
 		self._server_info = server_info
 		self._server_public_key = server_public_key
-		self.depot_list = depot.DepotList()
+		self.depot_list = depot_list.DepotList()
 		self._command_handler = command_handler.CommandHandler(self.depot_list)
 		working_depot = self.depot_list.get_working_depot("client1_public.pem")
 		self._log = log_handler.LogHandler("ClientHandler")

@@ -1,7 +1,7 @@
 '''
 Handles command creation
 '''
-from backseat_server.depot import depot
+from backseat_server.depot_files import depot
 
 from backseat_server import registration_handler
 
