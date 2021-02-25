@@ -2,7 +2,7 @@ from shared import log_handler
 
 from backseat_server.depot import depot_item
 
-from backseat_server.depot import depot_class
+from backseat_server.depot import depot
 
 class DepotList():
 	"""
@@ -32,7 +32,7 @@ class DepotList():
 		----------
 		host : str
 		"""
-		new_depot = depot_class.Depot(host)
+		new_depot = depot.Depot(host)
 		self.list.append(new_depot)
 		self._log.info("add_depot", f"New depot added for {host}")
 		return new_depot
