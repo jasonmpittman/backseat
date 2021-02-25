@@ -12,15 +12,17 @@ class Depot:
 	depot_items_list : python list
 	count : int
 	"""
-	def __init__(self, host):
+	def __init__(self, host, name):
 		"""
 		Creates a depot for a provided host.
 
 		Parameters
 		----------
 		host : str
+		name : str
 		"""
 		self.host = host
+		self.name = name
 		self.depot_items_list = []
 		self.count = 0 # -1 when done = True
 		self._log = log_handler.LogHandler("Depot")

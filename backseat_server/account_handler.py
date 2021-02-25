@@ -72,7 +72,7 @@ class AccountHandler:
 				else:
 					self._log.info("verify", "Password or username incorrect - Returned False")
 					return False
-		self._log("verify", "Password or username incorrect - Returned False")
+		self._log.warning("verify", "Password or username incorrect - Returned False")
 		return False
 
 	def add_account(self, username, password):

@@ -68,7 +68,4 @@ class ServerMessage:
 		return output_json
 
 if __name__ == "__main__":
-	m = ServerMessage()
-	m.add_data("ls -al", False, "", 0, 1)
-	output = m.to_json()
-	print(output)
+	pass

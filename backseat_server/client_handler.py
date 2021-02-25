@@ -155,6 +155,6 @@ class ClientHandler:
 			depot_item_list = {}
 			for depot_item in depot.depot_items_list:
 				i_list.append(depot_item.get_info())
-			depot_item_list = {"host": depot.host, "count": depot.count, "item_list": i_list}
+			depot_item_list = {"host": depot.host, "name": depot.name, "count": depot.count, "item_list": i_list}
 			depots_out.append(depot_item_list)
 		return depots_out

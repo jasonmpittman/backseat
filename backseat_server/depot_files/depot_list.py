@@ -24,7 +24,7 @@ class DepotList():
 		self._log.info("__init__", "DepotList Initialized")
 		self._item_order = 1
 
-	def add_depot(self, host):
+	def add_depot(self, host, name):
 		"""
 		Adds a depot to the list then returns the newly created depot.
 
@@ -32,7 +32,7 @@ class DepotList():
 		----------
 		host : str
 		"""
-		new_depot = depot.Depot(host)
+		new_depot = depot.Depot(host, name)
 		self.list.append(new_depot)
 		self._log.info("add_depot", f"New depot added for {host}")
 		return new_depot

@@ -135,7 +135,7 @@ class RegistrationHandler:
 		Parameters
 		----------
 		"""
-		return self.get_host("Fedora")
+		return self.get_hosts("Fedora")
 
 	def print_host_list(self):
 		"""
@@ -148,6 +148,3 @@ class RegistrationHandler:
 		for host in self.host_list:
 			print(f"{host['name']}: {host['OS']}")
 
-if __name__ == "__main__":
-	RH = registration_handler.RegistrationHandler()
-	RH.print_host_list()
