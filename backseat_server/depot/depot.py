@@ -1,5 +1,6 @@
 from shared import log_handler
 
+from backseat_server.depot import depot_item
 
 class Depot:
 	"""
@@ -70,7 +71,7 @@ class Depot:
 		command : str
 		item_iterator : str
 		"""
-		new_depot_item = DepotItem(command, self.get_depot_list_len()+1, item_order)
+		new_depot_item = depot_item.DepotItem(command, self.get_depot_list_len()+1, item_order)
 		self.depot_items_list.append(new_depot_item)
 		# print(new_depot_item.output())
 		self.count += 1
