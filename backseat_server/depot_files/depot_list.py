@@ -1,8 +1,8 @@
 from shared import log_handler
 
-from backseat_server.depot import depot_item
+from backseat_server.depot_files import depot_item
 
-from backseat_server.depot import depot
+from backseat_server.depot_files import depot
 
 class DepotList():
 	"""
