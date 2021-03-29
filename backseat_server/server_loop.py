@@ -69,7 +69,6 @@ class ServerLoop():
 		self._log.info("server_iteration", f"Thread ID = {theard_id}")
 		print("client:\n", self._client)
 		res, sender_key = self._socket_handler.recieve(self._client)
-
 		print(sender_key)
 		print(res)
 

@@ -8,11 +8,6 @@ import json
 
 import time
 
-# message_dict = {"type": "add", "command": "PWD", "who": ["client1_public.pem"]}
-# message_dict = {"type": "checkoff", "command_id": 3, "who": "client1_public.pem"}
-
-# message_dict = {"type": "get_server_data"}
-
 class ServerUpdateHandler:
 	def __init__(self):
 		self._ip, self._port, self._server_private_key, self._server_public_key = read_server_config.get_server_config()

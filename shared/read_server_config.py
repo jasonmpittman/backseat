@@ -14,5 +14,6 @@ def get_server_config():
 			server_private_key = line[2]
 			server_public_key = line[3]
 			return ip, port, server_private_key, server_public_key
-	except:
+	except Exception as E:
 		print("Create a server_info.config file")
+		print(E)

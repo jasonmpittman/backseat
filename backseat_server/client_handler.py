@@ -4,6 +4,8 @@ from shared import log_handler
 
 from backseat_server import command_handler
 
+from shared import read_host_config
+
 class ClientHandler:
 	"""
 	This is the logical backend to the functionality of the server. The messages
@@ -25,9 +27,12 @@ class ClientHandler:
 		self._server_public_key = server_public_key
 		self.depot_list = depot_list.DepotList()
 		self._command_handler = command_handler.CommandHandler(self.depot_list)
-		working_depot = self.depot_list.get_working_depot("client1_public.pem")
+		
 		self._log = log_handler.LogHandler("ClientHandler")
+		self._host_config = read_host_config.ReadHostConfig()
+		self._key_table = self._host_config.get_key_table()
 		#for testing
+		working_depot = self.depot_list.get_working_depot(self._key_table("client1_public.pem"))
 		working_depot.add("ls -al", 100)
 		working_depot.add("PWD", 101)
 
@@ -124,10 +129,12 @@ class ClientHandler:
 		----------
 		client_dict : python dictionary
 		"""
+		print("add_command running")
 		if client_dict["host_list"] == []:
 			self._command_handler.add_to_all(client_dict["command"])
 		else:
 			self._command_handler.add_command_to_specified(client_dict["command"], client_dict["host_list"])
+			print(self.get_depots_data())
 
 
 	def checkoff_command(self, client_dict):
