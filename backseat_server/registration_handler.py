@@ -6,6 +6,8 @@ from shared import log_handler
 
 from shared import asym_cryptography_handler as crypto
 
+from shared import read_host_config
+
 # Name OS Public_Key
 class RegistrationHandler:
 	def __init__(self):
@@ -17,8 +19,9 @@ class RegistrationHandler:
 		host_list : python list
 		crypto_handler : AsymmetricCryptographyHandler object
 		"""
+		self._host_list = read_host_config.ReadHostConfig()
 		self._log = log_handler.LogHandler(self.__class__.__name__)
-		self.host_list = []
+		self.host_list = self._host_list.endpoints
 		self.get_registration_info()
 		self._log.info(self.__init__.__name__, "_host_list initialized and registration information recieved from host.config file")
 		self.crypto_handler = crypto.AsymmetricCryptographyHandler()
@@ -61,6 +64,9 @@ class RegistrationHandler:
 				else:
 					self._log.warning(self.get_registration_info.__name__, f"repeat host in host.config file: [{name}] is not being added to RegistrationHandler._host_list")
 
+	# def get_registration_info(self):
+	# 	for line in self.host_list:
+	# 		self.add(line["name"], line["os"], line["key"], line["ip"], line["port"])
 
 	def add(self, name, OS, public_key, ip, port):
 		"""

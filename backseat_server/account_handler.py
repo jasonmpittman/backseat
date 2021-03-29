@@ -35,8 +35,9 @@ class AccountHandler:
 				usr, pword = file_line.split(",")
 				self._accounts.append({"username": usr, "password": pword})
 			self._log.info("__init__", "Accounts loaded from accounts.config")
-		except:
+		except Exception as E:
 			self._log.error("__init__", "Accounts could not be loaded from accounts.config - returned None")
+			print(E)
 			return None
 
 
@@ -50,8 +51,9 @@ class AccountHandler:
 		"""
 		try:
 			return hashlib.sha512(f"{str_obj}".encode()).hexdigest()
-		except:
+		except Exception as E:
 			self._log.error("_hash", "Hashing failed - returned None")
+			print(E)
 			return None
 
 	def verify(self, username, password):

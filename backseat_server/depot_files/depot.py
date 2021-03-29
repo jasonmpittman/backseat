@@ -54,7 +54,6 @@ class Depot:
 		"""
 		for dp in self.depot_items_list:
 			if dp._done == False:
-				# self.count -= 1
 				print(f"get_next: [command]{dp.command}, [command_id]{dp.command_id}, [count]{self.count}")
 
 				self._log.info("get_next", f"Next item found Returned DepotItem with command_id: {dp.command_id}")

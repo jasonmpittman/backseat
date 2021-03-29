@@ -7,6 +7,8 @@ from backseat_server import registration_handler
 
 from shared import log_handler
 
+from shared import read_host_config
+
 class CommandHandler:
 	"""
 	This deals with the commands by distributing the commands to the different
@@ -32,15 +34,18 @@ class CommandHandler:
 		----------
 		depot_list : DepotList object
 		"""
-
+		self._read_host_list = read_host_config.ReadHostConfig()
+		self._key_table = self._read_host_list.get_key_table()
+		
 		self._logger = log_handler.LogHandler(self.__class__.__name__)
 		self._depot_list = depot_list
 		self._logger.info(self.__init__.__name__, "self._depot_list initialized")
 
 		self._registration = registration_handler.RegistrationHandler()
 		self._logger.info(self.__init__.__name__, "self._registration initialized")
+
 		for host in self._registration.host_list:
-			self._depot_list.add_depot(host["public_key"], host["name"])
+			self._depot_list.add_depot(self._key_table[host["public_key"]], host["name"])
 		self._logger.info(self.__init__.__name__, "self._depot_list filled with depots for each approved host")
 
 	def add_to_all(self, command):

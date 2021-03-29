@@ -32,7 +32,7 @@ class ClientHandler:
 		self._host_config = read_host_config.ReadHostConfig()
 		self._key_table = self._host_config.get_key_table()
 		#for testing
-		working_depot = self.depot_list.get_working_depot(self._key_table("client1_public.pem"))
+		working_depot = self.depot_list.get_working_depot(self._key_table["client1_public.pem"])
 		working_depot.add("ls -al", 100)
 		working_depot.add("PWD", 101)
 
