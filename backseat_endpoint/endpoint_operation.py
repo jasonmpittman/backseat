@@ -167,7 +167,6 @@ class EndpointOperation:
 		else:
 			print("########")
 			print(responce_msg_json)
-			pass
 		try:
 			self.connect()
 		except Exception as E:
