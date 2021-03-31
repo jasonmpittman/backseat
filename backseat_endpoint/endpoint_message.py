@@ -15,8 +15,6 @@ class EndpointMessage:
 	_exit_code : int
 	_command_id : int
 	"""
-	def __init__(self):
-		pass
 
 	def create_msg(self, ping, ready, completed, stdout, stderr, successful, exit_code, command_id):
 		"""
@@ -69,8 +67,8 @@ class EndpointMessage:
 		Parameters
 		----------
 		"""
-		dict = {"ping": self._ping, "ready": self._ready, "completed": self._completed, "stdout": self._stdout, "stderr": self._stderr, "successful": self._successful, "exit_code": self._exit_code, "command_id": self._command_id}
-		output_json = json.dumps(dict)
+		res_dict = {"ping": self._ping, "ready": self._ready, "completed": self._completed, "stdout": self._stdout, "stderr": self._stderr, "successful": self._successful, "exit_code": self._exit_code, "command_id": self._command_id}
+		output_json = json.dumps(res_dict)
 
 		return output_json
 
@@ -84,8 +82,3 @@ class EndpointMessage:
 		"""
 		return self.create_msg(True, True, True, "", "", False, -1, 0)
 
-if __name__ == "__main__":
-	m = ClientMessage()
-	m.add_data("localhost",True, True, "woo\nwoon\nToon\n---", "", True, 1)
-	output = m.to_json()
-	print(output)

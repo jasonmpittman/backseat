@@ -14,6 +14,8 @@ import threading
 
 import sys
 
+import traceback
+
 class EndpointOperation:
 	"""
 	This class handles the full operations of the endpoint.
@@ -163,18 +165,18 @@ class EndpointOperation:
 		if responce_msg_json == None:
 			print("responce_msg_json = None")
 		else:
-			# responce_msg_str = json.dumps(responce_msg_json)
 			print("########")
 			print(responce_msg_json)
 			pass
 		try:
 			self.connect()
-		except:
+		except Exception as E:
 			print("no connection needed / connection failed")
+			print(E)
 
 		try:
 			self._tcp_socket_handler.send(self._client, responce_msg_json, self._server_public_key)
-		except:
+		except Exception as E:
 			print("Endpoint.send_command_res() - Error sending responce")
 
 
@@ -209,7 +211,8 @@ class EndpointOperation:
 			time.sleep(3)
 			print("Go!")
 			return True
-		except:
+		except Exception as E:
+			print(E)
 			return False
 
 	def operation_loop(self):
@@ -292,7 +295,3 @@ class EndpointOperation:
 			if self._f_client != None:
 				self._f_client.close()
 
-#Server does not know about the IP of the endpoint...
-
-if __name__ == "__main__":
-	pass

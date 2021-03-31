@@ -6,6 +6,8 @@ from shared import log_handler
 
 import sys
 
+import traceback
+
 class Agent:
 	"""
 	The Agent handles all of the actual running of the commands.
@@ -48,7 +50,6 @@ class Agent:
 		command : str
 		"""
 		command_list = command.split(" ")
-		ret = False
 		if "sudo" in command_list:
 			subprocess_result = self._sudo_run_command(command_list, password)
 		else:
@@ -88,7 +89,9 @@ class Agent:
 			subprocess_result.stdin.write(bytes(password, "utf-8"))
 			self._log.info("_sudo_run_command", "Sudo command Successful")
 			return subprocess_result
-		except:
+		except Exception as E:
 			print("Sudo command failed")
+			print(E)
 			self._log.warning("_sudo_run_command", "Sudo command failed, returned None")
+			self._log.warning("_sudo_run_command", E)
 			return None
