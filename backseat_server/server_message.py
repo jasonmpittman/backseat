@@ -14,8 +14,6 @@ class ServerMessage:
 	_depot_items : int
 	_command_id : int
 	"""
-	def __init__(self):
-		pass
 
 	def create_msg(self, not_ready, command, sudo, password, sequence, depot_items, command_id):
 		"""
@@ -63,9 +61,7 @@ class ServerMessage:
 		Parameters
 		----------
 		"""
-		dict = {"not_ready": self._not_ready, "command": self._command, "sudo": self._sudo, "password": self._password, "sequence": 0, "depot_items": self._depot_items, "command_id": self._command_id}
-		output_json = json.dumps(dict)
+		res_dict = {"not_ready": self._not_ready, "command": self._command, "sudo": self._sudo, "password": self._password, "sequence": 0, "depot_items": self._depot_items, "command_id": self._command_id}
+		output_json = json.dumps(res_dict)
 		return output_json
 
-if __name__ == "__main__":
-	pass

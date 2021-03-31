@@ -57,7 +57,6 @@ class ServerUpdateHandler:
 	def _recieve_server_info(self):
 		data, _ = self._socket_handler.recieve(self._client_conn)
 		print(data)
-		# return data_dict
 		data = json.loads(data)
 		return data
 
@@ -66,7 +65,6 @@ class ServerUpdateHandler:
 		return time.strftime("%a, %b %d, %Y %I:%M:%S %p", time.localtime(the_time))
 
 	def _elapsed_time_format(self, elapsed_time):
-		# return time.strftime('%H:%M:%S', elapsed_time)
 		if elapsed_time != None:
 			e = int(elapsed_time)
 			return f"{e // 3600}:{(e % 3600 // 60)}:{e % 60}"

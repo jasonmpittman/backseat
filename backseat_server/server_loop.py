@@ -90,15 +90,11 @@ class ServerLoop():
 				return None
 
 
-			elif next_depot_item == "get_server_data":
+			elif next_depot_item == "get_server_data" or next_depot_item == "get_startup_data":
 				server_data = count
 				self._socket_handler.send(self._client, server_data, self._server_public_key)
 				return None
 			
-			elif next_depot_item == "get_startup_data":
-				server_data = count
-				self._socket_handler.send(self._client, server_data, self._server_public_key)
-				return None
 
 			else:
 				print(next_depot_item)

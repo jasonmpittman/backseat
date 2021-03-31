@@ -64,9 +64,6 @@ class RegistrationHandler:
 				else:
 					self._log.warning(self.get_registration_info.__name__, f"repeat host in host.config file: [{name}] is not being added to RegistrationHandler._host_list")
 
-	# def get_registration_info(self):
-	# 	for line in self.host_list:
-	# 		self.add(line["name"], line["os"], line["key"], line["ip"], line["port"])
 
 	def add(self, name, OS, public_key, ip, port):
 		"""
