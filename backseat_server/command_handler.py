@@ -59,22 +59,22 @@ class CommandHandler:
 		self._depot_list.add_to_all(command)
 		self._logger.info(self.add_to_all.__name__, f"Command [{command}] added to all depots")
 
-	def add_command_all_os(self, command, OS):
+	def add_command_all_os(self, command, os):
 		"""
 		Adds command to all depots for hosts of a provided operating system.
 
 		Parameters
 		----------
 		command : str
-		OS : str
+		os : str
 		"""
-		hosts = self._registration.get_hosts(OS)
+		hosts = self._registration.get_hosts(os)
 		os_hosts = []
 		for host in hosts:
 			os_hosts.append(host["FQDN"])
 		print(f"Host_list [{os_hosts}]")
 		self._depot_list.add_to_specified(command, os_hosts)
-		self._logger.info(self.add_command_all_os.__name__, f"Command [{command}] added to all depots of OS [{OS}]")
+		self._logger.info(self.add_command_all_os.__name__, f"Command [{command}] added to all depots of OS [{os}]")
 
 	def add_command_to_specified(self, command, host_list):
 		"""

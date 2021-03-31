@@ -65,20 +65,20 @@ class RegistrationHandler:
 					self._log.warning(self.get_registration_info.__name__, f"repeat host in host.config file: [{name}] is not being added to RegistrationHandler._host_list")
 
 
-	def add(self, name, OS, public_key, ip, port):
+	def add(self, name, os, public_key, ip, port):
 		"""
-		Adds name, OS, and public_key to the host_list
+		Adds name, os, and public_key to the host_list
 
 		Parameters
 		----------
 		name : str
-		OS : str
+		os : str
 		public_key : str
 		ip : str
 		port : int
 		"""
 		self._log.info("add", f"Host: {name} added to host_list")
-		self.host_list.append({"name": name, "OS": OS, "public_key": public_key, "ip": ip, "port": port})
+		self.host_list.append({"name": name, "OS": os, "public_key": public_key, "ip": ip, "port": port})
 
 	def get_hosts(self, host_type):
 		"""
@@ -113,7 +113,7 @@ class RegistrationHandler:
 		"""
 		return self.get_hosts("Ubuntu")
 
-	def get_centOS_7_hosts(self):
+	def get_cent_os_7_hosts(self):
 		"""
 		Returns CentOS7 Hosts
 
@@ -122,7 +122,7 @@ class RegistrationHandler:
 		"""
 		return self.get_hosts("CentOS7")
 
-	def get_centOS_8_hosts(self):
+	def get_cent_os_8_hosts(self):
 		"""
 		Returns CentOS8 Hosts
 
