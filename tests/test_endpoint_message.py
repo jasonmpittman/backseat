@@ -4,6 +4,7 @@ import unittest
 
 import json
 
+unittest.TestLoader.sortTestMethodsUsing = None
 class TestCreateMsg(unittest.TestCase):
 
     def test_types(self):
