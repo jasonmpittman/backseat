@@ -18,6 +18,10 @@ import os
 
 from shared import log_handler
 
+import sys
+
+import traceback
+
 
 class TcpSocketHandler:
 	"""
@@ -67,23 +71,25 @@ class TcpSocketHandler:
 				cyphertext = self._crypto.encrypt(block, public_key)
 				cyphertext_full_msg += cyphertext
 			self._log.info("send", "Blocks encrypted")
-		except:
+		except Exception as E:
 			self._log.error("send", "Failed to encrypt blocks - returned None")
-			print("failed to make encrypted blocks")
+			print(E)
 			return None
 		try:
 			signature = self._crypto.sign(cyphertext_full_msg, self._my_private_key)
 			signed_msg = cyphertext_full_msg + signature
 			self._log.info("send", "Message signed")
-		except:
+		except Exception as E:
 			self._log.error("send", "Failed to sign message - returned None")
+			print(E)
 			return None
 		try:
 			client.send(signed_msg)
 			client.shutdown(socket.SHUT_WR)
 			self._log.info("send", "Message sent")
-		except:
+		except Exception as E:
 			self._log.error("send", "Failed to send message - returned None")
+			print(E)
 			return None
 
 
@@ -106,8 +112,9 @@ class TcpSocketHandler:
 					break
 				signed_msg += raw_msg
 			self._log.info("recieve", "Full message recieved")
-		except:
+		except Exception as E:
 			self._log.error("recieve", "Failed to recieve message - returned None")
+			print(E)
 			return None
 		client_msg = signed_msg[:-256]
 		client_signature = signed_msg[-256:]
@@ -119,8 +126,9 @@ class TcpSocketHandler:
 			for block in msg_byte_blocks:
 				return_msg += self._crypto.decrypt(block, self._my_private_key)
 			self._log.info("recieve", "Message fully decrypted")
-		except:
+		except Exception as E:
 			self._log.error("recieve", "Failed to decrypt message - retuned None")
+			print(E)
 			return None
 		return return_msg, sender_public_key
 
@@ -141,7 +149,7 @@ class TcpSocketHandler:
 			connected_socket.connect((ip, port))
 			self._log.info("create_client_socket_connect", "Client socket created and connected")
 			return connected_socket
-		except:
+		except Exception as E:
 			self._log.error("create_client_socket_connect", "Failed to connect to (ip[{ip}], port[{port}]) - returned None")
 			return None
 

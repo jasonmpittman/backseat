@@ -42,6 +42,3 @@ class LogHandler:
 			message (str): Important information that needs to be logged.
 		"""
 		self.logger.error(f"{self._class_name}.{function_name} - {message}")
-
-if __name__ == "__main__":
-	pass

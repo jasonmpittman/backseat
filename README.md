@@ -4,7 +4,7 @@ Backseat is a cross-platform and cross-ditribution GNU/Linux patch management to
 ## Table of Contents
 - [Features](#features)
 - [Implementation](#implementation)
-- [Configuration](#confiuration)
+- [Configuration](#configuration)
 - [Acknowledgments](#acknowledgments)
 
 ## Dependencies
@@ -31,9 +31,12 @@ All network communication between agent and server occurs within an encrypted tu
 
 ## Implementation
 
-## Agent
+### Server
 
-## Server
+
+### Endpoint
+
+
 
 ## Configuration
 ### host.config
