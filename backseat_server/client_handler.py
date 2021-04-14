@@ -62,6 +62,10 @@ class ClientHandler:
 			json_static_endpoint_data = self._server_info.get_static_endpoint_data()
 			return "get_startup_data", json_static_endpoint_data
 
+		if client_dict["type"] == "server_restart":
+			print("Server restart")
+			return "server_restart", -1
+
 		print("Recieved message from server, but 'type' is not 'add' or 'checkoff'.")
 
 		return None

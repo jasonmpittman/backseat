@@ -14,6 +14,8 @@ import sys
 
 import traceback
 
+from exceptions.server_restart_exception import ServerRestartException
+
 
 class ServerLoop():
 	"""
@@ -94,7 +96,9 @@ class ServerLoop():
 				server_data = count
 				self._socket_handler.send(self._client, server_data, self._server_public_key)
 				return None
-			
+
+			elif next_depot_item == "server_restart":
+				raise ServerRestartException()
 
 			else:
 				print(next_depot_item)
@@ -124,6 +128,10 @@ class ServerLoop():
 					new_thread = threading.Thread(target=self.server_iteration())
 					new_thread.start()
 					self._log.info("server_loop", "Thread successfully ran")
+				
+				except ServerRestartException as E:
+					raise
+
 				except Exception as E:
 					print("--Error in server_loop threading--")
 					print(E)
@@ -132,6 +140,9 @@ class ServerLoop():
 					print("-- --")
 					self._log.error("server_loop", f"Error in threading: {E}")
 
+		except ServerRestartException as E:
+			raise
+
 		except KeyboardInterrupt:
 			print("\n--Keyboard Interrupt--")
 			self._server.close()
@@ -139,3 +150,7 @@ class ServerLoop():
 				self._client.close()
 
 			self._log.info("server_loop", "-- Keyboard Interrupt --")
+			raise
+	
+	def server_shutdown(self):
+		print("Server Shutdown")
