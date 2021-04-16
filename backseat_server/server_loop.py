@@ -123,13 +123,16 @@ class ServerLoop():
 		try:
 			print("--Server Running--")
 			while True:
-				self._client, self._src_ip = self._server.accept()
 				try:
+					self._client, self._src_ip = self._server.accept()
 					new_thread = threading.Thread(target=self.server_iteration())
 					new_thread.start()
 					self._log.info("server_loop", "Thread successfully ran")
 				
 				except ServerRestartException as E:
+					raise
+				
+				except KeyboardInterrupt as E:
 					raise
 
 				except Exception as E:
@@ -141,16 +144,19 @@ class ServerLoop():
 					self._log.error("server_loop", f"Error in threading: {E}")
 
 		except ServerRestartException as E:
-			raise
+			self.socket_close()
 
 		except KeyboardInterrupt:
 			print("\n--Keyboard Interrupt--")
-			self._server.close()
-			if self._client != None:
-				self._client.close()
+			self.socket_close()
 
 			self._log.info("server_loop", "-- Keyboard Interrupt --")
 			raise
 	
 	def server_shutdown(self):
 		print("Server Shutdown")
+
+	def socket_close(self):
+		self._server.close()
+		if self._client != None:
+			self._client.close()		

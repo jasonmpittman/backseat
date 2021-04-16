@@ -22,6 +22,7 @@ if __name__ == "__main__":
 			SL = server_loop.ServerLoop(ip, port, 10, server_private_key, server_public_key, SI)
 			SL.server_loop()
 		except ServerRestartException as E:
+			
 			print(E)
 		except Exception as E:
 			print(E)
