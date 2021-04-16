@@ -13,29 +13,26 @@ Backseat is a cross-platform and cross-ditribution GNU/Linux patch management to
 ## Features
 
 The Backseat agent is capable of:
-- Producing a differential of missing patches compared to official distribution repository.
 - Installing missing patches based on Backseat server selections.  
 - Execute commands issued from Backseat server.  
 
 On each heartbeat:  
-- Sending a list of open and listening TCP and UDP ports.  
-- Sending a list of local users and groups.  
-- Sending an array of system parameters (uptime, ).  
+- Send results of cammands that were run
+- Send local information about the machine.  
 
 The Backseat server is capable of:  
 -  Managing endpoints across major GNU/Linux distributions. No count limit!  
 -  Sending commands to individual or groups of endpoints.  
 -  Orchestrating patch installation.  
 
-All network communication between agent and server occurs within an encrypted tunnel.
+All network communication between agent and server occurs with the content of the packets encrypted using public encryption.
 
 ## Implementation
-
 ### Server
-
+This is brain of the operation. It holds all the depots which hold the commands to be run by each Endpoint.
 
 ### Endpoint
-
+Endpoints send message to the server to see if there are any commands for the Endpoint to run. The Endpoint runs the command(s) and sends back the results.
 
 
 ## Configuration
