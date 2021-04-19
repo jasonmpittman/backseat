@@ -130,6 +130,7 @@ class ServerLoop():
 					self._log.info("server_loop", "Thread successfully ran")
 				
 				except ServerRestartException as E:
+					self.socket_close()
 					raise
 				
 				except KeyboardInterrupt as E:
@@ -144,7 +145,7 @@ class ServerLoop():
 					self._log.error("server_loop", f"Error in threading: {E}")
 
 		except ServerRestartException as E:
-			self.socket_close()
+			raise
 
 		except KeyboardInterrupt:
 			print("\n--Keyboard Interrupt--")
